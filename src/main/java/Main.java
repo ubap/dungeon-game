@@ -35,7 +35,7 @@ public class Main {
         protocol2.connect("127.0.0.1", 7172);
 
         while (true) {
-
+            Thread.sleep(100000000);
         }
 
     }

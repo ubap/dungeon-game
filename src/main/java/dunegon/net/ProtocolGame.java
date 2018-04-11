@@ -48,7 +48,7 @@ public class ProtocolGame extends Protocol {
 
     @Override
     protected void onRecv(InputMessage inputMessage) {
-        if(inputMessage.hasMore()) {
+        if (inputMessage.hasMore()) {
             byte opCode = inputMessage.getU8();
             switch (opCode) {
                 case Proto.OpCode.GAMESERVER_LOGIN_SUCCESS:
@@ -65,6 +65,9 @@ public class ProtocolGame extends Protocol {
                     break;
                 case Proto.OpCode.MAP_DESCRIPTION:
                     processMapDescription(inputMessage);
+                    break;
+                case Proto.OpCode.CREATURE_SAY:
+                    processCreatureSay(inputMessage);
                     break;
                 default:
                     mLogger.warn("Unrecognized opCode: {}", String.format("0x%x", opCode));
@@ -165,6 +168,21 @@ public class ProtocolGame extends Protocol {
         sendPingBack();
     }
 
+    private void processCreatureSay(InputMessage inputMessage) {
+        inputMessage.getU32(); // statementId
+        String creatureName = inputMessage.getString();
+
+        int level = inputMessage.getU16();
+        byte type = inputMessage.getU8();
+
+        int x = inputMessage.getU16();
+        int y = inputMessage.getU16();
+        int z = inputMessage.getU8();
+
+        String text = inputMessage.getString();
+
+        mLogger.info("Creature {} at pos {} {} {} says the following {}", creatureName, x, y, z, text);
+    }
 
 
     // send

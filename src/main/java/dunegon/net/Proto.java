@@ -18,9 +18,17 @@ public class Proto {
         public static final byte GAMEWORLD_FIRST_PACKET = 0x1F;
         public static final byte GAMESERVER_LOGIN_SUCCESS = 0x17;
 
+        public static final byte CREATURE_SAY = (byte) 0xAA;
+
         public static final byte PENDING_STATE = 0xA;
         public static final byte ENTER_WORLD = 0x0F;
 
+
+
         public static final byte MAP_DESCRIPTION = 0x64;
+
+        public static class Send {
+
+        }
     }
 }

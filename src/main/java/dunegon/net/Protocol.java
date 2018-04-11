@@ -129,12 +129,9 @@ public abstract class Protocol {
 
         if (mXteaEnabled) {
             mXteaEncryptionEngine.decrypt(mInputMessage.getBuffer(), 6, 1);
-            int xteaLength = mInputMessage.getU16();
-            xteaLength = xteaLength - 8;
+            int xteaLength = mInputMessage.getU16() + 2;
+            // xteaLength += 8 - (xteaLength % 8);
             int cycles = xteaLength / 8;
-            if (xteaLength % 8 > 0) {
-                cycles++;
-            }
 
             mXteaEncryptionEngine.decrypt(mInputMessage.getBuffer(), 14, cycles);
         }
