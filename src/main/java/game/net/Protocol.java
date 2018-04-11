@@ -1,13 +1,10 @@
 package game.net;
 
 
-import game.net.crypto.XTEA;
 import game.net.crypto.XteaEncryptionEngine;
 
 import java.io.IOException;
 import java.net.Socket;
-import java.nio.ByteBuffer;
-import java.security.InvalidKeyException;
 import java.util.Random;
 import java.util.zip.Adler32;
 
@@ -101,6 +98,7 @@ public abstract class Protocol {
 
         mConnection.getInputStream().read(mInputMessage.getBuffer(), 0, 2); // packet size
         int packetSize = mInputMessage.getU16();
+        mInputMessage.setMessageSize(packetSize + 2);
 
         mConnection.getInputStream().read(mInputMessage.getBuffer(), 2, packetSize); // the rest of the packet
         int checksum = mInputMessage.getU32();
@@ -140,7 +138,7 @@ public abstract class Protocol {
         @Override
         public void run() {
             try {
-                while (mConnection != null && mConnection.isConnected()) {
+                while (Protocol.this.isConnected()) {
                     receive();
                 }
             } catch (IOException e) {

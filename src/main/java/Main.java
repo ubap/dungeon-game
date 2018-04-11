@@ -9,7 +9,7 @@ public class Main {
         System.out.println("starting");
 
 
-        Protocol protocol = new ProtocolLogin();
+        Protocol protocol = new ProtocolLogin("1", "1");
         protocol.connect("127.0.0.1", 7171);
 
 

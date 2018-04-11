@@ -7,5 +7,8 @@ public class Proto {
 
     public static class OpCode {
         public static final byte DISCONNECT = 0xB;
+        public static final byte MOTD = 0x14;
+        public static final byte SESSION_KEY = 0x28;
+        public static final byte CHAR_LIST = 0x64;
     }
 }
