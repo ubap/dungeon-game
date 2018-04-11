@@ -53,6 +53,15 @@ public class ProtocolGame extends Protocol {
                 case Proto.OpCode.GAMESERVER_LOGIN_SUCCESS:
                     processLoginSuccess(inputMessage);
                     break;
+                case Proto.OpCode.PENDING_STATE:
+                    processPendingState(inputMessage);
+                    break;
+                case Proto.OpCode.ENTER_WORLD:
+                    processEnterWorld(inputMessage);
+                    break;
+                case Proto.OpCode.MAP_DESCRIPTION:
+                    processMapDescription(inputMessage);
+                    break;
                 default:
                     mLogger.warn("Unrecognized opCode: {}", String.format("0x%x", opCode));
                     break;
@@ -113,5 +122,39 @@ public class ProtocolGame extends Protocol {
 
         String urlToIngameStoreImages = inputMessage.getString();
         int premiumCoinPackageSize = inputMessage.getU16();
+    }
+
+    private void processPendingState(InputMessage inputMessage) {
+    }
+    private void processEnterWorld(InputMessage inputMessage) {
+    }
+
+    private void processMapDescription(InputMessage inputMessage) {
+        int x = inputMessage.getU16();
+        int y = inputMessage.getU16();
+        int z = inputMessage.getU8();
+
+        int startz, endz, zstep;
+        if (z > 7) {
+            startz = 7;
+            endz = 0;
+            zstep = 1;
+        } else {
+            startz = 7;
+            endz = 0;
+            zstep = -1;
+        }
+
+        int width = 18;
+        int height = 14;
+        for (int nz = startz; nz != endz + zstep; nz += zstep) {
+            getFloorDescription(inputMessage, x, y, nz, width, height, z - nz, -1);
+        }
+
+        return;
+    }
+
+    private void getFloorDescription(InputMessage inputMessage, int x, int y, int z, int width, int height, int offset, int skip) {
+
     }
 }
