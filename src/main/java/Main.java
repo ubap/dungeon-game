@@ -1,5 +1,5 @@
-import game.net.Protocol;
-import game.net.ProtocolLogin;
+import dunegon.net.Protocol;
+import dunegon.net.ProtocolLogin;
 
 import java.io.IOException;
 

@@ -1,7 +1,7 @@
-package game.net;
+package dunegon.net;
 
 
-import game.net.crypto.XteaEncryptionEngine;
+import dunegon.crypto.XteaEncryptionEngine;
 
 import java.io.IOException;
 import java.net.Socket;

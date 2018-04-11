@@ -1,4 +1,4 @@
-package game;
+package dunegon;
 
 public class Config {
     public static final short OS = 1;

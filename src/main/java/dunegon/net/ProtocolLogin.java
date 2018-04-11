@@ -1,6 +1,6 @@
-package game.net;
+package dunegon.net;
 
-import game.Config;
+import dunegon.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -80,6 +80,12 @@ public class ProtocolLogin extends Protocol {
                     mLogger.warn("Unrecognized opCode: {}", String.format("0x%x", opCode));
                     break;
             }
+        }
+        // its a login server no connection is maintained. Disconnect after receiving everything.
+        try {
+            disconnect();
+        } catch (IOException ioe) {
+            mLogger.error("Error while processing disconnect", ioe);
         }
     }
 

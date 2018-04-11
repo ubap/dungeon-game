@@ -1,6 +1,6 @@
-package game.net;
+package dunegon.net;
 
-import game.net.crypto.RSA;
+import dunegon.crypto.RSA;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

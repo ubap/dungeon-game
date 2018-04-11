@@ -1,4 +1,4 @@
-package game.net.crypto;
+package dunegon.crypto;
 
 public class XTEA {
 

@@ -1,4 +1,4 @@
-package game.net;
+package dunegon.net;
 
 public class Proto {
     private Proto() { }
