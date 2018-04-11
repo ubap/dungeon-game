@@ -1,6 +1,7 @@
 package dunegon.net;
 
 import dunegon.Config;
+import jdk.internal.util.xml.impl.Input;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,11 +48,14 @@ public class ProtocolGame extends Protocol {
 
     @Override
     protected void onRecv(InputMessage inputMessage) {
-        while(inputMessage.hasMore()) {
+        if(inputMessage.hasMore()) {
             byte opCode = inputMessage.getU8();
             switch (opCode) {
                 case Proto.OpCode.GAMESERVER_LOGIN_SUCCESS:
                     processLoginSuccess(inputMessage);
+                    break;
+                case Proto.OpCode.GAMEWORLD_PING:
+                    processPing(inputMessage);
                     break;
                 case Proto.OpCode.PENDING_STATE:
                     processPendingState(inputMessage);
@@ -67,7 +71,6 @@ public class ProtocolGame extends Protocol {
                     break;
             }
         }
-        return;
     }
 
     private void sendFirstPacket() throws IOException {
@@ -156,5 +159,26 @@ public class ProtocolGame extends Protocol {
 
     private void getFloorDescription(InputMessage inputMessage, int x, int y, int z, int width, int height, int offset, int skip) {
 
+    }
+
+    private void processPing(InputMessage inputMessage) {
+        sendPingBack();
+    }
+
+
+
+    // send
+
+    private void sendPingBack() {
+        mLogger.info("sendPingBack");
+        OutputMessage outputMessage = new OutputMessage();
+        outputMessage.addU8((char) Proto.OpCode.GAMEWORLD_PING_BACK);
+
+        try {
+            send(outputMessage);
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

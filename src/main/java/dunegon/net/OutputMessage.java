@@ -9,6 +9,7 @@ import java.util.zip.Adler32;
 public class OutputMessage {
     private ByteBuffer mByteBuffer;
     private short mHeaderPos;
+    private short mHeaderSize;
     private short mMessageSize;
     private short mWritePos;
 
@@ -16,6 +17,7 @@ public class OutputMessage {
         mByteBuffer = ByteBuffer.allocate(1024);
         mByteBuffer.order(ByteOrder.LITTLE_ENDIAN);
         mHeaderPos = 8;
+        mHeaderSize = 0;
         mMessageSize = 0;
         mWritePos = mHeaderPos;
     }
@@ -66,12 +68,14 @@ public class OutputMessage {
         adler32.update(mByteBuffer.array(), mHeaderPos, mMessageSize);
         int checksum = (int) adler32.getValue();
 
+        mHeaderSize += 4;
         mHeaderPos -= 4;
         mByteBuffer.putInt(mHeaderPos, checksum);
         mMessageSize += 4;
     }
 
     public void writeMessageSize() {
+        mHeaderSize += 2;
         mHeaderPos -= 2;
         mByteBuffer.putShort(mHeaderPos, mMessageSize);
         mMessageSize += 2;
@@ -83,6 +87,10 @@ public class OutputMessage {
 
     public short getHeaderPos() {
         return mHeaderPos;
+    }
+
+    public short getHeaderSize() {
+        return mHeaderSize;
     }
 
     public short getMessageSize() {

@@ -13,6 +13,8 @@ public class Proto {
 
 
         // gameworld
+        public static final byte GAMEWORLD_PING = 0x1D;
+        public static final byte GAMEWORLD_PING_BACK = 0x1E;
         public static final byte GAMEWORLD_FIRST_PACKET = 0x1F;
         public static final byte GAMESERVER_LOGIN_SUCCESS = 0x17;
 

@@ -73,6 +73,21 @@ public abstract class Protocol {
     }
 
     public void send(OutputMessage outputMessage) throws IOException {
+
+        if (mXteaEnabled) {
+            outputMessage.writeMessageSize();
+            int xteaLength = outputMessage.getMessageSize();
+            int padding = 8 - (xteaLength % 8);
+            outputMessage.addPaddingBytes(padding);
+
+            xteaLength = outputMessage.getMessageSize();
+            int cycles = xteaLength / 8;
+
+            mXteaEncryptionEngine.encrypt(outputMessage.getBuffer().array(),
+                    outputMessage.getHeaderPos() + outputMessage.getHeaderSize() - 2, cycles);
+        }
+
+
         if (mChecksumEnabled) {
             outputMessage.writeChecksum();
         }
