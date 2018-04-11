@@ -2,6 +2,7 @@ package dunegon.net;
 
 
 import dunegon.crypto.XteaEncryptionEngine;
+import jdk.internal.util.xml.impl.Input;
 
 import java.io.IOException;
 import java.net.Socket;
@@ -12,6 +13,7 @@ public abstract class Protocol {
     private Socket mConnection;
     private Thread mRecvThread;
     private InputMessage mInputMessage;
+    private boolean mFirstPacket;
 
     private boolean mChecksumEnabled;
     private boolean mXteaEnabled;
@@ -21,6 +23,7 @@ public abstract class Protocol {
     public Protocol() {
         mChecksumEnabled = false;
         mXteaEnabled = false;
+        mFirstPacket = true;
     }
 
     public void connect(String host, int port) throws IOException {
@@ -126,12 +129,18 @@ public abstract class Protocol {
         }
 
         // process the message further
-        onRecv(mInputMessage);
+        if (mFirstPacket) {
+            onRecvFirstPacket(mInputMessage);
+            mFirstPacket = false;
+        }
+        else {
+            onRecv(mInputMessage);
+        }
     }
 
 
     abstract protected void onConnect() throws IOException;
-
+    abstract protected void onRecvFirstPacket(InputMessage inputMessage) throws IOException ;
     abstract protected void onRecv(InputMessage inputMessage);
 
     private class RecvThread extends Thread {

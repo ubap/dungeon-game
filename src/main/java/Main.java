@@ -1,5 +1,6 @@
 import dunegon.game.login.CharList;
 import dunegon.net.Protocol;
+import dunegon.net.ProtocolGame;
 import dunegon.net.ProtocolLogin;
 
 import java.io.IOException;
@@ -18,6 +19,9 @@ public class Main {
         synchronized(charList) {
             charList.wait();
         }
+
+        Protocol protocol2 = new ProtocolGame("1", "1", "Heh");
+        protocol2.connect("127.0.0.1", 7172);
 
         while (true) {
 

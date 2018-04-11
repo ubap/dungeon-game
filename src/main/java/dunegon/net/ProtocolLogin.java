@@ -41,7 +41,6 @@ public class ProtocolLogin extends Protocol {
         outputMessage.addU8((char)0);
 
         int offset = outputMessage.getMessageSize();
-
         outputMessage.addU8((char)0); // RSA, check byte, server checks if this byte is 0 after decryption
 
         int[] xtea = getXteaKey();
@@ -65,6 +64,11 @@ public class ProtocolLogin extends Protocol {
         enableXtea();
 
         startReceiving();
+    }
+
+    @Override
+    protected void onRecvFirstPacket(InputMessage inputMessage) throws IOException {
+        onRecv(inputMessage);
     }
 
     @Override

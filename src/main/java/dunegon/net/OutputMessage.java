@@ -21,7 +21,7 @@ public class OutputMessage {
     }
 
     public void addU8(char value) {
-        mByteBuffer.putChar(mWritePos, value);
+        mByteBuffer.put(mWritePos, (byte) value);
         mWritePos += 1;
         mMessageSize += 1;
     }

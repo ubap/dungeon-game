@@ -10,5 +10,7 @@ public class Proto {
         public static final byte MOTD = 0x14;
         public static final byte SESSION_KEY = 0x28;
         public static final byte CHAR_LIST = 0x64;
+
+        public static final byte GAMEWORLD_FIRST_PACKET = 0x1F;
     }
 }
