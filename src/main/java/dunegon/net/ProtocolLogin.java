@@ -1,10 +1,15 @@
 package dunegon.net;
 
 import dunegon.Config;
+import dunegon.game.login.CharList;
+import dunegon.game.login.Character;
+import dunegon.game.login.World;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ProtocolLogin extends Protocol {
     private Logger mLogger = LoggerFactory.getLogger(ProtocolLogin.class.getSimpleName());
@@ -12,7 +17,10 @@ public class ProtocolLogin extends Protocol {
     private String mUsername;
     private String mPassword;
 
-    public ProtocolLogin(String username, String password) {
+    private CharList mCharList;
+
+    public ProtocolLogin(CharList charList, String username, String password) {
+        mCharList = charList;
         mUsername = username;
         mPassword = password;
     }
@@ -112,24 +120,39 @@ public class ProtocolLogin extends Protocol {
 
     private void processCharList(InputMessage inputMessage) {
         int numberOfWorlds = inputMessage.getU8();
+        List<World> worldList = new ArrayList<>(numberOfWorlds);
         for (int i = 0; i < numberOfWorlds; i++) {
             int worldId = inputMessage.getU8();
             String worldName = inputMessage.getString();
             String worldIp = inputMessage.getString();
             int port = inputMessage.getU16();
             inputMessage.getU8(); // stopByte: 0
+            worldList.add(new World(worldId, worldName, worldIp, port));
+
             mLogger.info("Got world: {}, {}, {}, {}", worldId, worldName, worldIp, port);
         }
 
         int numberOfCharacters = inputMessage.getU8();
+        List<Character> characterList = new ArrayList<>(numberOfCharacters);
         for (int i = 0; i < numberOfCharacters; i++) {
-            inputMessage.getU8(); // startByte: 0
+            int worldId  = inputMessage.getU8();
             String characterName = inputMessage.getString();
+            characterList.add(new Character(worldId, characterName));
+
             mLogger.info("Got chracter: {}", characterName);
         }
 
         inputMessage.getU8(); // stopByte: 0
-        byte freePremium = inputMessage.getU8();
+        byte premium = inputMessage.getU8();
         int premDays = inputMessage.getU32();
+
+        synchronized (mCharList) {
+            mCharList.setWorldList(worldList);
+            mCharList.setCharacterList(characterList);
+            mCharList.setPremium(premium == 1);
+            mCharList.setPremDays(premDays);
+
+            mCharList.notify();
+        }
     }
 }
