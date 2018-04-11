@@ -1,10 +1,14 @@
 package game.net;
 
 import game.Config;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
 public class ProtocolLogin extends Protocol {
+
+    private Logger mLogger = LoggerFactory.getLogger(ProtocolLogin.class.getSimpleName());
 
     @Override
     protected void onConnect() throws IOException {
@@ -49,7 +53,7 @@ public class ProtocolLogin extends Protocol {
     }
 
     @Override
-    protected void onRecv(InputMessage inputMessage) throws IOException {
+    protected void onRecv(InputMessage inputMessage) {
         byte opCode = inputMessage.getU8();
         switch (opCode) {
             case (Proto.OpCode.DISCONNECT):
@@ -60,8 +64,14 @@ public class ProtocolLogin extends Protocol {
         }
     }
 
-    private void processDisconnect(InputMessage inputMessage) {
+    private void processDisconnect(InputMessage inputMessage){
         String message = inputMessage.getString();
-        System.out.println(message);
+        mLogger.info("Got disconnect with message: {}", message);
+
+        try {
+            disconnect();
+        } catch (IOException ioe) {
+            mLogger.error("Error while processing disconnect", ioe);
+        }
     }
 }

@@ -32,8 +32,9 @@ public abstract class Protocol {
         onConnect();
     }
 
-    public void disconnect() {
-
+    public void disconnect() throws IOException {
+        mConnection.close();
+        mConnection = null;
     }
 
     public boolean isConnected() {
@@ -133,13 +134,13 @@ public abstract class Protocol {
 
     abstract protected void onConnect() throws IOException;
 
-    abstract protected void onRecv(InputMessage inputMessage) throws IOException;
+    abstract protected void onRecv(InputMessage inputMessage);
 
     private class RecvThread extends Thread {
         @Override
         public void run() {
             try {
-                while (mConnection.isConnected()) {
+                while (mConnection != null && mConnection.isConnected()) {
                     receive();
                 }
             } catch (IOException e) {
