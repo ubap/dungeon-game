@@ -12,5 +12,6 @@ public class Proto {
         public static final byte CHAR_LIST = 0x64;
 
         public static final byte GAMEWORLD_FIRST_PACKET = 0x1F;
+        public static final byte GAMESERVER_LOGIN_SUCCESS = 0x17;
     }
 }

@@ -30,6 +30,12 @@ public class InputMessage {
         return mByteBuffer.getInt();
     }
 
+    public double getDouble() {
+        int precision = mByteBuffer.get();
+        int v = getU32() - Integer.MAX_VALUE;
+        return (v / Math.pow(10, precision));
+    }
+
     public String getString() {
         int length = mByteBuffer.getShort();
         String val = new String(mByteBuffer.array(), mByteBuffer.position(), length);

@@ -50,7 +50,9 @@ public class ProtocolGame extends Protocol {
         while(inputMessage.hasMore()) {
             byte opCode = inputMessage.getU8();
             switch (opCode) {
-
+                case Proto.OpCode.GAMESERVER_LOGIN_SUCCESS:
+                    processLoginSuccess(inputMessage);
+                    break;
                 default:
                     mLogger.warn("Unrecognized opCode: {}", String.format("0x%x", opCode));
                     break;
@@ -97,4 +99,19 @@ public class ProtocolGame extends Protocol {
         enableXtea();
     }
 
+    private void processLoginSuccess(InputMessage inputMessage) {
+        int playerId = inputMessage.getU32();
+        int serverBeat = inputMessage.getU16();
+
+        double speedA = inputMessage.getDouble();
+        double speedB = inputMessage.getDouble();
+        double speedC = inputMessage.getDouble();
+
+        boolean canReportBugs = inputMessage.getU8() == 1;
+        boolean canChangePvpFrameOption = inputMessage.getU8() == 1;
+        boolean experModeEnabled = inputMessage.getU8() == 1;
+
+        String urlToIngameStoreImages = inputMessage.getString();
+        int premiumCoinPackageSize = inputMessage.getU16();
+    }
 }
