@@ -44,10 +44,10 @@ public class ItemLoader {
         sLogger.info("Reading thing for item id: {}", id);
         Thing thing = new Thing(id);
         boolean done = false;
-        for (int i = 0; i < DatAttrs.THING_LAST_ATTR; i++) {
+        for (int i = 0; i < DatAttrs.Attribute.LAST_ATTR; i++) {
             short attribute = fileStream.getU8();
 
-            if (DatAttrs.THING_LAST_ATTR == attribute) {
+            if (DatAttrs.Attribute.LAST_ATTR == attribute) {
                 done = true;
                 break;
             }
@@ -69,7 +69,7 @@ public class ItemLoader {
             }
             short width = fileStream.getU8();
             short height = fileStream.getU8();
-            if (width > 0 || height > 0) {
+            if (width + height > 2) {
                 short realSize = fileStream.getU8();
             }
             short nLayers = fileStream.getU8();
@@ -90,14 +90,14 @@ public class ItemLoader {
                 }
             }
 
-            int totalSprites = width * height * nLayers * numPatternX * numPatternY * numPatternZ * groupAnimationPhases;
+            int totalSprites = nLayers * width * height * numPatternX * numPatternY * numPatternZ * groupAnimationPhases;
 
             if (totalSpritesCount + totalSprites > 4096) {
                 throw new RuntimeException("has more than 4096 sprites count");
             }
 
             for (int sprite = totalSpritesCount; sprite < (totalSpritesCount + totalSprites); sprite++) {
-                fileStream.getU16();
+                fileStream.getU32();
             }
 
             totalSpritesCount += totalSprites;
@@ -108,39 +108,184 @@ public class ItemLoader {
 
     private static void processAttribute(FileStream fileStream, short attribute) {
         switch (attribute) {
-            case DatAttrs.Attribute.GROUND:
+            case DatAttrs.Attribute.GROUND: {
                 sLogger.info("GROUND");
                 fileStream.getU16();
                 break;
-            case DatAttrs.Attribute.GROUND_BORDER:
+            }
+            case DatAttrs.Attribute.GROUND_BORDER: {
                 sLogger.info("GROUND_BORDER");
                 break;
-            case DatAttrs.Attribute.ON_BOTTOM:
+            }
+            case DatAttrs.Attribute.ON_BOTTOM: {
                 sLogger.info("ON_BOTTOM");
                 break;
-            case DatAttrs.Attribute.ON_TOP:
+            }
+            case DatAttrs.Attribute.ON_TOP: {
                 sLogger.info("ON_TOP");
                 break;
-            case DatAttrs.Attribute.NOT_WALKABLE:
+            }
+            case DatAttrs.Attribute.CONTAINER: {
+                sLogger.info("CONTAINER");
+                break;
+            }
+            case DatAttrs.Attribute.FORCE_USE: {
+                sLogger.info("FORCE_USE");
+                break;
+            }
+            case DatAttrs.Attribute.MULTI_USE: {
+                sLogger.info("MULTI_USE");
+                break;
+            }
+            case DatAttrs.Attribute.NOT_WALKABLE: {
                 sLogger.info("NOT_WALKABLE");
                 break;
-            case DatAttrs.Attribute.NOT_MOVEABLE:
+            }
+            case DatAttrs.Attribute.NOT_MOVEABLE: {
                 sLogger.info("NOT_MOVEABLE");
                 break;
-            case DatAttrs.Attribute.HANGABLE:
+            }
+            case DatAttrs.Attribute.NOT_PATHABLE: {
+                sLogger.info("NOT_PATHABLE");
+                break;
+            }
+            case DatAttrs.Attribute.HANGABLE: {
                 sLogger.info("HANGABLE");
                 break;
-            case DatAttrs.Attribute.BLOCK_PROJECTILE:
+            }
+            case DatAttrs.Attribute.BLOCK_PROJECTILE: {
                 sLogger.info("BLOCK_PROJECTILE");
                 break;
-            case DatAttrs.Attribute.LIGHT:
+            }
+            case DatAttrs.Attribute.PICKUPABLE: {
+                sLogger.info("PICKUPABLE");
+                break;
+            }
+            case DatAttrs.Attribute.DISPLACEMENT: {
+                sLogger.info("DISPLACEMENT");
+                int x = fileStream.getU16();
+                int y = fileStream.getU16();
+                break;
+            }
+            case DatAttrs.Attribute.LIGHT: {
                 int intensity = fileStream.getU16();
                 int color = fileStream.getU16();
                 sLogger.info("LIGHT, intensity {}, color {}", intensity, color);
                 break;
-            case DatAttrs.Attribute.FULL_GROUND:
+            }
+            case DatAttrs.Attribute.FULL_GROUND: {
                 sLogger.info("FULL_GROUND");
                 break;
+            }
+            case DatAttrs.Attribute.MARKET: {
+                int category = fileStream.getU16();
+                int tradeAs = fileStream.getU16();
+                int showAs = fileStream.getU16();
+                String name = fileStream.getString();
+                int restrictVocation = fileStream.getU16();
+                int restrictLevel = fileStream.getU16();
+                sLogger.info("MARKET item name {}", name);
+                break;
+            }
+            case DatAttrs.Attribute.ELEVATION: {
+                sLogger.info("ELEVATION");
+                int elevation = fileStream.getU16();
+                break;
+            }
+            case DatAttrs.Attribute.MINIMAP_COLOR: {
+                sLogger.info("MINIMAP_COLOR");
+                int color = fileStream.getU16();
+                break;
+            }
+            case DatAttrs.Attribute.CHARGABLE: {
+                sLogger.info("CHARGABLE");
+                break;
+            }
+            case DatAttrs.Attribute.STACKABLE: {
+                sLogger.info("STACKABLE");
+                break;
+            }
+            case DatAttrs.Attribute.CLOTH: {
+                sLogger.info("CLOTH");
+                fileStream.getU16();
+                break;
+            }
+            case DatAttrs.Attribute.LYING_CORPSE: {
+                sLogger.info("LYING_CORPSE");
+                break;
+            }
+            case DatAttrs.Attribute.TRANSCLUENT: {
+                sLogger.info("TRANSCLUENT");
+                break;
+            }
+            case DatAttrs.Attribute.USABLE: {
+                sLogger.info("USABLE");
+                fileStream.getU16();
+                break;
+            }
+            case DatAttrs.Attribute.LOOK: {
+                sLogger.info("LOOK");
+                break;
+            }
+            case DatAttrs.Attribute.LENS_HELP: {
+                sLogger.info("LENS_HELP");
+                fileStream.getU16();
+                break;
+            }
+            case DatAttrs.Attribute.FLUID_CONTAINER: {
+                sLogger.info("FLUID_CONTAINER");
+                break;
+            }
+            case DatAttrs.Attribute.HOOK_SOUTH: {
+                sLogger.info("HOOK_SOUTH");
+                break;
+            }
+            case DatAttrs.Attribute.HOOK_EAST: {
+                sLogger.info("HOOK_EAST");
+                break;
+            }
+            case DatAttrs.Attribute.ROTATEABLE: {
+                sLogger.info("ROTATEABLE");
+                break;
+            }
+            case DatAttrs.Attribute.WRAPABLE: {
+                sLogger.info("WRAPABLE");
+                break;
+            }
+            case DatAttrs.Attribute.UNWRAPABLE: {
+                sLogger.info("UNWRAPABLE");
+                break;
+            }
+            case DatAttrs.Attribute.NO_MOVE_ANIM: {
+                sLogger.info("NO_MOVE_ANIM");
+                break;
+            }
+            case DatAttrs.Attribute.WRITABLE: {
+                sLogger.info("WRITABLE");
+                fileStream.getU16();
+                break;
+            }
+            case DatAttrs.Attribute.WRITABLE_ONCE: {
+                sLogger.info("WRITABLE_ONCE");
+                fileStream.getU16();
+                break;
+            }
+            case DatAttrs.Attribute.SPLASH: {
+                sLogger.info("SPLASH");
+                break;
+            }
+            case DatAttrs.Attribute.DONT_HIDE: {
+                sLogger.info("DONT_HIDE");
+                break;
+            }
+            case DatAttrs.Attribute.ANIMATE_ALWAYS: {
+                sLogger.info("ANIMATE_ALWAYS");
+                break;
+            }
+            case DatAttrs.Attribute.TOP_EFFECT: {
+                sLogger.info("TOP_EFFECT");
+                break;
+            }
             default:
                 sLogger.info("Unrecognized attribute {}", String.format("0x%x", attribute));
                 break;

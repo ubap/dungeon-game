@@ -15,24 +15,24 @@ public class Main {
     public static void main(String[] args) throws IOException, InterruptedException, URISyntaxException {
         System.out.println("starting");
 
-//        ArrayOfThingTypes arrayOfThingTypes = new ArrayOfThingTypes();
+        ArrayOfThingTypes arrayOfThingTypes = new ArrayOfThingTypes();
+
+        final ClassLoader loader = Main.class.getClassLoader();
+        URL resourceUrl = loader.getResource("Tibia1098.dat");
+
+        ItemLoader.loadDat(arrayOfThingTypes.getThingTypesArray(), resourceUrl.toURI());
+
+//        CharList charList = new CharList();
 //
-//        final ClassLoader loader = Main.class.getClassLoader();
-//        URL resourceUrl = loader.getResource("Tibia.dat");
+//        Protocol protocol = new ProtocolLogin(charList,"1", "1");
+//        protocol.connect("127.0.0.1", 7171);
 //
-//        ItemLoader.loadDat(arrayOfThingTypes.getThingTypesArray(), resourceUrl.toURI());
-
-        CharList charList = new CharList();
-
-        Protocol protocol = new ProtocolLogin(charList,"1", "1");
-        protocol.connect("127.0.0.1", 7171);
-
-        synchronized(charList) {
-            charList.wait();
-        }
-
-        Protocol protocol2 = new ProtocolGame("1", "1", "Heh");
-        protocol2.connect("127.0.0.1", 7172);
+//        synchronized(charList) {
+//            charList.wait();
+//        }
+//
+//        Protocol protocol2 = new ProtocolGame("1", "1", "Heh");
+//        protocol2.connect("127.0.0.1", 7172);
 
         while (true) {
             Thread.sleep(100000000);

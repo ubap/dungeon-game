@@ -28,4 +28,11 @@ public class FileStream {
         mPosition += 1;
         return val;
     }
+
+    public String getString() {
+        int length = getU16();
+        String val = new String(mBytes, mPosition, length);
+        mPosition += length;
+        return val;
+    }
 }
