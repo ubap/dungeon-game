@@ -15,6 +15,15 @@ public class ThingType {
         return mTings;
     }
 
+    public void setThing(Thing thing) {
+        int id = thing.getId();
+        mTings[id] = thing;
+    }
+
+    public Thing getThing(int id) {
+        return mTings[id];
+    }
+
     public int getThingCount() {
         return mTings.length;
     }
