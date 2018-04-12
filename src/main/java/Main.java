@@ -15,12 +15,12 @@ public class Main {
     public static void main(String[] args) throws IOException, InterruptedException, URISyntaxException {
         System.out.println("starting");
 
-        ArrayOfThingTypes arrayOfThingTypes = new ArrayOfThingTypes();
+        ArrayOfThingTypes.init();
 
         final ClassLoader loader = Main.class.getClassLoader();
         URL resourceUrl = loader.getResource("Tibia1098.dat");
 
-        ItemLoader.loadDat(arrayOfThingTypes.getThingTypesArray(), resourceUrl.toURI());
+        ItemLoader.loadDat(ArrayOfThingTypes.getInstance(), resourceUrl.toURI());
 
 //        CharList charList = new CharList();
 //

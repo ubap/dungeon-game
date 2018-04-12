@@ -11,10 +11,6 @@ public class ThingType {
         mTings = new Thing[size];
     }
 
-    public Thing[] getThings() {
-        return mTings;
-    }
-
     public void setThing(Thing thing) {
         int id = thing.getId();
         mTings[id] = thing;
