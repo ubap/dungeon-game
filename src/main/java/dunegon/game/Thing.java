@@ -73,6 +73,8 @@ public class Thing {
     private boolean mHasWritableOnce;
     private int mWritableOnce;
 
+    private int mAnimationPhases;
+
 
     public Thing(int id) {
         mId = id;
@@ -259,6 +261,30 @@ public class Thing {
     public void setWritableOnce(boolean hasWritableOnce, int writableOnce) {
         mHasWritableOnce = hasWritableOnce;
         mWritableOnce = writableOnce;
+    }
+
+    public void setAnimationPhases(int animationPhases) {
+        mAnimationPhases = animationPhases;
+    }
+
+    public boolean isStackable() {
+        return mStackable;
+    }
+
+    public boolean isFluidContainer() {
+        return mFluidContainer;
+    }
+
+    public boolean isSplash() {
+        return mSplash;
+    }
+
+    public boolean isChargeable() {
+        return mChargeable;
+    }
+
+    public int getAnimationPhases() {
+        return mAnimationPhases;
     }
 
 }

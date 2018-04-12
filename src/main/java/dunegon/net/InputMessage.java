@@ -22,8 +22,15 @@ public class InputMessage {
         return mByteBuffer.get();
     }
 
-    public short getU16() {
+    public int getU16() {
         return mByteBuffer.getShort();
+    }
+
+    public int peekU16() {
+        byte[] bytes = mByteBuffer.array();
+        int position = mByteBuffer.position();
+        int val =  bytes[position + 1]<<8 & 0xFF00 | bytes[position] & 0xFF;
+        return val;
     }
 
     public int getU32() {

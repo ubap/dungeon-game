@@ -31,4 +31,11 @@ public class Proto {
 
         }
     }
+
+    public static class ItemOpCode {
+        public static final short UNKNOWN_CREATURE = 97;
+        public static final short OUTDATED_CREATUER = 98;
+        public static final short CREATURE = 99;
+
+    }
 }

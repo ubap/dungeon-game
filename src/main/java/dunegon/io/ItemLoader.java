@@ -107,6 +107,8 @@ public class ItemLoader {
             totalSpritesCount += totalSprites;
         }
 
+        thing.setAnimationPhases(animationPhases);
+
         return thing;
     }
 

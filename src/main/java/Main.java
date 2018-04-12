@@ -22,17 +22,17 @@ public class Main {
 
         ItemLoader.loadDat(ArrayOfThingTypes.getInstance(), resourceUrl.toURI());
 
-//        CharList charList = new CharList();
-//
-//        Protocol protocol = new ProtocolLogin(charList,"1", "1");
-//        protocol.connect("127.0.0.1", 7171);
-//
-//        synchronized(charList) {
-//            charList.wait();
-//        }
-//
-//        Protocol protocol2 = new ProtocolGame("1", "1", "Heh");
-//        protocol2.connect("127.0.0.1", 7172);
+        CharList charList = new CharList();
+
+        Protocol protocol = new ProtocolLogin(charList,"1", "1");
+        protocol.connect("127.0.0.1", 7171);
+
+        synchronized(charList) {
+            charList.wait();
+        }
+
+        Protocol protocol2 = new ProtocolGame("1", "1", "Heh");
+        protocol2.connect("127.0.0.1", 7172);
 
         while (true) {
             Thread.sleep(100000000);
