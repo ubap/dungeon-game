@@ -12,7 +12,14 @@ public class Tile {
         this.things = new ArrayList<>();
     }
 
+    public void addThing(Thing thing, int stackPos) {
+
+        if (thing.isEffect()) {
+
+        }
+    }
+
     public void clean() {
-        this.things.clear();;
+        this.things.clear();
     }
 }

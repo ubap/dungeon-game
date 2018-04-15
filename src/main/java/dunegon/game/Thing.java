@@ -293,4 +293,43 @@ public class Thing {
     public boolean isLocalPlayer() {
         return false;
     }
+
+    public boolean isCreature() {
+        return false;
+    }
+
+    public boolean isEffect() {
+        return false;
+    }
+
+    public boolean isGround() {
+        return mGround;
+    }
+
+    public boolean isGroundBorder() {
+        return mGroundBorder;
+    }
+
+    public boolean isOnBottom() {
+        return mOnBottom;
+    }
+
+    public boolean isOnTop() {
+        return mOnTop;
+    }
+
+    public int getStackPriority() {
+        if(isGround())
+            return 0;
+        else if(isGroundBorder())
+            return 1;
+        else if(isOnBottom())
+            return 2;
+        else if(isOnTop())
+            return 3;
+        else if(isCreature())
+            return 4;
+        else // common items
+            return 5;
+    }
 }

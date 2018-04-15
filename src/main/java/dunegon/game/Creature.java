@@ -11,4 +11,9 @@ public class Creature extends Thing {
         this.speedB = speedB;
         this.speedC = speedC;
     }
+
+    @Override
+    public boolean isCreature() {
+        return true;
+    }
 }
