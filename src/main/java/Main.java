@@ -1,4 +1,5 @@
 import dunegon.game.ArrayOfThingTypes;
+import dunegon.game.Game;
 import dunegon.game.ThingType;
 import dunegon.game.login.CharList;
 import dunegon.io.ItemLoader;
@@ -14,6 +15,9 @@ import java.net.URL;
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException, URISyntaxException {
         System.out.println("starting");
+
+
+        Game.init();
 
         ArrayOfThingTypes.init();
 

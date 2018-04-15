@@ -46,7 +46,8 @@ public class ItemLoader {
 
     public static Thing readThing(int id, int category, FileStream fileStream) {
         sLogger.debug("Reading thing for item id: {}", id);
-        Thing thing = new Thing(id);
+        Thing thing = new Thing();
+        thing.setId(id);
         boolean done = false;
         for (int i = 0; i < DatAttrs.Attribute.LAST_ATTR; i++) {
             short attribute = fileStream.getU8();
@@ -110,6 +111,9 @@ public class ItemLoader {
         thing.setAnimationPhases(animationPhases);
 
         return thing;
+
+
+
     }
 
     private static void processAttribute(Thing thing, FileStream fileStream, short attribute) {

@@ -26,6 +26,9 @@ public class Proto {
 
 
         public static final byte MAP_DESCRIPTION = 0x64;
+        public static final byte DELETE_INVENTORY = 0x79;
+        public static final byte PLAYER_STATS = (byte) 0xA0;
+        public static final byte PLAYER_SKILLS = (byte) 0xA1;
 
         public static class Send {
 

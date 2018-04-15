@@ -1,11 +1,8 @@
 package dunegon.net;
 
 import dunegon.Config;
-import dunegon.game.ArrayOfThingTypes;
-import dunegon.game.Position;
-import dunegon.game.Thing;
+import dunegon.game.*;
 import dunegon.io.DatAttrs;
-import javafx.geometry.Pos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,9 +70,18 @@ public class ProtocolGame extends Protocol {
                 case Proto.OpCode.CREATURE_SAY:
                     processCreatureSay(inputMessage);
                     break;
+                case Proto.OpCode.DELETE_INVENTORY:
+                    processDeleteInventory(inputMessage);
+                    break;
+                case Proto.OpCode.PLAYER_STATS:
+                    processPlayerStats(inputMessage);
+                    break;
+                case Proto.OpCode.PLAYER_SKILLS:
+                    processPlayerSkills(inputMessage);
+                    break;
                 default:
                     mLogger.warn("Unrecognized opCode: {}", String.format("0x%x", opCode));
-                    break;
+                    return;
             }
         }
     }
@@ -132,6 +138,10 @@ public class ProtocolGame extends Protocol {
 
         String urlToIngameStoreImages = inputMessage.getString();
         int premiumCoinPackageSize = inputMessage.getU16();
+
+        LocalPlayer localPlayer = Game.getInstance().getLocalPlayer();
+        localPlayer.setId(playerId);
+        localPlayer.setSpeedFormula(speedA, speedB, speedC);
     }
 
     private void processPendingState(InputMessage inputMessage) {
@@ -161,6 +171,7 @@ public class ProtocolGame extends Protocol {
         int skip = 0;
         for (int nz = startz; nz != endz + zstep; nz += zstep) {
             skip = setFloorDescription(inputMessage, x - 8, y - 6, nz, width, height, z - nz, skip);
+            mLogger.info("skip: {}", skip);
         }
 
         return;
@@ -265,11 +276,13 @@ public class ProtocolGame extends Protocol {
                 int creatureType = inputMessage.getU8();
 
                 String name = inputMessage.getString();
+                mLogger.info("Name: {}", name);
             }
 
             int healthPercent = inputMessage.getU8();
             int direction = inputMessage.getU8();
             // get outfit here
+            getOutfit(inputMessage);
 
             int lightIntensity = inputMessage.getU8();
             int lightColor = inputMessage.getU8();
@@ -301,6 +314,22 @@ public class ProtocolGame extends Protocol {
 
     private void getOutfit(InputMessage inputMessage) {
         int lookType = inputMessage.getU16();
+
+        if (lookType != 0) {
+            int head = inputMessage.getU8();
+            int body = inputMessage.getU8();
+            int legs = inputMessage.getU8();
+            int feet = inputMessage.getU8();
+            int addons = inputMessage.getU8();
+        } else {
+            int lookTypeEx = inputMessage.getU16();
+            if (lookTypeEx == 0) {
+                // effect
+            } else {
+                // outfit type = item
+            }
+        }
+        int mount = inputMessage.getU16();
     }
 
 
@@ -324,6 +353,56 @@ public class ProtocolGame extends Protocol {
         mLogger.info("Creature {} at pos {} {} {} says the following {}", creatureName, x, y, z, text);
     }
 
+    private void processDeleteInventory(InputMessage inputMessage) {
+        int slot = inputMessage.getU8();
+        mLogger.info("processDeleteInventory, slot: {}", slot);
+    }
+
+    private void processPlayerStats(InputMessage inputMessage) {
+        mLogger.info("processPlayerStats");
+
+        int health = inputMessage.getU16();
+        int maxHealth = inputMessage.getU16();
+        int freeCapacity = inputMessage.getU32();
+        int totalCapacity = inputMessage.getU32();
+        int experience = inputMessage.getU32(); inputMessage.getU32(); // TODO: ;
+        int level = inputMessage.getU16();
+        int levelPercent = inputMessage.getU8();
+
+        int baseXpGain = inputMessage.getU16();
+        int voucherAddend = inputMessage.getU16();
+        int grindingAddend = inputMessage.getU16();
+        int storeBoostAddend = inputMessage.getU16();
+        int huntingBoostFactor = inputMessage.getU16();
+
+        int mana = inputMessage.getU16();
+        int maxMana = inputMessage.getU16();
+
+        int magicLevel = inputMessage.getU8();
+        int baseMagicLevel = inputMessage.getU8();
+        int magicLevelPercent = inputMessage.getU8();
+        int soul = inputMessage.getU8();
+        int stamina = inputMessage.getU16();
+
+        int baseSkillSpeed = inputMessage.getU16();
+        int regenerationTime = inputMessage.getU16(); // food
+
+        int training = inputMessage.getU16();
+        int remainingStoreXpBoostSeconds = inputMessage.getU16();
+        boolean canBuyMoreStoreXpBoosts = inputMessage.getU8() != 0;
+    }
+
+    private void processPlayerSkills(InputMessage inputMessage) {
+        mLogger.info("processPlayerSkills");
+        for (int skill = 0; skill < Consts.Skill.LASTSKILL; skill++) {
+            int level = inputMessage.getU16();
+            int baseLevel = inputMessage.getU16();
+
+            if (skill <= Consts.Skill.FISHING) {
+                int levelPercent = inputMessage.getU8();
+            }
+        }
+    }
 
     // send
 

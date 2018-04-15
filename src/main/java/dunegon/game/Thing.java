@@ -75,8 +75,7 @@ public class Thing {
 
     private int mAnimationPhases;
 
-
-    public Thing(int id) {
+    public void setId(int id) {
         mId = id;
     }
 
@@ -287,4 +286,11 @@ public class Thing {
         return mAnimationPhases;
     }
 
+    public boolean isPlayer() {
+        return false;
+    }
+
+    public boolean isLocalPlayer() {
+        return false;
+    }
 }

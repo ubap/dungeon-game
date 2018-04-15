@@ -3,6 +3,7 @@ package dunegon.net;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 
+// TODO: getU64
 public class InputMessage {
     private ByteBuffer mByteBuffer;
     private int mMessageSize;
