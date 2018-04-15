@@ -79,6 +79,9 @@ public class ProtocolGame extends Protocol {
                 case Proto.OpCode.PLAYER_SKILLS:
                     processPlayerSkills(inputMessage);
                     break;
+                case Proto.OpCode.GRAPHICAL_EFFECT:
+                    processGraphicalEffect(inputMessage);
+                    break;
                 default:
                     mLogger.warn("Unrecognized opCode: {}", String.format("0x%x", opCode));
                     return;
@@ -402,6 +405,22 @@ public class ProtocolGame extends Protocol {
                 int levelPercent = inputMessage.getU8();
             }
         }
+    }
+
+    private void processGraphicalEffect(InputMessage inputMessage) {
+        Position position = getPosition(inputMessage);
+
+        int effectId = inputMessage.getU8();
+
+        mLogger.info("processGraphicalEffect, pos: {}, id: {}", position, effectId);
+    }
+
+    private Position getPosition(InputMessage inputMessage) {
+        int x = inputMessage.getU16();
+        int y = inputMessage.getU16();
+        int z = inputMessage.getU8();
+
+        return new Position(x, y, z);
     }
 
     // send
