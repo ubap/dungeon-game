@@ -1,6 +1,11 @@
 package dunegon.game;
 
 public class Consts {
+
+    public static final int MAP_HEIGHT = 18;
+    public static final int MAP_WIDTH = 14;
+
+
     public static class Skill {
         public static final int FIST = 0;
         public static final int CLUB = 1;

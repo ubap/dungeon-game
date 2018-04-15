@@ -165,8 +165,8 @@ public class ProtocolGame extends Protocol {
             zstep = -1;
         }
 
-        int width = 18;
-        int height = 14;
+        int width = Consts.MAP_WIDTH;
+        int height = Consts.MAP_HEIGHT;
 
         int skip = 0;
         for (int nz = startz; nz != endz + zstep; nz += zstep) {

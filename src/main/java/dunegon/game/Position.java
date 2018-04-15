@@ -1,14 +1,26 @@
 package dunegon.game;
 
 public class Position {
-    private int mPosX;
-    private int mPosY;
-    private int mPosZ;
+    private int x;
+    private int y;
+    private int z;
 
     public Position(int x, int y, int z) {
-        mPosX = x;
-        mPosY = y;
-        mPosZ = z;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
+    }
+
+    public int getZ() {
+        return this.z;
     }
 
     @Override
@@ -16,11 +28,11 @@ public class Position {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder
                 .append("x=")
-                .append(mPosX)
+                .append(x)
                 .append(", y=")
-                .append(mPosY)
+                .append(y)
                 .append(", z=")
-                .append(mPosZ);
+                .append(z);
         return stringBuilder.toString();
     }
 }

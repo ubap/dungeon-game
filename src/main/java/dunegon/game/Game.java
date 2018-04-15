@@ -4,9 +4,11 @@ public class Game {
     private static Game INSTANCE;
 
     private LocalPlayer localPlayer;
+    private Map map;
 
     private Game() {
-        localPlayer = new LocalPlayer();
+        this.localPlayer = new LocalPlayer();
+        this.map = new Map();
     }
 
     public static Game getInstance() {
@@ -22,5 +24,9 @@ public class Game {
 
     public LocalPlayer getLocalPlayer() {
         return this.localPlayer;
+    }
+
+    public Map getMap() {
+        return this.map;
     }
 }
