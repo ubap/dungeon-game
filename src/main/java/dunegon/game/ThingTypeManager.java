@@ -4,13 +4,13 @@ import dunegon.io.DatAttrs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ArrayOfThingTypes {
-    private static ArrayOfThingTypes sArrayOfThingTypes;
-    private static Logger sLogger = LoggerFactory.getLogger(ArrayOfThingTypes.class.getSimpleName());
+public class ThingTypeManager {
+    private static ThingTypeManager sThingTypeManager;
+    private static Logger sLogger = LoggerFactory.getLogger(ThingTypeManager.class.getSimpleName());
 
     private ThingType[] mThingTypes;
 
-    private ArrayOfThingTypes() {
+    private ThingTypeManager() {
         mThingTypes = new ThingType[DatAttrs.ThingCategory.ThingLastCategory];
         for (int i = 0; i < mThingTypes.length; i++) {
             mThingTypes[i] = new ThingType();
@@ -22,13 +22,13 @@ public class ArrayOfThingTypes {
      */
     public static void init() {
         sLogger.info("init");
-        if (sArrayOfThingTypes == null) {
-            sArrayOfThingTypes = new ArrayOfThingTypes();
+        if (sThingTypeManager == null) {
+            sThingTypeManager = new ThingTypeManager();
         }
     }
 
-    public static ArrayOfThingTypes getInstance() {
-        return sArrayOfThingTypes;
+    public static ThingTypeManager getInstance() {
+        return sThingTypeManager;
     }
 
     public ThingType[] getThingTypesArray() {

@@ -1,6 +1,6 @@
 package dunegon.io;
 
-import dunegon.game.ArrayOfThingTypes;
+import dunegon.game.ThingTypeManager;
 import dunegon.game.Thing;
 import dunegon.game.ThingType;
 import org.slf4j.Logger;
@@ -14,7 +14,7 @@ import java.nio.file.Files;
 public class ItemLoader {
     private static Logger sLogger = LoggerFactory.getLogger(ItemLoader.class.getSimpleName());
 
-    public static void loadDat(ArrayOfThingTypes arrayOfThingTypes, URI uri) throws IOException {
+    public static void loadDat(ThingTypeManager thingTypeManager, URI uri) throws IOException {
         sLogger.info("loadDat");
 
         byte[] data = Files.readAllBytes(new File(uri).toPath());
@@ -22,7 +22,7 @@ public class ItemLoader {
 
         long datSignature = fileStream.getU32();
 
-        ThingType[] thingTypes = arrayOfThingTypes.getThingTypesArray();
+        ThingType[] thingTypes = thingTypeManager.getThingTypesArray();
 
         for (int i = 0; i < DatAttrs.ThingCategory.ThingLastCategory; i++) {
             int count = fileStream.getU16() + 1;

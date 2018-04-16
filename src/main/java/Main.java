@@ -1,6 +1,5 @@
-import dunegon.game.ArrayOfThingTypes;
+import dunegon.game.ThingTypeManager;
 import dunegon.game.Game;
-import dunegon.game.ThingType;
 import dunegon.game.login.CharList;
 import dunegon.io.ItemLoader;
 import dunegon.net.Protocol;
@@ -19,12 +18,12 @@ public class Main {
 
         Game.init();
 
-        ArrayOfThingTypes.init();
+        ThingTypeManager.init();
 
         final ClassLoader loader = Main.class.getClassLoader();
         URL resourceUrl = loader.getResource("Tibia1098.dat");
 
-        ItemLoader.loadDat(ArrayOfThingTypes.getInstance(), resourceUrl.toURI());
+        ItemLoader.loadDat(ThingTypeManager.getInstance(), resourceUrl.toURI());
 
         CharList charList = new CharList();
 

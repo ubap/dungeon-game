@@ -216,7 +216,8 @@ public class ProtocolGame extends Protocol {
                 mLogger.error("too many things");
             }
 
-            getThing(inputMessage);
+            Thing thing = getThing(inputMessage);
+            Game.getInstance().getMap().addThing(thing, position, stackPos);
         }
 
         return 0;
@@ -243,7 +244,8 @@ public class ProtocolGame extends Protocol {
             id = inputMessage.getU16();
         }
 
-        Thing thing = ArrayOfThingTypes.getInstance().getThingType(DatAttrs.ThingCategory.ThingCategoryItem).getThing(id);
+        Thing thing = ThingTypeManager.getInstance().getThingType(DatAttrs.ThingCategory.ThingCategoryItem).getThing(id);
+        //Thing thing = Item.create(id);
 
         int gameThingMark = inputMessage.getU8();
 
@@ -411,6 +413,9 @@ public class ProtocolGame extends Protocol {
         Position position = getPosition(inputMessage);
 
         int effectId = inputMessage.getU8();
+
+        Thing effect = Effect.create(effectId);
+
 
         mLogger.info("processGraphicalEffect, pos: {}, id: {}", position, effectId);
     }

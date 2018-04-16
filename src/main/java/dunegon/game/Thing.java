@@ -302,6 +302,10 @@ public class Thing {
         return false;
     }
 
+    public boolean isItem() {
+        return false;
+    }
+
     public boolean isGround() {
         return mGround;
     }

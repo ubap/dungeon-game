@@ -23,6 +23,10 @@ public class Position {
         return this.z;
     }
 
+    public boolean isMapPosition() {
+        return (x >=0 && y >= 0 && z >= 0 && x < 65535 && y < 65535 && z <= Consts.MAX_Z);
+    }
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
