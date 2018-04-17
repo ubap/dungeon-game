@@ -331,14 +331,13 @@ public class ProtocolGame extends Protocol {
             }
 
         } else if (type == Proto.ItemOpCode.CREATURE) {
-            // todo: map get creature by id
-            creature = new Creature();
-
             long id = inputMessage.getU32();
-            int direction = inputMessage.getU8();
+            creature = Game.getInstance().getMap().getCreatureById(id);
+            Consts.Direction direction = Consts.Direction.fromInt(inputMessage.getU8());
             int unpasss = inputMessage.getU8();
 
-            creature.setId(id);
+            // todo: turn creature
+            creature.setDirection(direction);
         } else {
             throw new RuntimeException("unknown creature opcode");
         }

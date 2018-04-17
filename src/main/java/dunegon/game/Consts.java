@@ -46,9 +46,9 @@ public class Consts {
                     return SOUTH_WEST;
                 case 7:
                     return NORTH_WEST;
-                case 8:
+                default:
                     return INVALID_DIRECTION;
             }
-        }
+        };
     }
 }

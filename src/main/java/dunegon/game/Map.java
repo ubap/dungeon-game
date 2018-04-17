@@ -11,6 +11,7 @@ public class Map {
     private java.util.Map<Long, Creature> knownCreatures;
 
     public Map() {
+        knownCreatures = new HashMap<>();
         tileBlocks = new HashMap[Consts.MAX_Z + 1];
         for (int i = 0; i < Consts.MAX_Z; i++) {
             tileBlocks[i] = new HashMap<>();
