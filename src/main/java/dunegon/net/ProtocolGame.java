@@ -247,14 +247,12 @@ public class ProtocolGame extends Protocol {
         }
 
         //ThingType thingType = ThingTypeManager.getInstance().getThingType(DatAttrs.ThingCategory.ThingCategoryItem).getThing(id);
-        Thing thing = Item.create(id);
+        Item thing = Item.create(id);
 
         int gameThingMark = inputMessage.getU8();
 
-        if (thing.isStackable()) {
-            int count = inputMessage.getU8();
-        } else if (thing.isFluidContainer() || thing.isSplash()) {
-            int countOrSubType = inputMessage.getU8();
+        if (thing.isStackable() || thing.isFluidContainer() || thing.isSplash()) {
+            thing.setCountOrSubType(inputMessage.getU8());
         }
 
         if (thing.getAnimationPhases() > 1) {

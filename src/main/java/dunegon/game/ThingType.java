@@ -302,4 +302,7 @@ public class ThingType {
         return mOnTop;
     }
 
+    public boolean isTopEffect() {
+        return mTopEffect;
+    }
 }

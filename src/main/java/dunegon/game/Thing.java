@@ -1,6 +1,7 @@
 package dunegon.game;
 
 public abstract class Thing {
+    private Position position;
 
     public abstract void setId(long id);
     public abstract long getId();
@@ -65,9 +66,16 @@ public abstract class Thing {
     public boolean isSplash() {
         return getThingType().isSplash();
     }
+    public boolean isTopEffect() {
+        return getThingType().isTopEffect();
+    }
 
     public int getAnimationPhases() {
         return getThingType().getAnimationPhases();
     }
 
+    // set
+    public void setPosition(Position position) {
+        this.position = position;
+    }
 }

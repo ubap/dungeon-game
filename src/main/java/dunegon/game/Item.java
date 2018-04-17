@@ -5,6 +5,7 @@ import dunegon.io.DatAttrs;
 public class Item extends Thing {
 
     private long clientId;
+    private int countOrSubType;
 
     public static Item create(int id) {
         Item val = new Item();
@@ -32,5 +33,9 @@ public class Item extends Thing {
     @Override
     protected ThingType getThingType() {
         return ThingTypeManager.getInstance().getThingType((int) clientId, DatAttrs.ThingCategory.ThingCategoryItem);
+    }
+
+    public void setCountOrSubType(int countOrSubType) {
+        this.countOrSubType = countOrSubType;
     }
 }

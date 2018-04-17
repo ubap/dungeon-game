@@ -67,7 +67,7 @@ public class Map {
     }
 
     public void removeCreatureById(long id) {
-        knownCreatures.put(id,  null);
+        knownCreatures.remove(id);
     }
 
     // private
