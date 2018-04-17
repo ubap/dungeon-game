@@ -23,5 +23,32 @@ public class Consts {
         public static final int MANALEECHCHANCE = 11;
         public static final int MANAlEECHMOUNT = 12;
         public static final int LASTSKILL = 13;
-    };
+    }
+
+    public enum Direction {
+        NORTH, EAST, SOUTH, WEST, NORTH_EAST, SOUTH_EAST, SOUTH_WEST, NORTH_WEST, INVALID_DIRECTION;
+
+        public static Direction fromInt(int val) {
+            switch (val) {
+                case 0:
+                    return NORTH;
+                case 1:
+                    return EAST;
+                case 2:
+                    return SOUTH;
+                case 3:
+                    return WEST;
+                case 4:
+                    return NORTH_EAST;
+                case 5:
+                    return SOUTH_EAST;
+                case 6:
+                    return SOUTH_WEST;
+                case 7:
+                    return NORTH_WEST;
+                case 8:
+                    return INVALID_DIRECTION;
+            }
+        }
+    }
 }

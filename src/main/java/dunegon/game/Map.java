@@ -8,6 +8,7 @@ public class Map {
     private static final int BLOCK_SIZE = 32;
     // z y x
     private java.util.Map<Integer, TileBlock>[] tileBlocks;
+    private java.util.Map<Long, Creature> knownCreatures;
 
     public Map() {
         tileBlocks = new HashMap[Consts.MAX_Z + 1];
@@ -56,8 +57,15 @@ public class Map {
         return null;
     }
 
-    // private
+    public void addCreature(Creature creature) {
+        knownCreatures.put(creature.getId(), creature);
+    }
 
+    public Creature getCreatureById(long id) {
+        return knownCreatures.get(id);
+    }
+
+    // private
     private int getBlockIndex(Position position) {
         return ((position.getY() / BLOCK_SIZE) * (65536 / BLOCK_SIZE)) + (position.getX() / BLOCK_SIZE);
     }

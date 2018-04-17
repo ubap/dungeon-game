@@ -277,8 +277,10 @@ public class ProtocolGame extends Protocol {
         if (type == Proto.ItemOpCode.OUTDATED_CREATUER || type == Proto.ItemOpCode.UNKNOWN_CREATURE) {
             if (known) {
                 long id = inputMessage.getU32();
-                creature = new Creature(); // todo:get creature from map
-                creature.setId(id);
+                creature = Game.getInstance().getMap().getCreatureById(id);
+                if (creature == null) {
+                    throw new RuntimeException("server said that a creature is known, but it's not");
+                }
             } else {
                 long removeId = inputMessage.getU32();
                 // now remove it from map
@@ -295,10 +297,12 @@ public class ProtocolGame extends Protocol {
                     creature = new Player();
                 }
                 creature.setName(name);
+
+                Game.getInstance().getMap().addCreature(creature);
             }
 
             int healthPercent = inputMessage.getU8();
-            int direction = inputMessage.getU8();
+            Consts.Direction direction = Consts.Direction.fromInt(inputMessage.getU8());
             // get outfit here
             Outfit outfit = getOutfit(inputMessage);
 
@@ -321,6 +325,8 @@ public class ProtocolGame extends Protocol {
 
             if (creature != null) {
                 // todo other attribs set
+                creature.setHealthPercent(healthPercent);
+                creature.setDirection(direction);
                 creature.setOutfit(outfit);
             }
 

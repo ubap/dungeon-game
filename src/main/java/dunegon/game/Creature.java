@@ -5,7 +5,10 @@ import dunegon.io.DatAttrs;
 public class Creature extends Thing {
     private long id;
     private String name;
+    private int healthPercent;
+    private Consts.Direction direction;
     private Outfit outfit;
+
 
     private double speedA;
     private double speedB;
@@ -39,6 +42,12 @@ public class Creature extends Thing {
 
     public void setName(String name) {
         this.name = name;
+    }
+    public void setHealthPercent(int healthPercent) {
+        this.healthPercent = healthPercent;
+    }
+    public void setDirection(Consts.Direction direction) {
+        this.direction = direction;
     }
 
     public void setOutfit(Outfit outfit) {
