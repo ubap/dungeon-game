@@ -48,7 +48,12 @@ public class Map {
             return null;
         }
 
-        return tileBlocks[position.getZ()].get(getBlockIndex(position)).get(position);
+        TileBlock tileBlock = tileBlocks[position.getZ()].get(getBlockIndex(position));
+        if (tileBlock != null) {
+            return tileBlock.get(position);
+        }
+
+        return null;
     }
 
     // private

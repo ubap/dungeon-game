@@ -2,7 +2,8 @@ package dunegon.game;
 
 public abstract class Thing {
 
-    public abstract void setId(int id);
+    public abstract void setId(long id);
+    public abstract long getId();
 
     public int getStackPriority() {
         if(isGround())

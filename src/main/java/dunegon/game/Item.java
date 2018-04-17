@@ -4,7 +4,7 @@ import dunegon.io.DatAttrs;
 
 public class Item extends Thing {
 
-    private int clientId;
+    private long clientId;
 
     public static Item create(int id) {
         Item val = new Item();
@@ -19,13 +19,18 @@ public class Item extends Thing {
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(long id) {
         // todo: check: is valid dat
         this.clientId = id;
     }
 
     @Override
+    public long getId() {
+        return clientId;
+    }
+
+    @Override
     protected ThingType getThingType() {
-        return ThingTypeManager.getInstance().getThingType(clientId, DatAttrs.ThingCategory.ThingCategoryItem);
+        return ThingTypeManager.getInstance().getThingType((int) clientId, DatAttrs.ThingCategory.ThingCategoryItem);
     }
 }

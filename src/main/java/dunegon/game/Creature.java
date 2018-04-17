@@ -3,21 +3,27 @@ package dunegon.game;
 import dunegon.io.DatAttrs;
 
 public class Creature extends Thing {
-    private int id;
+    private long id;
     private String name;
+    private Outfit outfit;
 
     private double speedA;
     private double speedB;
     private double speedC;
 
     @Override
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @Override
+    public long getId() {
+        return id;
+    }
+
+    @Override
     protected ThingType getThingType() {
-        return ThingTypeManager.getInstance().getThingType(id, DatAttrs.ThingCategory.ThingCategoryCreature);
+        return ThingTypeManager.getInstance().getThingType(outfit.getId(), DatAttrs.ThingCategory.ThingCategoryCreature);
     }
 
     @Override
@@ -35,4 +41,7 @@ public class Creature extends Thing {
         this.name = name;
     }
 
+    public void setOutfit(Outfit outfit) {
+        this.outfit = outfit;
+    }
 }

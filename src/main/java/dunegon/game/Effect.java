@@ -3,7 +3,7 @@ package dunegon.game;
 import dunegon.io.DatAttrs;
 
 public class Effect extends Thing {
-    private int id;
+    private long id;
 
     public static Effect create(int id) {
         Effect val = new Effect();
@@ -12,13 +12,18 @@ public class Effect extends Thing {
     }
 
     @Override
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     @Override
+    public long getId() {
+        return id;
+    }
+
+    @Override
     protected ThingType getThingType() {
-        return ThingTypeManager.getInstance().getThingType(id, DatAttrs.ThingCategory.ThingCategoryEffect);
+        return ThingTypeManager.getInstance().getThingType((int) id, DatAttrs.ThingCategory.ThingCategoryEffect);
     }
 
     @Override

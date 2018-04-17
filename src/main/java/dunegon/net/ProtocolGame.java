@@ -11,17 +11,20 @@ import java.io.IOException;
 public class ProtocolGame extends Protocol {
     private Logger mLogger = LoggerFactory.getLogger(ProtocolGame.class.getSimpleName());
 
-    private String mAccountName;
-    private String mPassword;
-    private String mCharacterName;
+    private String accountName;
+    private String password;
+    private String characterName;
 
     private int mChallengeTimestamp;
     private byte mChallengeRandom;
 
+    private Player localPlayer;
+
     public ProtocolGame(String accountName, String password, String characterName) {
-        mAccountName = accountName;
-        mPassword = password;
-        mCharacterName = characterName;
+        this.accountName = accountName;
+        this.password = password;
+        this.characterName = characterName;
+        this.localPlayer = new Player();
     }
 
     @Override
@@ -111,9 +114,9 @@ public class ProtocolGame extends Protocol {
 
         outputMessage.addU8((char) 0); // gamemasterflag
 
-        String sessionArgs = String.format("%s\n%s\n%s\n%s", mAccountName, mPassword, "", "0");
+        String sessionArgs = String.format("%s\n%s\n%s\n%s", accountName, password, "", "0");
         outputMessage.addString(sessionArgs);
-        outputMessage.addString(mCharacterName);
+        outputMessage.addString(characterName);
         outputMessage.addU32(mChallengeTimestamp);
         outputMessage.addU8((char) mChallengeRandom);
 
@@ -142,7 +145,6 @@ public class ProtocolGame extends Protocol {
         String urlToIngameStoreImages = inputMessage.getString();
         int premiumCoinPackageSize = inputMessage.getU16();
 
-        LocalPlayer localPlayer = Game.getInstance().getLocalPlayer();
         localPlayer.setId(playerId);
         localPlayer.setSpeedFormula(speedA, speedB, speedC);
     }
@@ -269,30 +271,36 @@ public class ProtocolGame extends Protocol {
             type = inputMessage.getU16();
         }
 
-        Creature creature = new Creature();
+        Creature creature;
 
         boolean known = (type != Proto.ItemOpCode.UNKNOWN_CREATURE);
         if (type == Proto.ItemOpCode.OUTDATED_CREATUER || type == Proto.ItemOpCode.UNKNOWN_CREATURE) {
             if (known) {
-                int id = inputMessage.getU32();
+                long id = inputMessage.getU32();
+                creature = new Creature(); // todo:get creature from map
                 creature.setId(id);
             } else {
                 long removeId = inputMessage.getU32();
                 // now remove it from map
 
                 int id = inputMessage.getU32();
-                creature.setId(id);
                 int creatureType = inputMessage.getU8();
 
                 String name = inputMessage.getString();
-                creature.setName(name);
                 mLogger.info("Name: {}", name);
+
+                if (id == localPlayer.getId()) {
+                    creature = localPlayer;
+                } else {
+                    creature = new Player();
+                }
+                creature.setName(name);
             }
 
             int healthPercent = inputMessage.getU8();
             int direction = inputMessage.getU8();
             // get outfit here
-            getOutfit(inputMessage);
+            Outfit outfit = getOutfit(inputMessage);
 
             int lightIntensity = inputMessage.getU8();
             int lightColor = inputMessage.getU8();
@@ -309,37 +317,64 @@ public class ProtocolGame extends Protocol {
             int icon = inputMessage.getU8();
             int mark = inputMessage.getU8();
             inputMessage.getU16(); // helpers
-
             int unpass = inputMessage.getU8();
+
+            if (creature != null) {
+                // todo other attribs set
+                creature.setOutfit(outfit);
+            }
+
         } else if (type == Proto.ItemOpCode.CREATURE) {
+            // todo: map get creature by id
+            creature = new Creature();
+
             long id = inputMessage.getU32();
             int direction = inputMessage.getU8();
             int unpasss = inputMessage.getU8();
+
+            creature.setId(id);
         } else {
             throw new RuntimeException("unknown creature opcode");
         }
 
-        return null;
+        return creature;
     }
 
-    private void getOutfit(InputMessage inputMessage) {
-        int lookType = inputMessage.getU16();
+    private Outfit getOutfit(InputMessage inputMessage) {
+        Outfit outfit = new Outfit();
 
+        int lookType = inputMessage.getU16();
         if (lookType != 0) {
+            outfit.setThingCategory(DatAttrs.ThingCategory.ThingCategoryCreature);
             int head = inputMessage.getU8();
             int body = inputMessage.getU8();
             int legs = inputMessage.getU8();
             int feet = inputMessage.getU8();
             int addons = inputMessage.getU8();
+
+            outfit.setId(lookType);
+            outfit.setHead(head);
+            outfit.setBody(body);
+            outfit.setLegs(legs);
+            outfit.setFeet(feet);
+            outfit.setAddons(addons);
         } else {
             int lookTypeEx = inputMessage.getU16();
             if (lookTypeEx == 0) {
                 // effect
+                outfit.setThingCategory(DatAttrs.ThingCategory.ThingCategoryEffect);
+                outfit.setAuxId(13); // invisible effect id
             } else {
                 // outfit type = item
+                lookTypeEx = 0;
+                outfit.setThingCategory(DatAttrs.ThingCategory.ThingCategoryItem);
+                outfit.setAuxId(lookTypeEx);
             }
         }
         int mount = inputMessage.getU16();
+        outfit.setMount(mount);
+
+        return outfit;
     }
 
 
