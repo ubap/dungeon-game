@@ -66,6 +66,10 @@ public class Map {
         return knownCreatures.get(id);
     }
 
+    public void removeCreatureById(long id) {
+        knownCreatures.put(id,  null);
+    }
+
     // private
     private int getBlockIndex(Position position) {
         return ((position.getY() / BLOCK_SIZE) * (65536 / BLOCK_SIZE)) + (position.getX() / BLOCK_SIZE);

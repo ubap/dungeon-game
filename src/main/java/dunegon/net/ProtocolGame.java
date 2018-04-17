@@ -283,7 +283,7 @@ public class ProtocolGame extends Protocol {
                 }
             } else {
                 long removeId = inputMessage.getU32();
-                // now remove it from map
+                Game.getInstance().getMap().removeCreatureById(removeId);
 
                 int id = inputMessage.getU32();
                 int creatureType = inputMessage.getU8();
