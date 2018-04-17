@@ -85,8 +85,20 @@ public class ProtocolGame extends Protocol {
                 case Proto.OpCode.PLAYER_SKILLS:
                     processPlayerSkills(inputMessage);
                     break;
+                case Proto.OpCode.AMBIENT_LIGHT:
+                    processAmbientLight(inputMessage);
+                    break;
                 case Proto.OpCode.GRAPHICAL_EFFECT:
                     processGraphicalEffect(inputMessage);
+                    break;
+                case Proto.OpCode.CREATURE_LIGHT:
+                    processCreatureLight(inputMessage);
+                    break;
+                case Proto.OpCode.PLAYER_BASIC_DATA:
+                    processPlayerBasicData(inputMessage);
+                    break;
+                case Proto.OpCode.PLAYER_STATE:
+                    processPlayerState(inputMessage);
                     break;
                 default:
                     mLogger.warn("Unrecognized opCode: {}", String.format("0x%x", opCode));
@@ -488,6 +500,12 @@ public class ProtocolGame extends Protocol {
         }
     }
 
+    private void processAmbientLight(InputMessage inputMessage) {
+        int intensity = inputMessage.getU8();
+        int color = inputMessage.getU8();
+        mLogger.info("processAmbientLight, intensity:{}, color:{}", intensity, color);
+    }
+
     private void processGraphicalEffect(InputMessage inputMessage) {
         Position position = getPosition(inputMessage);
 
@@ -497,6 +515,35 @@ public class ProtocolGame extends Protocol {
 
 
         mLogger.info("processGraphicalEffect, pos: {}, id: {}", position, effectId);
+    }
+
+    private void processCreatureLight(InputMessage inputMessage) {
+        long id = inputMessage.getU32();
+        int intensity = inputMessage.getU8();
+        int color = inputMessage.getU8();
+        Creature creature = Game.getInstance().getMap().getCreatureById(id);
+        if (creature == null) {
+            throw new RuntimeException("could not get creature");
+        }
+
+        mLogger.info("processCreatureLight, creature:{}, intensity:{}, color:{}", creature.getName(), intensity, color);
+    }
+
+    private void processPlayerBasicData(InputMessage inputMessage) {
+        boolean premium = inputMessage.getU8() != 0;
+        long premiumExpiration = inputMessage.getU32();
+        int vocation = inputMessage.getU8();
+
+        int spellCount = inputMessage.getU16();
+        for (int i = 0; i < spellCount; i++) {
+            inputMessage.getU8(); // get known spell
+        }
+        mLogger.info("processPlayerBasicData");
+    }
+
+    private void processPlayerState(InputMessage inputMessage) {
+        int states = inputMessage.getU16();
+        mLogger.info("processPlayerState");
     }
 
     private Position getPosition(InputMessage inputMessage) {

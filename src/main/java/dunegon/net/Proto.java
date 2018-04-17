@@ -28,9 +28,13 @@ public class Proto {
         public static final byte MAP_DESCRIPTION = 0x64;
         public static final byte SET_INVENTORY = 0x78;
         public static final byte DELETE_INVENTORY = 0x79;
+        public static final byte AMBIENT_LIGHT = (byte) 0x82;
         public static final byte GRAPHICAL_EFFECT = (byte) 0x83;
+        public static final byte CREATURE_LIGHT = (byte) 0x8D;
+        public static final byte PLAYER_BASIC_DATA = (byte) 0x9F;
         public static final byte PLAYER_STATS = (byte) 0xA0;
         public static final byte PLAYER_SKILLS = (byte) 0xA1;
+        public static final byte PLAYER_STATE = (byte) 0xA2;
 
 
         public static class Send {

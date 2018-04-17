@@ -53,4 +53,9 @@ public class Creature extends Thing {
     public void setOutfit(Outfit outfit) {
         this.outfit = outfit;
     }
+
+
+    public String getName() {
+        return name;
+    }
 }
