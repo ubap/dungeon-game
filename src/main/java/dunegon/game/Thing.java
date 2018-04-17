@@ -12,15 +12,15 @@ public abstract class Thing {
     public abstract long getId();
 
     public int getStackPriority() {
-        if(isGround())
+        if (isGround())
             return 0;
-        else if(isGroundBorder())
+        else if (isGroundBorder())
             return 1;
-        else if(isOnBottom())
+        else if (isOnBottom())
             return 2;
-        else if(isOnTop())
+        else if (isOnTop())
             return 3;
-        else if(isCreature())
+        else if (isCreature())
             return 4;
         else // common items
             return 5;
