@@ -130,6 +130,7 @@ public abstract class Protocol {
         if (mXteaEnabled) {
             mXteaEncryptionEngine.decrypt(mInputMessage.getBuffer(), 6, 1);
             int xteaLength = mInputMessage.getU16() + 2;
+            mInputMessage.setMessageSize(xteaLength + 6); // proper message length is now known, use it
             // xteaLength += 8 - (xteaLength % 8);
             int cycles = xteaLength / 8;
 
