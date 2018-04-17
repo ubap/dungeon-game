@@ -103,6 +103,9 @@ public class ProtocolGame extends Protocol {
                 case Proto.OpCode.CHANGE_ON_MAP:
                     processTileTransformThing(inputMessage);
                     break;
+                case Proto.OpCode.MOVE_CREATURE:
+                    processMoveCreature(inputMessage);
+                    break;
                 default:
                     mLogger.warn("Unrecognized opCode: {}", String.format("0x%x", opCode));
                     return;
@@ -568,6 +571,21 @@ public class ProtocolGame extends Protocol {
         mLogger.info("processTileTransformThing");
     }
 
+    private void processMoveCreature(InputMessage inputMessage) {
+        Thing thing = getMappedThing(inputMessage);
+        Position newPos = getPosition(inputMessage);
+
+        if (thing == null || !thing.isCreature()) {
+            throw new RuntimeException("no creature found to move");
+        }
+
+        if (!Game.getInstance().getMap().removeThing(thing)) {
+            throw new RuntimeException("unable to remove creature");
+        }
+
+        Game.getInstance().getMap().addThing(thing, newPos, -1);
+        mLogger.info("processMoveCreature");
+    }
 
     // HELPERS -->
 
