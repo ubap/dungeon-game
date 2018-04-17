@@ -30,6 +30,12 @@ public abstract class Thing {
     public boolean isCreature() {
         return false;
     }
+    public boolean isMonster() {
+        return false;
+    }
+    public boolean isNpc() {
+        return false;
+    }
     public boolean isEffect() {
         return false;
     }

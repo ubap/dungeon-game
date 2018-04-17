@@ -43,4 +43,13 @@ public class Proto {
         public static final short CREATURE = 99;
 
     }
+
+    public static class CreatureType {
+        public static final short PLAYER = 0;
+        public static final short MONSTER = 1;
+        public static final short NPC = 2;
+        public static final short SUMMON_OWN = 3;
+        public static final short SUMMON_OTHER = 4;
+        public static final short UNKNOWN = 0xFF;
+    }
 }

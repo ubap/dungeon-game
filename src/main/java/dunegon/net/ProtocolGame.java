@@ -293,9 +293,17 @@ public class ProtocolGame extends Protocol {
 
                 if (id == localPlayer.getId()) {
                     creature = localPlayer;
-                } else {
+                } else if (creatureType == Proto.CreatureType.PLAYER) {
                     creature = new Player();
+                } else if (creatureType == Proto.CreatureType.MONSTER) {
+                    creature = new Monster();
+                } else if (creatureType == Proto.CreatureType.NPC) {
+                    creature = new Npc();
+                } else {
+                    throw new RuntimeException("invalid creature type: " + creatureType);
                 }
+
+                creature.setId(id);
                 creature.setName(name);
 
                 Game.getInstance().getMap().addCreature(creature);
