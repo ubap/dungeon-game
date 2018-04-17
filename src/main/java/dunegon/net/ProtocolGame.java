@@ -100,6 +100,9 @@ public class ProtocolGame extends Protocol {
                 case Proto.OpCode.PLAYER_STATE:
                     processPlayerState(inputMessage);
                     break;
+                case Proto.OpCode.CHANGE_ON_MAP:
+                    processTileTransformThing(inputMessage);
+                    break;
                 default:
                     mLogger.warn("Unrecognized opCode: {}", String.format("0x%x", opCode));
                     return;
@@ -546,6 +549,28 @@ public class ProtocolGame extends Protocol {
         mLogger.info("processPlayerState");
     }
 
+    private void processTileTransformThing(InputMessage inputMessage) {
+        Thing thing = getMappedThing(inputMessage);
+        Thing newThing = getThing(inputMessage);
+
+        if (thing == null) {
+            throw new RuntimeException("no thing");
+        }
+
+        Position position = thing.getPosition();
+        int stackPos = thing.getStackPos();
+
+        if (!Game.getInstance().getMap().removeThing(thing)) {
+            throw new RuntimeException("unable to remove thing");
+        }
+
+        Game.getInstance().getMap().addThing(newThing, position, stackPos);
+        mLogger.info("processTileTransformThing");
+    }
+
+
+    // HELPERS -->
+
     private Position getPosition(InputMessage inputMessage) {
         int x = inputMessage.getU16();
         int y = inputMessage.getU16();
@@ -554,7 +579,30 @@ public class ProtocolGame extends Protocol {
         return new Position(x, y, z);
     }
 
-    // send
+    private Thing getMappedThing(InputMessage inputMessage) {
+        Thing thing;
+        int x = inputMessage.getU16();
+        if (x != 0xFFFF) {
+            int y = inputMessage.getU16();
+            int z = inputMessage.getU8();
+            int stackPos = inputMessage.getU8();
+            Position position = new Position(x, y, z);
+            thing = Game.getInstance().getMap().getThing(position, stackPos);
+            if (thing == null) {
+                throw new RuntimeException("no thing at pos:" + position + ", stackpos:" + stackPos);
+            }
+
+        } else {
+            long id = inputMessage.getU32();
+            thing = Game.getInstance().getMap().getCreatureById(id);
+            if (thing == null) {
+                throw new RuntimeException("no creature with id: " + id);
+            }
+        }
+        return thing;
+    }
+
+    // SEND -->
 
     private void sendPingBack() {
         mLogger.info("sendPingBack");

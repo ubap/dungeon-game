@@ -64,6 +64,38 @@ public class Tile {
         thing.setPosition(position);
     }
 
+    public Thing getThing(int stackPos) {
+        if (stackPos >= 0 && stackPos < things.size()) {
+            return things.get(stackPos);
+        }
+        return null;
+    }
+
+    public int getThingStackPos(Thing thing) {
+        for (int stackPos = 0; stackPos < things.size(); stackPos++) {
+            if (thing == things.get(stackPos)) {
+                return stackPos;
+            }
+        }
+        return -1;
+    }
+
+    public boolean removeThing(Thing thing) {
+        if (thing == null) {
+            return false;
+        }
+
+        boolean removed = false;
+
+        if (thing.isEffect()) {
+            // todo
+        } else {
+            removed = things.remove(thing);
+        }
+
+        return removed;
+    }
+
     public void clean() {
         this.things.clear();
     }

@@ -1,6 +1,11 @@
 package dunegon.game;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class Thing {
+    private static Logger sLogger = LoggerFactory.getLogger(Thing.class.getSimpleName());
+
     private Position position;
 
     public abstract void setId(long id);
@@ -72,6 +77,24 @@ public abstract class Thing {
 
     public int getAnimationPhases() {
         return getThingType().getAnimationPhases();
+    }
+    public Position getPosition() {
+        return position;
+    }
+    public Tile getTile() {
+        return Game.getInstance().getMap().getTile(position);
+    }
+    public int getStackPos() {
+        if (position.getX() == 0xFFFF && isItem()) {
+            return position.getZ();
+        } else {
+            Tile tile = getTile();
+            if (tile == null) {
+                sLogger.warn("got a thing with invalid stackpos");
+                return -1;
+            }
+            return tile.getThingStackPos(this);
+        }
     }
 
     // set

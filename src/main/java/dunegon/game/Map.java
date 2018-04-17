@@ -58,6 +58,27 @@ public class Map {
         return null;
     }
 
+    public Thing getThing(Position position, int stackPos) {
+        Tile tile = getTile(position);
+        if (tile != null) {
+            return tile.getThing(stackPos);
+        }
+        return null;
+    }
+
+    public boolean removeThing(Thing thing) {
+        if (thing == null) {
+            return false;
+        }
+        boolean removed = false;
+        // todo implement missile etc
+        Tile tile = thing.getTile();
+        if (tile != null) {
+            removed = tile.removeThing(thing);
+        }
+        return removed;
+    }
+
     public void addCreature(Creature creature) {
         knownCreatures.put(creature.getId(), creature);
     }

@@ -26,6 +26,7 @@ public class Proto {
 
 
         public static final byte MAP_DESCRIPTION = 0x64;
+        public static final byte CHANGE_ON_MAP = 0x6B;
         public static final byte SET_INVENTORY = 0x78;
         public static final byte DELETE_INVENTORY = 0x79;
         public static final byte AMBIENT_LIGHT = (byte) 0x82;
