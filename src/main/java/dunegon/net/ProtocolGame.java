@@ -73,6 +73,9 @@ public class ProtocolGame extends Protocol {
                 case Proto.OpCode.CREATURE_SAY:
                     processCreatureSay(inputMessage);
                     break;
+                case Proto.OpCode.SET_INVENTORY:
+                    processAddInventory(inputMessage);
+                    break;
                 case Proto.OpCode.DELETE_INVENTORY:
                     processDeleteInventory(inputMessage);
                     break;
@@ -241,7 +244,11 @@ public class ProtocolGame extends Protocol {
         return thing;
     }
 
-    private Thing getItem(InputMessage inputMessage, int id) {
+    private Item getItem(InputMessage inputMessage) {
+        return getItem(inputMessage, 0);
+    }
+
+    private Item getItem(InputMessage inputMessage, int id) {
         if (id == 0) {
             id = inputMessage.getU16();
         }
@@ -259,7 +266,7 @@ public class ProtocolGame extends Protocol {
             inputMessage.getU8(); // sync I think
         }
 
-        mLogger.info("item id: {}", id);
+        mLogger.info("getItem item id: {}", id);
 
         return thing;
     }
@@ -407,6 +414,12 @@ public class ProtocolGame extends Protocol {
         String text = inputMessage.getString();
 
         mLogger.info("Creature {} at pos {} {} {} says the following {}", creatureName, x, y, z, text);
+    }
+
+    private void processAddInventory(InputMessage inputMessage) {
+        int slot = inputMessage.getU8();
+        Item item = getItem(inputMessage);
+        mLogger.info("processAddInventory, slot: {}", slot);
     }
 
     private void processDeleteInventory(InputMessage inputMessage) {
