@@ -38,7 +38,8 @@ public class Proto {
 
 
         public static class Send {
-
+            public static final byte TURN_NORTH = 0x6F;
+            public static final byte TURN_EAST = 0x70;
         }
     }
 

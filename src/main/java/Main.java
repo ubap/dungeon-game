@@ -30,11 +30,16 @@ public class Main {
             charList.wait();
         }
 
-        Protocol protocol2 = new ProtocolGame("1", "1", "Heh");
-        protocol2.connect("127.0.0.1", 7172);
+        ProtocolGame protocolGame = new ProtocolGame("1", "1", "Heh");
+        protocolGame.connect("127.0.0.1", 7172);
+
+        Thread.sleep(2000);
 
         while (true) {
-            Thread.sleep(1000);
+            protocolGame.sendTurnEast();
+            Thread.sleep(500);
+            protocolGame.sendTurnNorth();
+            Thread.sleep(500);
         }
 
     }

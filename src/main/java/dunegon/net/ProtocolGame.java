@@ -560,12 +560,18 @@ public class ProtocolGame extends Protocol {
         mLogger.info("sendPingBack");
         OutputMessage outputMessage = new OutputMessage();
         outputMessage.addU8((char) Proto.OpCode.GAMEWORLD_PING_BACK);
+        send(outputMessage);
+    }
 
-        try {
-            send(outputMessage);
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void sendTurnNorth() {
+        OutputMessage outputMessage = new OutputMessage();
+        outputMessage.addU8((char) Proto.OpCode.Send.TURN_NORTH);
+        send(outputMessage);
+    }
+
+    public void sendTurnEast() {
+        OutputMessage outputMessage = new OutputMessage();
+        outputMessage.addU8((char) Proto.OpCode.Send.TURN_EAST);
+        send(outputMessage);
     }
 }
