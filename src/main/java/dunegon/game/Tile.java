@@ -15,10 +15,7 @@ public class Tile {
     }
 
     public void addThing(Thing thing, int stackPos) {
-
-        if (thing.isEffect()) {
-
-        }
+        things.add(thing);
     }
 
     public void clean() {

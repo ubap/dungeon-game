@@ -1,7 +1,6 @@
 import dunegon.game.ThingTypeManager;
 import dunegon.game.Game;
 import dunegon.game.login.CharList;
-import dunegon.io.ItemLoader;
 import dunegon.net.Protocol;
 import dunegon.net.ProtocolGame;
 import dunegon.net.ProtocolLogin;
@@ -15,15 +14,12 @@ public class Main {
     public static void main(String[] args) throws IOException, InterruptedException, URISyntaxException {
         System.out.println("starting");
 
-
         Game.init();
-
         ThingTypeManager.init();
 
         final ClassLoader loader = Main.class.getClassLoader();
         URL resourceUrl = loader.getResource("Tibia1098.dat");
-
-        ItemLoader.loadDat(ThingTypeManager.getInstance(), resourceUrl.toURI());
+        ThingTypeManager.getInstance().loadDat(resourceUrl.toURI());
 
         CharList charList = new CharList();
 
@@ -38,7 +34,7 @@ public class Main {
         protocol2.connect("127.0.0.1", 7172);
 
         while (true) {
-            Thread.sleep(100000000);
+            Thread.sleep(1000);
         }
 
     }

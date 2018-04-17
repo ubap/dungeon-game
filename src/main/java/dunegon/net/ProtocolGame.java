@@ -228,7 +228,7 @@ public class ProtocolGame extends Protocol {
         int id = inputMessage.getU16();
 
         if (id == 0) {
-            throw new RuntimeException("invalid thing id");
+            throw new RuntimeException("invalid thingType id");
         } else if (id == Proto.ItemOpCode.UNKNOWN_CREATURE || id == Proto.ItemOpCode.OUTDATED_CREATUER
                 || id == Proto.ItemOpCode.CREATURE) {
             thing = getCreature(inputMessage, id);
@@ -244,8 +244,8 @@ public class ProtocolGame extends Protocol {
             id = inputMessage.getU16();
         }
 
-        Thing thing = ThingTypeManager.getInstance().getThingType(DatAttrs.ThingCategory.ThingCategoryItem).getThing(id);
-        //Thing thing = Item.create(id);
+        //ThingType thingType = ThingTypeManager.getInstance().getThingType(DatAttrs.ThingCategory.ThingCategoryItem).getThing(id);
+        Thing thing = Item.create(id);
 
         int gameThingMark = inputMessage.getU8();
 
@@ -269,18 +269,23 @@ public class ProtocolGame extends Protocol {
             type = inputMessage.getU16();
         }
 
+        Creature creature = new Creature();
+
         boolean known = (type != Proto.ItemOpCode.UNKNOWN_CREATURE);
         if (type == Proto.ItemOpCode.OUTDATED_CREATUER || type == Proto.ItemOpCode.UNKNOWN_CREATURE) {
             if (known) {
-                long id = inputMessage.getU32();
+                int id = inputMessage.getU32();
+                creature.setId(id);
             } else {
                 long removeId = inputMessage.getU32();
                 // now remove it from map
 
-                long id = inputMessage.getU32();
+                int id = inputMessage.getU32();
+                creature.setId(id);
                 int creatureType = inputMessage.getU8();
 
                 String name = inputMessage.getString();
+                creature.setName(name);
                 mLogger.info("Name: {}", name);
             }
 

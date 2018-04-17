@@ -1,5 +1,7 @@
 package dunegon.game;
 
+import javafx.geometry.Pos;
+
 import java.util.HashMap;
 
 public class Map {
@@ -39,6 +41,14 @@ public class Map {
 
         TileBlock block = getTileBlock(position);
         return block.getOrCreate(position);
+    }
+
+    public Tile getTile(Position position) {
+        if (!position.isMapPosition()) {
+            return null;
+        }
+
+        return tileBlocks[position.getZ()].get(getBlockIndex(position)).get(position);
     }
 
     // private
