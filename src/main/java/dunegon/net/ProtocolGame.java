@@ -18,13 +18,13 @@ public class ProtocolGame extends Protocol {
     private int mChallengeTimestamp;
     private byte mChallengeRandom;
 
-    private Player localPlayer;
+    private LocalPlayer localPlayer;
 
     public ProtocolGame(String accountName, String password, String characterName) {
         this.accountName = accountName;
         this.password = password;
         this.characterName = characterName;
-        this.localPlayer = new Player();
+        this.localPlayer = new LocalPlayer();
     }
 
     @Override
@@ -459,6 +459,21 @@ public class ProtocolGame extends Protocol {
         int training = inputMessage.getU16();
         int remainingStoreXpBoostSeconds = inputMessage.getU16();
         boolean canBuyMoreStoreXpBoosts = inputMessage.getU8() != 0;
+
+        localPlayer.setHealth(health);
+        localPlayer.setMaxHealth(maxHealth);
+        localPlayer.setFreeCapacity(freeCapacity);
+        localPlayer.setTotalCapacity(totalCapacity);
+        localPlayer.setTotalExperience(0);
+        localPlayer.setLevel(level);
+        localPlayer.setLevelPercent(levelPercent);
+        localPlayer.setMana(mana);
+        localPlayer.setMaxMana(maxMana);
+        localPlayer.setMagicLevel(magicLevel);
+        localPlayer.setMagicLevelPercent(magicLevelPercent);
+        localPlayer.setBaseMagicLevel(baseMagicLevel);
+        localPlayer.setSoul(soul);
+        localPlayer.setStamina(stamina);
     }
 
     private void processPlayerSkills(InputMessage inputMessage) {
