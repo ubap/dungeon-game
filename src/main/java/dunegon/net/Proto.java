@@ -18,38 +18,38 @@ public class Proto {
         public static final byte GAMEWORLD_FIRST_PACKET = 0x1F;
         public static final byte GAMESERVER_LOGIN_SUCCESS = 0x17;
 
-        public static final byte CREATURE_SAY = (byte) 0xAA;
+        public static final short CREATURE_SAY = 0xAA;
 
         public static final byte PENDING_STATE = 0xA;
         public static final byte ENTER_WORLD = 0x0F;
 
 
 
-        public static final byte MAP_DESCRIPTION = 0x64;
-        public static final byte MAP_TOP_ROW = 0x65;
-        public static final byte MAP_RIGHT_ROW = 0x66;
-        public static final byte MAP_BOTTOM_ROW = 0x67;
-        public static final byte MAP_LEFT_ROW = 0x68;
-        public static final byte CREATE_ON_MAP = 0x6A;
-        public static final byte CHANGE_ON_MAP = 0x6B;
-        public static final byte DELETE_ON_MAP = 0x6C;
-        public static final byte MOVE_CREATURE = 0x6D;
+        public static final short MAP_DESCRIPTION = 0x64;
+        public static final short MAP_TOP_ROW = 0x65;
+        public static final short MAP_RIGHT_ROW = 0x66;
+        public static final short MAP_BOTTOM_ROW = 0x67;
+        public static final short MAP_LEFT_ROW = 0x68;
+        public static final short CREATE_ON_MAP = 0x6A;
+        public static final short CHANGE_ON_MAP = 0x6B;
+        public static final short DELETE_ON_MAP = 0x6C;
+        public static final short MOVE_CREATURE = 0x6D;
 
-        public static final byte SET_INVENTORY = 0x78;
-        public static final byte DELETE_INVENTORY = 0x79;
-        public static final byte AMBIENT_LIGHT = (byte) 0x82;
-        public static final byte GRAPHICAL_EFFECT = (byte) 0x83;
-        public static final byte CREATURE_LIGHT = (byte) 0x8D;
-        public static final byte CREATURE_HEALTH = (byte) 0x8C;
-        public static final byte CREATURE_SPEED = (byte) 0x8F;
-        public static final byte CREATURE_TYPE = (byte) 0x95;
+        public static final short SET_INVENTORY = 0x78;
+        public static final short DELETE_INVENTORY = 0x79;
+        public static final short AMBIENT_LIGHT = 0x82;
+        public static final short GRAPHICAL_EFFECT = 0x83;
+        public static final short CREATURE_LIGHT = 0x8D;
+        public static final short CREATURE_HEALTH = 0x8C;
+        public static final short CREATURE_SPEED = 0x8F;
+        public static final short CREATURE_TYPE = 0x95;
 
-        public static final byte PLAYER_BASIC_DATA = (byte) 0x9F;
-        public static final byte PLAYER_STATS = (byte) 0xA0;
-        public static final byte PLAYER_SKILLS = (byte) 0xA1;
-        public static final byte PLAYER_STATE = (byte) 0xA2;
-        public static final byte TEXT_MESSAGE = (byte) 0xB4;
-        public static final byte PLAYER_INVENTORY = (byte) 0xF5;
+        public static final short PLAYER_BASIC_DATA = 0x9F;
+        public static final short PLAYER_STATS = 0xA0;
+        public static final short PLAYER_SKILLS = 0xA1;
+        public static final short PLAYER_STATE = 0xA2;
+        public static final short TEXT_MESSAGE = 0xB4;
+        public static final short PLAYER_INVENTORY = 0xF5;
 
 
         public static class Send {

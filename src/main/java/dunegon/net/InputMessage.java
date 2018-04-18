@@ -19,7 +19,11 @@ public class InputMessage {
     }
 
     public short getU8() {
-        return mByteBuffer.get();
+        byte[] bytes = mByteBuffer.array();
+        int position = mByteBuffer.position();
+        short val = (short) (bytes[position] & ((short) 0xFF));
+        mByteBuffer.position(position + 1);
+        return val;
     }
 
     public int getU16() {
