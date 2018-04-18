@@ -324,7 +324,7 @@ public class ProtocolGame extends Protocol {
         int maxHealth = inputMessage.getU16();
         long freeCapacity = inputMessage.getU32();
         long totalCapacity = inputMessage.getU32();
-        long experience = inputMessage.getU32(); inputMessage.getU32(); // TODO: ;
+        long experience = inputMessage.get64();
         int level = inputMessage.getU16();
         int levelPercent = inputMessage.getU8();
 
