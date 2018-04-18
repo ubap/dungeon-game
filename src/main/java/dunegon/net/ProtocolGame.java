@@ -119,6 +119,9 @@ public class ProtocolGame extends Protocol {
                 case Proto.OpCode.CREATURE_TYPE:
                     processCreatureType(inputMessage);
                     break;
+                case Proto.OpCode.PLAYER_INVENTORY:
+                    processPlayerInventory(inputMessage);
+                    break;
                 default:
                     LOGGER.warn("Unrecognized opCode: {}", String.format("0x%x", opCode));
                     return;
@@ -624,6 +627,15 @@ public class ProtocolGame extends Protocol {
     private void processCreatureType(InputMessage inputMessage) {
         long id = inputMessage.getU32();
         int type = inputMessage.getU8();
+    }
+
+    private void processPlayerInventory(InputMessage inputMessage) {
+        int size = inputMessage.getU16();
+        for (int i = 0; i < size; i++) {
+            inputMessage.getU16(); // id
+            inputMessage.getU8(); // subtype
+            inputMessage.getU16(); // count
+        }
     }
 
     // HELPERS -->

@@ -43,6 +43,8 @@ public class Proto {
         public static final byte PLAYER_SKILLS = (byte) 0xA1;
         public static final byte PLAYER_STATE = (byte) 0xA2;
 
+        public static final byte PLAYER_INVENTORY = (byte) 0xF5;
+
 
         public static class Send {
             public static final byte TURN_NORTH = 0x6F;
