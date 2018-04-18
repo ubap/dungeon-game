@@ -12,12 +12,43 @@ public class Map {
     private java.util.Map<Integer, TileBlock>[] tileBlocks;
     private java.util.Map<Long, Creature> knownCreatures;
 
+    private AwareRange awareRange;
+    private Position centralPosition;
+
     public Map() {
         knownCreatures = new HashMap<>();
         tileBlocks = new HashMap[Consts.MAX_Z + 1];
         for (int i = 0; i < Consts.MAX_Z; i++) {
             tileBlocks[i] = new HashMap<>();
         }
+
+        init();
+    }
+
+    public void init() {
+        resetAwareRange();
+    }
+
+    public void setAwareRange(AwareRange awareRange) {
+        this.awareRange = awareRange;
+        // todo: remove unaware things
+    }
+
+    public void resetAwareRange() {
+        AwareRange awareRange = new AwareRange(6, 9, 7, 8);
+        setAwareRange(awareRange);
+    }
+
+    public AwareRange getAwareRange() {
+        return awareRange;
+    }
+
+    public Position getCentralPosition() {
+        return centralPosition;
+    }
+
+    public void setCentralPosition(Position centralPosition) {
+        this.centralPosition = centralPosition;
     }
 
     public void addThing(Thing thing, Position position) {

@@ -12,27 +12,29 @@ public class MapPrinter {
     private static Logger LOGGER = LoggerFactory.getLogger(MapPrinter.class.getSimpleName());
 
     public static void printThingsUnder(Game game, ProtocolGame protocolGame) {
-            List<Item> items = game.getMap().getTile(protocolGame.getLocalPlayer().getPosition()).getItems();
-            StringBuilder text = new StringBuilder();
-            String separator = "";
-            text.append("items: ");
-            for (Item item : items) {
-                text.append(separator).append(item.getId());
-                separator = ", ";
-            }
+        Position position = protocolGame.getLocalPlayer().getPosition();
+        position = new Position(position.getX(), position.getY() - 1, position.getZ());
+        List<Item> items = game.getMap().getTile(position).getItems();
+        StringBuilder text = new StringBuilder();
+        String separator = "";
+        text.append("items: ");
+        for (Item item : items) {
+            text.append(separator).append(item.getId());
+            separator = ", ";
+        }
 
-            List<Creature> creatures = game.getMap().getTile(protocolGame.getLocalPlayer().getPosition()).getCreatures();
-            separator = "";
-            text.append(", creatures: ");
-            for (Creature creature : creatures) {
-                text.append(separator).append(creature.getName());
-                separator = ", ";
-            }
+        List<Creature> creatures = game.getMap().getTile(position).getCreatures();
+        separator = "";
+        text.append(", creatures: ");
+        for (Creature creature : creatures) {
+            text.append(separator).append(creature.getName());
+            separator = ", ";
+        }
 
-            text.append(", getTopLookThing: ");
-            text.append(game.getMap().getTile(protocolGame.getLocalPlayer().getPosition()).getTopLookThing().getId());
+        text.append(", getTopLookThing: ");
+        text.append(game.getMap().getTile(position).getTopLookThing().getId());
 
-            LOGGER.info(text.toString());
+        LOGGER.info(text.toString());
     }
 
     public static void printMap(Game game, ProtocolGame protocolGame) {
