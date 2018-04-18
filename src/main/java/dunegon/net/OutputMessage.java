@@ -34,8 +34,8 @@ public class OutputMessage {
         mMessageSize += 2;
     }
 
-    public void addU32(int value) {
-        mByteBuffer.putInt(mWritePos, value);
+    public void addU32(long value) {
+        mByteBuffer.putInt(mWritePos, (int) value);
         mWritePos += 4;
         mMessageSize += 4;
     }

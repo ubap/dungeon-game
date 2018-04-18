@@ -140,7 +140,7 @@ public abstract class Protocol {
             disconnect();
             return;
         }
-        int checksum = inputMessage.getU32();
+        long checksum = inputMessage.getU32();
 
         Adler32 adler32 = new Adler32();
         adler32.update(inputMessage.getBuffer(), 6, packetSize - 4);

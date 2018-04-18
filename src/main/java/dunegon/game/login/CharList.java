@@ -7,7 +7,7 @@ public class CharList {
     private List<World> mWorldList;
     private List<Character> mCharacterList;
     private boolean mPremium;
-    private int mPremDays;
+    private long mPremDays;
 
     public CharList() {
         reset();
@@ -32,7 +32,7 @@ public class CharList {
         this.mPremium = mPremium;
     }
 
-    public void setPremDays(int mPremDays) {
+    public void setPremDays(long mPremDays) {
         this.mPremDays = mPremDays;
     }
 }

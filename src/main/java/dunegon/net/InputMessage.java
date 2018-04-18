@@ -38,13 +38,18 @@ public class InputMessage {
         return val;
     }
 
-    public int getU32() {
-        return mByteBuffer.getInt();
+    public long getU32() {
+        byte[] bytes = mByteBuffer.array();
+        int position = mByteBuffer.position();
+        long val = bytes[position + 3]<<24 & 0xFF000000 | bytes[position + 2]<<16
+                & 0xFF0000 | bytes[position + 1]<<8 & 0xFF00 | bytes[position] & 0xFF;
+        mByteBuffer.position(position + 4);
+        return val;
     }
 
     public double getDouble() {
         int precision = mByteBuffer.get();
-        int v = getU32() - Integer.MAX_VALUE;
+        long v = getU32() - Integer.MAX_VALUE;
         return (v / Math.pow(10, precision));
     }
 

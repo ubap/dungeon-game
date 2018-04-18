@@ -139,7 +139,7 @@ public class ProtocolLogin extends Protocol {
 
         inputMessage.getU8(); // stopByte: 0
         byte premium = inputMessage.getU8();
-        int premDays = inputMessage.getU32();
+        long premDays = inputMessage.getU32();
 
         synchronized (mCharList) {
             mCharList.setWorldList(worldList);

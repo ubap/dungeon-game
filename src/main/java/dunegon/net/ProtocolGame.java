@@ -15,7 +15,7 @@ public class ProtocolGame extends Protocol {
     private String password;
     private String characterName;
 
-    private int mChallengeTimestamp;
+    private long mChallengeTimestamp;
     private byte mChallengeRandom;
 
     private LocalPlayer localPlayer;
@@ -193,7 +193,7 @@ public class ProtocolGame extends Protocol {
     }
 
     private void processLoginSuccess(InputMessage inputMessage) {
-        int playerId = inputMessage.getU32();
+        long playerId = inputMessage.getU32();
         int serverBeat = inputMessage.getU16();
 
         double speedA = inputMessage.getDouble();
@@ -322,9 +322,9 @@ public class ProtocolGame extends Protocol {
 
         int health = inputMessage.getU16();
         int maxHealth = inputMessage.getU16();
-        int freeCapacity = inputMessage.getU32();
-        int totalCapacity = inputMessage.getU32();
-        int experience = inputMessage.getU32(); inputMessage.getU32(); // TODO: ;
+        long freeCapacity = inputMessage.getU32();
+        long totalCapacity = inputMessage.getU32();
+        long experience = inputMessage.getU32(); inputMessage.getU32(); // TODO: ;
         int level = inputMessage.getU16();
         int levelPercent = inputMessage.getU8();
 
@@ -409,7 +409,8 @@ public class ProtocolGame extends Protocol {
             case Consts.Message.DAMAGE_RECEIVED:
             case Consts.Message.DAMAGE_OTHERS: {
                 Position position = getPosition(inputMessage);
-                int valuePhysical, colorPhysical, valueMagic, colorMagic;
+                long valuePhysical, valueMagic;
+                int colorPhysical, colorMagic;
                 valuePhysical = inputMessage.getU32();
                 colorPhysical = inputMessage.getU8();
                 valueMagic = inputMessage.getU32();
@@ -423,7 +424,7 @@ public class ProtocolGame extends Protocol {
             case Consts.Message.HEAL_OTHERS:
             case Consts.Message.EXP_OTHERS: {
                 Position position = getPosition(inputMessage);
-                int value = inputMessage.getU32();
+                long value = inputMessage.getU32();
                 int color = inputMessage.getU8();
                 text = inputMessage.getString();
                 break;
@@ -690,7 +691,7 @@ public class ProtocolGame extends Protocol {
                 long removeId = inputMessage.getU32();
                 Game.getInstance().getMap().removeCreatureById(removeId);
 
-                int id = inputMessage.getU32();
+                long id = inputMessage.getU32();
                 int creatureType = inputMessage.getU8();
 
                 String name = inputMessage.getString();
