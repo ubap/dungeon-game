@@ -27,6 +27,7 @@ public class Proto {
 
         public static final byte MAP_DESCRIPTION = 0x64;
         public static final byte MAP_TOP_ROW = 0x65;
+        public static final byte MAP_BOTTOM_ROW = 0x67;
         public static final byte CREATE_ON_MAP = 0x6A;
         public static final byte CHANGE_ON_MAP = 0x6B;
         public static final byte DELETE_ON_MAP = 0x6C;

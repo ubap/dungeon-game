@@ -81,6 +81,9 @@ public class ProtocolGame extends Protocol {
                 case Proto.OpCode.MAP_TOP_ROW:
                     processMapTopRow(inputMessage);
                     break;
+                case Proto.OpCode.MAP_BOTTOM_ROW:
+                    processMapBottomRow(inputMessage);
+                    break;
                 case Proto.OpCode.CREATURE_SAY:
                     processCreatureSay(inputMessage);
                     break;
@@ -225,6 +228,20 @@ public class ProtocolGame extends Protocol {
                 awareRange.horizontal(), 1);
 
         Game.getInstance().getMap().setCentralPosition(position);
+        LOGGER.info("processMapTopRow");
+    }
+
+    private void processMapBottomRow(InputMessage inputMessage) {
+        Position position = Game.getInstance().getMap().getCentralPosition();
+        position = new Position(position.getX(), position.getY() + 1, position.getZ());
+
+        AwareRange awareRange = Game.getInstance().getMap().getAwareRange();
+        setMapDescription(inputMessage, position.getX() - awareRange.getLeft(),
+                position.getY() + awareRange.getBottom(), position.getZ(),
+                awareRange.horizontal(), 1);
+
+        Game.getInstance().getMap().setCentralPosition(position);
+        LOGGER.info("processMapBottomRow");
     }
 
     private void processPing(InputMessage inputMessage) {
@@ -700,7 +717,7 @@ public class ProtocolGame extends Protocol {
     // SEND -->
 
     private void sendPingBack() {
-        LOGGER.info("sendPingBack");
+        // LOGGER.info("sendPingBack");
         OutputMessage outputMessage = new OutputMessage();
         outputMessage.addU8((char) Proto.OpCode.GAMEWORLD_PING_BACK);
         send(outputMessage);
