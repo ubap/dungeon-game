@@ -588,7 +588,8 @@ public class ProtocolGame extends Protocol {
         }
     }
 
-    private int setFloorDescription(InputMessage inputMessage, int x, int y, int z, int width, int height, int offset, int skip) {
+    private int setFloorDescription(InputMessage inputMessage, int x, int y, int z,
+                                    int width, int height, int offset, int skip) {
         for (int nx = 0; nx < width; nx++) {
             for (int ny = 0; ny < height; ny++) {
                 Position tilePos = new Position(x + nx + offset, y + ny + offset, z);

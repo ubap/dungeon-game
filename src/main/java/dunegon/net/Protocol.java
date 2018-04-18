@@ -2,7 +2,6 @@ package dunegon.net;
 
 
 import dunegon.crypto.XteaEncryptionEngine;
-import jdk.internal.util.xml.impl.Input;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,71 +13,76 @@ import java.util.zip.Adler32;
 public abstract class Protocol {
     private static Logger LOGGER = LoggerFactory.getLogger(Protocol.class.getSimpleName());
 
-    private Socket mConnection;
-    private Thread mRecvThread;
-    private InputMessage mInputMessage;
-    private boolean mFirstPacket;
+    private Socket socket;
+    private Thread receiveThread;
+    private InputMessage inputMessage;
+    private boolean firstPacket;
 
-    private boolean mChecksumEnabled;
-    private boolean mXteaEnabled;
-    private XteaEncryptionEngine mXteaEncryptionEngine;
-    private int[] mXteaKey;
+    private boolean checksumEnabled;
+    private boolean xteaEnabled;
+    private XteaEncryptionEngine xteaEncryptionEngine;
+    private int[] xteaKey;
 
     public Protocol() {
-        mChecksumEnabled = false;
-        mXteaEnabled = false;
-        mFirstPacket = true;
+        checksumEnabled = false;
+        xteaEnabled = false;
+        firstPacket = true;
     }
 
     public void connect(String host, int port) throws IOException {
-        mInputMessage = new InputMessage();
-        mConnection = new Socket(host, port);
+        inputMessage = new InputMessage();
+        socket = new Socket(host, port);
         onConnect();
     }
 
-    public void disconnect() throws IOException {
-        mConnection.close();
-        mConnection = null;
+    public void disconnect() {
+        try {
+            socket.close();
+        } catch (IOException io) {
+            LOGGER.error("error disconnecting", io);
+        } finally {
+            socket = null;
+        }
     }
 
     public boolean isConnected() {
-        if (mConnection == null || !mConnection.isConnected()) {
+        if (socket == null || !socket.isConnected()) {
             return false;
         }
         return true;
     }
 
     public void enableChecksum() {
-        mChecksumEnabled = true;
+        checksumEnabled = true;
     }
 
     public void enableXtea() {
-        mXteaEnabled = true;
+        xteaEnabled = true;
         getXteaKey();
 
-        mXteaEncryptionEngine = new XteaEncryptionEngine();
+        xteaEncryptionEngine = new XteaEncryptionEngine();
         try {
-            mXteaEncryptionEngine.init(mXteaKey);
+            xteaEncryptionEngine.init(xteaKey);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
     public int[] getXteaKey() {
-        if (mXteaKey == null) {
-            mXteaKey = new int[4];
+        if (xteaKey == null) {
+            xteaKey = new int[4];
             Random random = new Random();
-            mXteaKey[0] = 1;
-            mXteaKey[1] = 2;
-            mXteaKey[2] = 3;
-            mXteaKey[3] = 4;
+            xteaKey[0] = random.nextInt();
+            xteaKey[1] = random.nextInt();
+            xteaKey[2] = random.nextInt();
+            xteaKey[3] = random.nextInt();
         }
-        return mXteaKey;
+        return xteaKey;
     }
 
     public void send(OutputMessage outputMessage) {
         try {
-            if (mXteaEnabled) {
+            if (xteaEnabled) {
                 outputMessage.writeMessageSize();
                 int xteaLength = outputMessage.getMessageSize();
                 int padding = 8 - (xteaLength % 8);
@@ -87,83 +91,84 @@ public abstract class Protocol {
                 xteaLength = outputMessage.getMessageSize();
                 int cycles = xteaLength / 8;
 
-                mXteaEncryptionEngine.encrypt(outputMessage.getBuffer().array(),
+                xteaEncryptionEngine.encrypt(outputMessage.getBuffer().array(),
                         outputMessage.getHeaderPos() + outputMessage.getHeaderSize() - 2, cycles);
             }
 
 
-            if (mChecksumEnabled) {
+            if (checksumEnabled) {
                 outputMessage.writeChecksum();
             }
 
             outputMessage.writeMessageSize();
 
-            mConnection.getOutputStream().write(outputMessage.getBuffer().array(), outputMessage.getHeaderPos(),
+            socket.getOutputStream().write(outputMessage.getBuffer().array(), outputMessage.getHeaderPos(),
                     outputMessage.getMessageSize());
 
         } catch (IOException io) {
-            io.printStackTrace();
+            disconnect();
+            LOGGER.error("error send", io);
         }
 
     }
 
     protected void startReceiving() {
-        mRecvThread = new RecvThread();
-        mRecvThread.start();
+        receiveThread = new RecvThread();
+        receiveThread.start();
     }
 
     private void receive() throws IOException {
-        mInputMessage.reset();
+        inputMessage.reset();
         int headerSize = 2; // packet size
-        if (mChecksumEnabled) {
+        if (checksumEnabled) {
             headerSize += 4; // 4 bytes for checksum
         }
-        if (mXteaEnabled) {
+        if (xteaEnabled) {
             headerSize += 2;
         }
 
-        int read = mConnection.getInputStream().read(mInputMessage.getBuffer(), 0, 2); // packet size
+        int read = socket.getInputStream().read(inputMessage.getBuffer(), 0, 2); // packet size
         if (read <= 0) {
             disconnect();
             return;
         }
-        int packetSize = mInputMessage.getU16();
-        mInputMessage.setMessageSize(packetSize + 2);
+        int packetSize = inputMessage.getU16();
+        inputMessage.setMessageSize(packetSize + 2);
 
-        read = mConnection.getInputStream().read(mInputMessage.getBuffer(), 2, packetSize); // the rest of the packet
+        read = socket.getInputStream().read(inputMessage.getBuffer(), 2, packetSize); // the rest of the packet
         if (read <= 0) {
             disconnect();
             return;
         }
-        int checksum = mInputMessage.getU32();
+        int checksum = inputMessage.getU32();
 
         Adler32 adler32 = new Adler32();
-        adler32.update(mInputMessage.getBuffer(), 6, packetSize - 4);
+        adler32.update(inputMessage.getBuffer(), 6, packetSize - 4);
         if (checksum != (int) adler32.getValue()) {
             throw new RuntimeException("checksum mismatch");
         }
 
-        if (mXteaEnabled) {
-            mXteaEncryptionEngine.decrypt(mInputMessage.getBuffer(), 6, 1);
-            int xteaLength = mInputMessage.getU16() + 2;
-            mInputMessage.setMessageSize(xteaLength + 6); // proper message length is now known, use it
+        if (xteaEnabled) {
+            xteaEncryptionEngine.decrypt(inputMessage.getBuffer(), 6, 1);
+            int xteaLength = inputMessage.getU16() + 2;
+            inputMessage.setMessageSize(xteaLength + 6); // proper message length is now known, use it
             // xteaLength += 8 - (xteaLength % 8);
             int cycles = xteaLength / 8;
 
-            mXteaEncryptionEngine.decrypt(mInputMessage.getBuffer(), 14, cycles);
+            xteaEncryptionEngine.decrypt(inputMessage.getBuffer(), 14, cycles);
         }
 
-        if (headerSize != mInputMessage.getPosition()) {
+        if (headerSize != inputMessage.getPosition()) {
             throw new RuntimeException("incorrect header size");
         }
 
         // process the message further
-        if (mFirstPacket) {
-            onRecvFirstPacket(mInputMessage);
-            mFirstPacket = false;
+        if (firstPacket) {
+            onRecvFirstPacket(inputMessage);
+            firstPacket = false;
         }
         else {
-            onRecv(mInputMessage);
+            onRecv(inputMessage);
         }
     }
 
