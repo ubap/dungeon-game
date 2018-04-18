@@ -16,7 +16,7 @@ public class ProtocolGame extends Protocol {
     private String characterName;
 
     private long mChallengeTimestamp;
-    private byte mChallengeRandom;
+    private short mChallengeRandom;
 
     private LocalPlayer localPlayer;
     private boolean mapKnown;
@@ -47,7 +47,7 @@ public class ProtocolGame extends Protocol {
         if (packetSize != 6) {
             LOGGER.error("Incorrect packet size");
         }
-        byte opCode = inputMessage.getU8();
+        short opCode = inputMessage.getU8();
         if (opCode != Proto.OpCode.GAMEWORLD_FIRST_PACKET) {
             LOGGER.error("Incorrect first packet opcode");
         }
@@ -61,7 +61,7 @@ public class ProtocolGame extends Protocol {
     @Override
     protected void onRecv(InputMessage inputMessage) {
         while (inputMessage.hasMore()) {
-            byte opCode = inputMessage.getU8();
+            short opCode = inputMessage.getU8();
             switch (opCode) {
                 case Proto.OpCode.GAMESERVER_LOGIN_SUCCESS:
                     processLoginSuccess(inputMessage);
@@ -295,7 +295,7 @@ public class ProtocolGame extends Protocol {
         String creatureName = inputMessage.getString();
 
         int level = inputMessage.getU16();
-        byte type = inputMessage.getU8();
+        short type = inputMessage.getU8();
 
         int x = inputMessage.getU16();
         int y = inputMessage.getU16();

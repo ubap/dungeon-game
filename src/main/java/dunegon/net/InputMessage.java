@@ -19,7 +19,7 @@ public class InputMessage {
         mMessageSize = messageSize;
     }
 
-    public byte getU8() {
+    public short getU8() {
         return mByteBuffer.get();
     }
 

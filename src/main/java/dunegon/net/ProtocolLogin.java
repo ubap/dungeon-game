@@ -74,7 +74,7 @@ public class ProtocolLogin extends Protocol {
     @Override
     protected void onRecv(InputMessage inputMessage) {
         while(inputMessage.hasMore()) {
-            byte opCode = inputMessage.getU8();
+            short opCode = inputMessage.getU8();
             switch (opCode) {
                 case Proto.OpCode.DISCONNECT:
                     processDisconnect(inputMessage);
@@ -138,7 +138,7 @@ public class ProtocolLogin extends Protocol {
         }
 
         inputMessage.getU8(); // stopByte: 0
-        byte premium = inputMessage.getU8();
+        short premium = inputMessage.getU8();
         long premDays = inputMessage.getU32();
 
         synchronized (mCharList) {
