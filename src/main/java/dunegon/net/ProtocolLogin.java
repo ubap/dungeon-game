@@ -94,22 +94,13 @@ public class ProtocolLogin extends Protocol {
             }
         }
         // its a login server no connection is maintained. Disconnect after receiving everything.
-        try {
-            disconnect();
-        } catch (IOException ioe) {
-            mLogger.error("Error while processing disconnect", ioe);
-        }
+        disconnect();
     }
 
     private void processDisconnect(InputMessage inputMessage){
         String message = inputMessage.getString();
         mLogger.info("Got disconnect with message: {}", message);
-
-        try {
-            disconnect();
-        } catch (IOException ioe) {
-            mLogger.error("Error while processing disconnect", ioe);
-        }
+        disconnect();
     }
 
     private void processMotd(InputMessage inputMessage) {
