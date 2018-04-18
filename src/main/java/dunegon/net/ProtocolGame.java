@@ -81,8 +81,14 @@ public class ProtocolGame extends Protocol {
                 case Proto.OpCode.MAP_TOP_ROW:
                     processMapTopRow(inputMessage);
                     break;
+                case Proto.OpCode.MAP_RIGHT_ROW:
+                    processMapRightRow(inputMessage);
+                    break;
                 case Proto.OpCode.MAP_BOTTOM_ROW:
                     processMapBottomRow(inputMessage);
+                    break;
+                case Proto.OpCode.MAP_LEFT_ROW:
+                    processMapLeftRow(inputMessage);
                     break;
                 case Proto.OpCode.CREATURE_SAY:
                     processCreatureSay(inputMessage);
@@ -231,6 +237,19 @@ public class ProtocolGame extends Protocol {
         LOGGER.info("processMapTopRow");
     }
 
+    private void processMapRightRow(InputMessage inputMessage) {
+        Position position = Game.getInstance().getMap().getCentralPosition();
+        position = new Position(position.getX() + 1, position.getY(), position.getZ());
+
+        AwareRange awareRange = Game.getInstance().getMap().getAwareRange();
+        setMapDescription(inputMessage, position.getX() + awareRange.getRight(),
+                position.getY() - awareRange.getTop(), position.getZ(),
+                1, awareRange.vertical());
+
+        Game.getInstance().getMap().setCentralPosition(position);
+        LOGGER.info("processMapRightRow");
+    }
+
     private void processMapBottomRow(InputMessage inputMessage) {
         Position position = Game.getInstance().getMap().getCentralPosition();
         position = new Position(position.getX(), position.getY() + 1, position.getZ());
@@ -242,6 +261,19 @@ public class ProtocolGame extends Protocol {
 
         Game.getInstance().getMap().setCentralPosition(position);
         LOGGER.info("processMapBottomRow");
+    }
+
+    private void processMapLeftRow(InputMessage inputMessage) {
+        Position position = Game.getInstance().getMap().getCentralPosition();
+        position = new Position(position.getX() - 1, position.getY(), position.getZ());
+
+        AwareRange awareRange = Game.getInstance().getMap().getAwareRange();
+        setMapDescription(inputMessage, position.getX() - awareRange.getLeft(),
+                position.getY() - awareRange.getTop(), position.getZ(),
+                1, awareRange.vertical());
+
+        Game.getInstance().getMap().setCentralPosition(position);
+        LOGGER.info("processMapLeftRow");
     }
 
     private void processPing(InputMessage inputMessage) {
