@@ -42,7 +42,7 @@ public class Main {
         Thread.sleep(2000);
 
         while (true) {
-            MapPrinter.printThingsUnder(Game.getInstance(), protocolGame);
+            // MapPrinter.printThingsUnder(Game.getInstance(), protocolGame);
             Thread.sleep(500);
         }
 

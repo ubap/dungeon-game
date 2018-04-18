@@ -111,8 +111,17 @@ public class ProtocolGame extends Protocol {
                 case Proto.OpCode.GRAPHICAL_EFFECT:
                     processGraphicalEffect(inputMessage);
                     break;
+                case Proto.OpCode.TEXT_MESSAGE:
+                    processTextMessage(inputMessage);
+                    break;
                 case Proto.OpCode.CREATURE_LIGHT:
                     processCreatureLight(inputMessage);
+                    break;
+                case Proto.OpCode.CREATURE_HEALTH:
+                    processCreatureHealth(inputMessage);
+                    break;
+                case Proto.OpCode.CREATURE_SPEED:
+                    processCreatureSpeed(inputMessage);
                     break;
                 case Proto.OpCode.PLAYER_BASIC_DATA:
                     processPlayerBasicData(inputMessage);
@@ -376,13 +385,55 @@ public class ProtocolGame extends Protocol {
 
     private void processGraphicalEffect(InputMessage inputMessage) {
         Position position = getPosition(inputMessage);
-
         int effectId = inputMessage.getU8();
-
         Thing effect = Effect.create(effectId);
-
-
         LOGGER.info("processGraphicalEffect, pos: {}, id: {}", position, effectId);
+    }
+
+    private void processTextMessage(InputMessage inputMessage) {
+        int mode = inputMessage.getU8();
+        String text;
+        switch (mode) {
+            case Consts.Message.CHANNEL_MANAGEMENT:
+                inputMessage.getU16(); // channel
+                text = inputMessage.getString();
+                break;
+            case Consts.Message.GUILD:
+            case Consts.Message.PARTY_MANAGEMENT:
+            case Consts.Message.PARTY:
+                inputMessage.getU16(); // channel
+                text = inputMessage.getString();
+                break;
+            case Consts.Message.DAMAGE_DEALED:
+            case Consts.Message.DAMAGE_RECEIVED:
+            case Consts.Message.DAMAGE_OTHERS: {
+                Position position = getPosition(inputMessage);
+                int valuePhysical, colorPhysical, valueMagic, colorMagic;
+                valuePhysical = inputMessage.getU32();
+                colorPhysical = inputMessage.getU8();
+                valueMagic = inputMessage.getU32();
+                colorMagic = inputMessage.getU8();
+                text = inputMessage.getString();
+                break;
+            }
+            case Consts.Message.HEAL:
+            case Consts.Message.MANA:
+            case Consts.Message.EXP:
+            case Consts.Message.HEAL_OTHERS:
+            case Consts.Message.EXP_OTHERS: {
+                Position position = getPosition(inputMessage);
+                int value = inputMessage.getU32();
+                int color = inputMessage.getU8();
+                text = inputMessage.getString();
+                break;
+            }
+            case Consts.Message.INVALID:
+                throw new RuntimeException("invalid message");
+            default:
+                text = inputMessage.getString();
+                break;
+        }
+        LOGGER.info("processTextMessage, text:{}", text);
     }
 
     private void processCreatureLight(InputMessage inputMessage) {
@@ -393,8 +444,31 @@ public class ProtocolGame extends Protocol {
         if (creature == null) {
             throw new RuntimeException("could not get creature");
         }
-
         LOGGER.info("processCreatureLight, creature:{}, intensity:{}, color:{}", creature.getName(), intensity, color);
+    }
+
+    private void processCreatureHealth(InputMessage inputMessage) {
+        long id = inputMessage.getU32();
+        int healthPercent = inputMessage.getU8();
+        Creature creature = Game.getInstance().getMap().getCreatureById(id);
+        if (creature != null) {
+            creature.setHealthPercent(healthPercent);
+        }
+        LOGGER.info("processCreatureHealth hppc: {}", healthPercent);
+    }
+
+    private void processCreatureSpeed(InputMessage inputMessage) {
+        long id = inputMessage.getU32();
+        int baseSpeed = inputMessage.getU16();
+        int speed = inputMessage.getU16();
+
+        Creature creature = Game.getInstance().getMap().getCreatureById(id);
+        if (creature != null) {
+            // set speed and base speed here
+        }
+
+
+        LOGGER.info("processCreatureSpeed");
     }
 
     private void processPlayerBasicData(InputMessage inputMessage) {

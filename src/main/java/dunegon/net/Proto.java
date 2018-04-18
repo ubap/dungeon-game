@@ -40,13 +40,15 @@ public class Proto {
         public static final byte AMBIENT_LIGHT = (byte) 0x82;
         public static final byte GRAPHICAL_EFFECT = (byte) 0x83;
         public static final byte CREATURE_LIGHT = (byte) 0x8D;
+        public static final byte CREATURE_HEALTH = (byte) 0x8C;
+        public static final byte CREATURE_SPEED = (byte) 0x8F;
         public static final byte CREATURE_TYPE = (byte) 0x95;
 
         public static final byte PLAYER_BASIC_DATA = (byte) 0x9F;
         public static final byte PLAYER_STATS = (byte) 0xA0;
         public static final byte PLAYER_SKILLS = (byte) 0xA1;
         public static final byte PLAYER_STATE = (byte) 0xA2;
-
+        public static final byte TEXT_MESSAGE = (byte) 0xB4;
         public static final byte PLAYER_INVENTORY = (byte) 0xF5;
 
 
