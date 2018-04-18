@@ -100,11 +100,20 @@ public class ProtocolGame extends Protocol {
                 case Proto.OpCode.PLAYER_STATE:
                     processPlayerState(inputMessage);
                     break;
+                case Proto.OpCode.CREATE_ON_MAP:
+                    processTileAddThing(inputMessage);
+                    break;
                 case Proto.OpCode.CHANGE_ON_MAP:
                     processTileTransformThing(inputMessage);
                     break;
                 case Proto.OpCode.MOVE_CREATURE:
                     processMoveCreature(inputMessage);
+                    break;
+                case Proto.OpCode.DELETE_ON_MAP:
+                    processTileRemoveThing(inputMessage);
+                    break;
+                case Proto.OpCode.CREATURE_TYPE:
+                    processCreatureType(inputMessage);
                     break;
                 default:
                     mLogger.warn("Unrecognized opCode: {}", String.format("0x%x", opCode));
@@ -571,6 +580,27 @@ public class ProtocolGame extends Protocol {
         mLogger.info("processTileTransformThing");
     }
 
+    private void processTileAddThing(InputMessage inputMessage) {
+        Position position = getPosition(inputMessage);
+        int stackPos = inputMessage.getU8();
+        Thing thing = getThing(inputMessage);
+        Game.getInstance().getMap().addThing(thing, position, stackPos);
+
+        mLogger.info("processTileAddThing position: {}", position);
+    }
+
+    private void processTileRemoveThing(InputMessage inputMessage) {
+        Thing thing = getMappedThing(inputMessage);
+        if (thing == null) {
+            throw new RuntimeException("no thing");
+        }
+
+        if (!Game.getInstance().getMap().removeThing(thing)) {
+            throw new RuntimeException("unable to remove thing");
+        }
+        mLogger.info("processTileRemoveThing, position {}", thing.getPosition());
+    }
+
     private void processMoveCreature(InputMessage inputMessage) {
         Thing thing = getMappedThing(inputMessage);
         Position newPos = getPosition(inputMessage);
@@ -584,7 +614,12 @@ public class ProtocolGame extends Protocol {
         }
 
         Game.getInstance().getMap().addThing(thing, newPos, -1);
-        mLogger.info("processMoveCreature");
+        mLogger.info("processMoveCreature, oldPos: {}, newPos: {}", thing.getPosition(), newPos);
+    }
+
+    private void processCreatureType(InputMessage inputMessage) {
+        long id = inputMessage.getU32();
+        int type = inputMessage.getU8();
     }
 
     // HELPERS -->

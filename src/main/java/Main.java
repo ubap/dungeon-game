@@ -37,9 +37,9 @@ public class Main {
 
         while (true) {
             protocolGame.sendTurnEast();
-            Thread.sleep(50000);
+            Thread.sleep(5000);
             protocolGame.sendTurnNorth();
-            Thread.sleep(50000);
+            Thread.sleep(5000);
         }
 
     }

@@ -26,7 +26,9 @@ public class Proto {
 
 
         public static final byte MAP_DESCRIPTION = 0x64;
+        public static final byte CREATE_ON_MAP = 0x6A;
         public static final byte CHANGE_ON_MAP = 0x6B;
+        public static final byte DELETE_ON_MAP = 0x6C;
         public static final byte MOVE_CREATURE = 0x6D;
 
         public static final byte SET_INVENTORY = 0x78;
@@ -34,6 +36,8 @@ public class Proto {
         public static final byte AMBIENT_LIGHT = (byte) 0x82;
         public static final byte GRAPHICAL_EFFECT = (byte) 0x83;
         public static final byte CREATURE_LIGHT = (byte) 0x8D;
+        public static final byte CREATURE_TYPE = (byte) 0x95;
+
         public static final byte PLAYER_BASIC_DATA = (byte) 0x9F;
         public static final byte PLAYER_STATS = (byte) 0xA0;
         public static final byte PLAYER_SKILLS = (byte) 0xA1;

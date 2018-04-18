@@ -1,10 +1,12 @@
 package dunegon.game;
 
-import javafx.geometry.Pos;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 
 public class Map {
+    private Logger LOGGER = LoggerFactory.getLogger(Map.class.getSimpleName());
     private static final int BLOCK_SIZE = 32;
     // z y x
     private java.util.Map<Integer, TileBlock>[] tileBlocks;
@@ -32,6 +34,8 @@ public class Map {
             Tile tile = getOrCreateTile(position);
             if (tile != null) {
                 tile.addThing(thing, stackPos);
+            } else {
+                LOGGER.error("no tile!");
             }
         } // todo : other things
     }
