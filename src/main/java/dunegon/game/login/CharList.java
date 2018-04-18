@@ -4,35 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CharList {
-    private List<World> mWorldList;
-    private List<Character> mCharacterList;
-    private boolean mPremium;
-    private long mPremDays;
+    private List<World> worlds;
+    private List<Character> characters;
+    private boolean premium;
+    private long premDays;
 
     public CharList() {
         reset();
     }
 
     public void reset() {
-        mWorldList = new ArrayList<>();
-        mCharacterList = new ArrayList<>();
-        mPremium = false;
-        mPremDays = 0;
+        worlds = new ArrayList<>();
+        characters = new ArrayList<>();
+        premium = false;
+        premDays = 0;
     }
 
-    public void setWorldList(List<World> mWorldList) {
-        this.mWorldList = mWorldList;
+    public void setWorlds(List<World> worlds) {
+        this.worlds = worlds;
     }
 
-    public void setCharacterList(List<Character> mCharacterList) {
-        this.mCharacterList = mCharacterList;
+    public void setCharacterList(List<Character> characters) {
+        this.characters = characters;
     }
 
-    public void setPremium(boolean mPremium) {
-        this.mPremium = mPremium;
+    public void setPremium(boolean isPremium) {
+        this.premium = isPremium;
     }
 
-    public void setPremDays(long mPremDays) {
-        this.mPremDays = mPremDays;
+    public void setPremDays(long premDays) {
+        this.premDays = premDays;
     }
 }

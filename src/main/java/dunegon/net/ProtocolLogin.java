@@ -142,7 +142,7 @@ public class ProtocolLogin extends Protocol {
         long premDays = inputMessage.getU32();
 
         synchronized (mCharList) {
-            mCharList.setWorldList(worldList);
+            mCharList.setWorlds(worldList);
             mCharList.setCharacterList(characterList);
             mCharList.setPremium(premium == 1);
             mCharList.setPremDays(premDays);
