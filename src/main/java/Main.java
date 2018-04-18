@@ -1,6 +1,7 @@
 import dunegon.game.ThingTypeManager;
 import dunegon.game.Game;
 import dunegon.game.login.CharList;
+import dunegon.io.SpriteManager;
 import dunegon.net.Protocol;
 import dunegon.net.ProtocolGame;
 import dunegon.net.ProtocolLogin;
@@ -17,11 +18,15 @@ public class Main {
 
         Game.init();
         ThingTypeManager.init();
+        SpriteManager.init();
+
+
 
         final ClassLoader loader = Main.class.getClassLoader();
-        URL resourceUrl = loader.getResource("Tibia1098.dat");
-        ThingTypeManager.getInstance().loadDat(resourceUrl.toURI());
-
+        URL datUrl = loader.getResource("Tibia1098.dat");
+        URL sprUrl = loader.getResource("Tibia.spr");
+        ThingTypeManager.getInstance().loadDat(datUrl.toURI());
+        SpriteManager.getInstance().loadSpr(sprUrl.toURI());
         CharList charList = new CharList();
 
         Protocol protocol = new ProtocolLogin(charList,"1", "1");

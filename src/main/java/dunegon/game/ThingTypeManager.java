@@ -11,8 +11,8 @@ import java.net.URI;
 import java.nio.file.Files;
 
 public class ThingTypeManager {
-    private static ThingTypeManager sThingTypeManager;
-    private static Logger sLogger = LoggerFactory.getLogger(ThingTypeManager.class.getSimpleName());
+    private static ThingTypeManager INSTANCE;
+    private static Logger LOGGER = LoggerFactory.getLogger(ThingTypeManager.class.getSimpleName());
 
     private ThingType[][] thingTypes;
 
@@ -24,14 +24,14 @@ public class ThingTypeManager {
      * Thats some invalid singleton but it will help in thread safety.
      */
     public static void init() {
-        sLogger.info("init");
-        if (sThingTypeManager == null) {
-            sThingTypeManager = new ThingTypeManager();
+        LOGGER.info("init");
+        if (INSTANCE == null) {
+            INSTANCE = new ThingTypeManager();
         }
     }
 
     public static ThingTypeManager getInstance() {
-        return sThingTypeManager;
+        return INSTANCE;
     }
 
     public ThingType getThingType(int id, int category) {
@@ -39,7 +39,7 @@ public class ThingTypeManager {
     }
 
     public void loadDat(URI uri) throws IOException {
-        sLogger.info("loadDat");
+        LOGGER.info("loadDat");
 
         byte[] data = Files.readAllBytes(new File(uri).toPath());
         FileStream fileStream = new FileStream(data);
@@ -68,7 +68,7 @@ public class ThingTypeManager {
     }
 
     public static ThingType readThing(int id, int category, FileStream fileStream) {
-        sLogger.debug("Reading thingType for item id: {}", id);
+        LOGGER.debug("Reading thingType for item id: {}", id);
         ThingType thingType = new ThingType();
         thingType.setId(id);
         boolean done = false;
@@ -142,208 +142,208 @@ public class ThingTypeManager {
     private static void processAttribute(ThingType thingType, FileStream fileStream, short attribute) {
         switch (attribute) {
             case DatAttrs.Attribute.GROUND: {
-                sLogger.trace("GROUND");
+                LOGGER.trace("GROUND");
                 thingType.setGround(true, fileStream.getU16());
                 break;
             }
             case DatAttrs.Attribute.GROUND_BORDER: {
-                sLogger.trace("GROUND_BORDER");
+                LOGGER.trace("GROUND_BORDER");
                 thingType.setGroundBorder(true);
                 break;
             }
             case DatAttrs.Attribute.ON_BOTTOM: {
-                sLogger.trace("ON_BOTTOM");
+                LOGGER.trace("ON_BOTTOM");
                 thingType.setOnBottom(true);
                 break;
             }
             case DatAttrs.Attribute.ON_TOP: {
-                sLogger.trace("ON_TOP");
+                LOGGER.trace("ON_TOP");
                 thingType.setOnTop(true);
                 break;
             }
             case DatAttrs.Attribute.CONTAINER: {
-                sLogger.trace("CONTAINER");
+                LOGGER.trace("CONTAINER");
                 thingType.setContainer(true);
                 break;
             }
             case DatAttrs.Attribute.FORCE_USE: {
-                sLogger.trace("FORCE_USE");
+                LOGGER.trace("FORCE_USE");
                 thingType.setForceUse(true);
                 break;
             }
             case DatAttrs.Attribute.MULTI_USE: {
-                sLogger.trace("MULTI_USE");
+                LOGGER.trace("MULTI_USE");
                 thingType.setMultiUse(true);
                 break;
             }
             case DatAttrs.Attribute.NOT_WALKABLE: {
-                sLogger.trace("NOT_WALKABLE");
+                LOGGER.trace("NOT_WALKABLE");
                 thingType.setNotWalkable(true);
                 break;
             }
             case DatAttrs.Attribute.NOT_MOVEABLE: {
-                sLogger.trace("NOT_MOVEABLE");
+                LOGGER.trace("NOT_MOVEABLE");
                 thingType.setNotMoveable(true);
                 break;
             }
             case DatAttrs.Attribute.NOT_PATHABLE: {
-                sLogger.trace("NOT_PATHABLE");
+                LOGGER.trace("NOT_PATHABLE");
                 thingType.setNotPathable(true);
                 break;
             }
             case DatAttrs.Attribute.HANGABLE: {
-                sLogger.trace("HANGABLE");
+                LOGGER.trace("HANGABLE");
                 thingType.setHangable(true);
                 break;
             }
             case DatAttrs.Attribute.BLOCK_PROJECTILE: {
-                sLogger.trace("BLOCK_PROJECTILE");
+                LOGGER.trace("BLOCK_PROJECTILE");
                 thingType.setBlockProjectile(true);
                 break;
             }
             case DatAttrs.Attribute.PICKUPABLE: {
-                sLogger.trace("PICKUPABLE");
+                LOGGER.trace("PICKUPABLE");
                 thingType.setPickupable(true);
                 break;
             }
             case DatAttrs.Attribute.DISPLACEMENT: {
-                sLogger.trace("DISPLACEMENT");
+                LOGGER.trace("DISPLACEMENT");
                 // https://docs.oracle.com/javase/specs/jls/se7/html/jls-15.html#jls-15.7.4
                 thingType.setDisplacement(true, fileStream.getU16(), fileStream.getU16());
                 break;
             }
             case DatAttrs.Attribute.LIGHT: {
-                sLogger.trace("LIGHT");
+                LOGGER.trace("LIGHT");
                 thingType.setLight(true, fileStream.getU16(), fileStream.getU16());
                 break;
             }
             case DatAttrs.Attribute.FULL_GROUND: {
-                sLogger.trace("FULL_GROUND");
+                LOGGER.trace("FULL_GROUND");
                 break;
             }
             case DatAttrs.Attribute.MARKET: {
-                sLogger.trace("MARKET");
+                LOGGER.trace("MARKET");
                 thingType.setMarket(true, fileStream.getU16(), fileStream.getU16(), fileStream.getU16(),
                         fileStream.getString(), fileStream.getU16(), fileStream.getU16());
                 break;
             }
             case DatAttrs.Attribute.ELEVATION: {
-                sLogger.trace("ELEVATION");
+                LOGGER.trace("ELEVATION");
                 thingType.setElevation(true, fileStream.getU16());
                 break;
             }
             case DatAttrs.Attribute.MINIMAP_COLOR: {
-                sLogger.trace("MINIMAP_COLOR");
+                LOGGER.trace("MINIMAP_COLOR");
                 thingType.setMinimapColor(true, fileStream.getU16());
                 break;
             }
             case DatAttrs.Attribute.CHARGABLE: {
-                sLogger.trace("CHARGABLE");
+                LOGGER.trace("CHARGABLE");
                 thingType.setChargeable(true);
                 break;
             }
             case DatAttrs.Attribute.STACKABLE: {
-                sLogger.trace("STACKABLE");
+                LOGGER.trace("STACKABLE");
                 thingType.setStackable(true);
                 break;
             }
             case DatAttrs.Attribute.CLOTH: {
-                sLogger.trace("CLOTH");
+                LOGGER.trace("CLOTH");
                 thingType.setCloth(true, fileStream.getU16());
                 break;
             }
             case DatAttrs.Attribute.LYING_CORPSE: {
-                sLogger.trace("LYING_CORPSE");
+                LOGGER.trace("LYING_CORPSE");
                 thingType.setLyingCorpse(true);
                 break;
             }
             case DatAttrs.Attribute.TRANSCLUENT: {
-                sLogger.trace("TRANSCLUENT");
+                LOGGER.trace("TRANSCLUENT");
                 thingType.setTranscluent(true);
                 break;
             }
             case DatAttrs.Attribute.USABLE: {
-                sLogger.trace("USABLE");
+                LOGGER.trace("USABLE");
                 thingType.setUsable(true, fileStream.getU16());
                 break;
             }
             case DatAttrs.Attribute.LOOK: {
-                sLogger.trace("LOOK");
+                LOGGER.trace("LOOK");
                 thingType.setLook(true);
                 break;
             }
             case DatAttrs.Attribute.LENS_HELP: {
-                sLogger.trace("LENS_HELP");
+                LOGGER.trace("LENS_HELP");
                 thingType.setLensHelp(true, fileStream.getU16());
                 break;
             }
             case DatAttrs.Attribute.FLUID_CONTAINER: {
-                sLogger.trace("FLUID_CONTAINER");
+                LOGGER.trace("FLUID_CONTAINER");
                 thingType.setFluidContainer(true);
                 break;
             }
             case DatAttrs.Attribute.HOOK_SOUTH: {
-                sLogger.trace("HOOK_SOUTH");
+                LOGGER.trace("HOOK_SOUTH");
                 thingType.setHookSouth(true);
                 break;
             }
             case DatAttrs.Attribute.HOOK_EAST: {
-                sLogger.trace("HOOK_EAST");
+                LOGGER.trace("HOOK_EAST");
                 thingType.setHookEast(true);
                 break;
             }
             case DatAttrs.Attribute.ROTATEABLE: {
-                sLogger.trace("ROTATEABLE");
+                LOGGER.trace("ROTATEABLE");
                 thingType.setRotateable(true);
                 break;
             }
             case DatAttrs.Attribute.WRAPABLE: {
-                sLogger.trace("WRAPABLE");
+                LOGGER.trace("WRAPABLE");
                 thingType.setWrapable(true);
                 break;
             }
             case DatAttrs.Attribute.UNWRAPABLE: {
-                sLogger.trace("UNWRAPABLE");
+                LOGGER.trace("UNWRAPABLE");
                 thingType.setUnwrapable(true);
                 break;
             }
             case DatAttrs.Attribute.NO_MOVE_ANIM: {
-                sLogger.trace("NO_MOVE_ANIM");
+                LOGGER.trace("NO_MOVE_ANIM");
                 thingType.setNoMoveAnim(true);
                 break;
             }
             case DatAttrs.Attribute.WRITABLE: {
-                sLogger.trace("WRITABLE");
+                LOGGER.trace("WRITABLE");
                 thingType.setWritable(true, fileStream.getU16());
                 break;
             }
             case DatAttrs.Attribute.WRITABLE_ONCE: {
-                sLogger.trace("WRITABLE_ONCE");
+                LOGGER.trace("WRITABLE_ONCE");
                 thingType.setWritableOnce(true, fileStream.getU16());
                 break;
             }
             case DatAttrs.Attribute.SPLASH: {
-                sLogger.trace("SPLASH");
+                LOGGER.trace("SPLASH");
                 thingType.setSplash(true);
                 break;
             }
             case DatAttrs.Attribute.DONT_HIDE: {
-                sLogger.trace("DONT_HIDE");
+                LOGGER.trace("DONT_HIDE");
                 thingType.setDontHide(true);
                 break;
             }
             case DatAttrs.Attribute.ANIMATE_ALWAYS: {
-                sLogger.trace("ANIMATE_ALWAYS");
+                LOGGER.trace("ANIMATE_ALWAYS");
                 thingType.setAnimateAlways(true);
                 break;
             }
             case DatAttrs.Attribute.TOP_EFFECT: {
-                sLogger.trace("TOP_EFFECT");
+                LOGGER.trace("TOP_EFFECT");
                 thingType.setTopEffect(true);
                 break;
             }
             default:
-                sLogger.info("Unrecognized attribute {}", String.format("0x%x", attribute));
+                LOGGER.info("Unrecognized attribute {}", String.format("0x%x", attribute));
                 break;
         }
     }
