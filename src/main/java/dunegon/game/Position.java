@@ -25,6 +25,34 @@ public class Position {
         return (x >=0 && y >= 0 && z >= 0 && x < 65535 && y < 65535 && z <= Consts.MAX_Z);
     }
 
+    public boolean isInRange(Position position, int minXRange, int maxXRange, int minYRange, int maxYRange) {
+        return (position.getX() >= x - minXRange && position.getX() <= x + maxXRange
+                && position.getY() >= y - minYRange && position.getY() <= y + maxYRange
+                && position.getZ() == z);
+    }
+
+    public Position coveredUp() {
+        return coveredUp(1);
+    }
+    public Position coveredUp(int n) {
+        int nx = x + n, ny = y + n, nz = z - n;
+        if (nx >= 0 && nx <= 65535 && ny >= 0 && ny <= 65535 && nz >= 0 && nz <= Consts.MAX_Z) {
+            return new Position(nx, ny, nz);
+        }
+        return null;
+    }
+
+    public Position coveredDown() {
+        return coveredDown(1);
+    }
+    public Position coveredDown(int n) {
+        int nx = x - n, ny = y - n, nz = z + n;
+        if (nx >= 0 && nx <= 65535 && ny >= 0 && ny <= 65535 && nz >= 0 && nz <= Consts.MAX_Z) {
+            return new Position(nx, ny, nz);
+        }
+        return null;
+    }
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();

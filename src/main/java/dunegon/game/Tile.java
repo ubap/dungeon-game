@@ -160,8 +160,16 @@ public class Tile {
         return creatures;
     }
 
+    public Position getPosition() {
+        return position;
+    }
+
     public boolean isEmpty() {
         return things.size() == 0;
+    }
+
+    public boolean canErase() {
+        return false; // todo: implement
     }
 
     public void clean() {

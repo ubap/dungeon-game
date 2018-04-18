@@ -18,7 +18,7 @@ public class Main {
 
         Game.init();
         ThingTypeManager.init();
-        SpriteManager.init();
+        //SpriteManager.init();
 
 
 
@@ -26,7 +26,7 @@ public class Main {
         URL datUrl = loader.getResource("Tibia1098.dat");
         URL sprUrl = loader.getResource("Tibia.spr");
         ThingTypeManager.getInstance().loadDat(datUrl.toURI());
-        SpriteManager.getInstance().loadSpr(sprUrl.toURI());
+        //SpriteManager.getInstance().loadSpr(sprUrl.toURI());
         CharList charList = new CharList();
 
         Protocol protocol = new ProtocolLogin(charList,"1", "1");

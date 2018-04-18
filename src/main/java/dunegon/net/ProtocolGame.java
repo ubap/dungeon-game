@@ -230,6 +230,7 @@ public class ProtocolGame extends Protocol {
 
         mapKnown = true;
         Game.getInstance().getMap().setCentralPosition(position);
+        LOGGER.info("processMapDescription");
 
     }
 
@@ -540,8 +541,8 @@ public class ProtocolGame extends Protocol {
             throw new RuntimeException("unable to remove creature");
         }
 
-        Game.getInstance().getMap().addThing(thing, newPos, -1);
         LOGGER.info("processMoveCreature, oldPos: {}, newPos: {}", thing.getPosition(), newPos);
+        Game.getInstance().getMap().addThing(thing, newPos, -1);
     }
 
     private void processCreatureType(InputMessage inputMessage) {
@@ -583,7 +584,7 @@ public class ProtocolGame extends Protocol {
         int skip = 0;
         for (int nz = startZ; nz != endZ + zStep; nz += zStep) {
             skip = setFloorDescription(inputMessage, x, y, nz, width, height, z - nz, skip);
-            LOGGER.info("skip: {}", skip);
+            // LOGGER.info("skip: {}", skip);
         }
     }
 
@@ -595,6 +596,7 @@ public class ProtocolGame extends Protocol {
                     skip = setTileDescription(inputMessage, tilePos);
                 } else {
                     // clean tile
+                    Game.getInstance().getMap().cleanTile(tilePos);
                     skip--;
                 }
             }
@@ -603,9 +605,8 @@ public class ProtocolGame extends Protocol {
     }
 
     private int setTileDescription(InputMessage inputMessage, Position position) {
-        // clean tile
-
-        LOGGER.info("Getting tile desc from pos {}", position);
+        // LOGGER.info("Getting tile desc from pos {}", position);
+        Game.getInstance().getMap().cleanTile(position);
 
         boolean gotEffect = false;
         for (int stackPos = 0; stackPos < 255; stackPos++) {
@@ -654,21 +655,17 @@ public class ProtocolGame extends Protocol {
         if (id == 0) {
             id = inputMessage.getU16();
         }
-
-        //ThingType thingType = ThingTypeManager.getInstance().getThingType(DatAttrs.ThingCategory.ThingCategoryItem).getThing(id);
         Item thing = Item.create(id);
-
         int gameThingMark = inputMessage.getU8();
 
         if (thing.isStackable() || thing.isFluidContainer() || thing.isSplash()) {
             thing.setCountOrSubType(inputMessage.getU8());
         }
-
         if (thing.getAnimationPhases() > 1) {
             inputMessage.getU8(); // sync I think
         }
 
-        LOGGER.info("getItem item id: {}", id);
+        //LOGGER.info("getItem item id: {}", id);
 
         return thing;
     }
