@@ -1,7 +1,6 @@
-package dunegon.game;
+package dunegon.io;
 
-import dunegon.io.DatAttrs;
-import dunegon.io.FileStream;
+import dunegon.game.ThingType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

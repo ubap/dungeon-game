@@ -1,4 +1,4 @@
-import dunegon.game.ThingTypeManager;
+import dunegon.io.ThingTypeManager;
 import dunegon.game.Game;
 import dunegon.game.login.CharList;
 import dunegon.io.SpriteManager;

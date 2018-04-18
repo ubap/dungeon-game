@@ -1,6 +1,7 @@
 package dunegon.game;
 
 import dunegon.io.DatAttrs;
+import dunegon.io.ThingTypeManager;
 
 public class Creature extends Thing {
     private long id;
