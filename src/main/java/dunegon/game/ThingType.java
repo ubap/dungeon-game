@@ -265,44 +265,40 @@ public class ThingType {
     public void setAnimationPhases(int animationPhases) {
         mAnimationPhases = animationPhases;
     }
-
     public boolean isStackable() {
         return mStackable;
     }
-
     public boolean isFluidContainer() {
         return mFluidContainer;
     }
-
     public boolean isSplash() {
         return mSplash;
     }
-
     public boolean isChargeable() {
         return mChargeable;
     }
-
     public int getAnimationPhases() {
         return mAnimationPhases;
     }
-
     public boolean isGround() {
         return mGround;
     }
-
     public boolean isGroundBorder() {
         return mGroundBorder;
     }
-
     public boolean isOnBottom() {
         return mOnBottom;
     }
-
     public boolean isOnTop() {
         return mOnTop;
     }
-
     public boolean isTopEffect() {
         return mTopEffect;
+    }
+    public boolean isForceUse() {
+        return mForceUse;
+    }
+    public boolean isIgnoreLook() {
+        return mLook;
     }
 }

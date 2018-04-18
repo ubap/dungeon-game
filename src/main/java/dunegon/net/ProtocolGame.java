@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 public class ProtocolGame extends Protocol {
-    private Logger mLogger = LoggerFactory.getLogger(ProtocolGame.class.getSimpleName());
+    private static Logger LOGGER = LoggerFactory.getLogger(ProtocolGame.class.getSimpleName());
 
     private String accountName;
     private String password;
@@ -19,9 +19,13 @@ public class ProtocolGame extends Protocol {
     private byte mChallengeRandom;
 
     private LocalPlayer localPlayer;
+    public LocalPlayer getLocalPlayer() {
+        return this.localPlayer;
+    }
 
     public ProtocolGame(String accountName, String password, String characterName) {
         this.accountName = accountName;
+        this.password = password;
         this.password = password;
         this.characterName = characterName;
         this.localPlayer = new LocalPlayer();
@@ -37,11 +41,11 @@ public class ProtocolGame extends Protocol {
     protected void onRecvFirstPacket(InputMessage inputMessage) throws IOException {
         int packetSize = inputMessage.getU16();
         if (packetSize != 6) {
-            mLogger.error("Incorrect packet size");
+            LOGGER.error("Incorrect packet size");
         }
         byte opCode = inputMessage.getU8();
         if (opCode != Proto.OpCode.GAMEWORLD_FIRST_PACKET) {
-            mLogger.error("Incorrect first packet opcode");
+            LOGGER.error("Incorrect first packet opcode");
         }
 
         mChallengeTimestamp = inputMessage.getU32();
@@ -116,7 +120,7 @@ public class ProtocolGame extends Protocol {
                     processCreatureType(inputMessage);
                     break;
                 default:
-                    mLogger.warn("Unrecognized opCode: {}", String.format("0x%x", opCode));
+                    LOGGER.warn("Unrecognized opCode: {}", String.format("0x%x", opCode));
                     return;
             }
         }
@@ -206,7 +210,7 @@ public class ProtocolGame extends Protocol {
         int skip = 0;
         for (int nz = startz; nz != endz + zstep; nz += zstep) {
             skip = setFloorDescription(inputMessage, x - 8, y - 6, nz, width, height, z - nz, skip);
-            mLogger.info("skip: {}", skip);
+            LOGGER.info("skip: {}", skip);
         }
 
         return;
@@ -230,7 +234,7 @@ public class ProtocolGame extends Protocol {
     private int setTileDescription(InputMessage inputMessage, Position position) {
         // clean tile
 
-        mLogger.info("Getting tile desc from pos {}", position);
+        LOGGER.info("Getting tile desc from pos {}", position);
 
         boolean gotEffect = false;
         for (int stackPos = 0; stackPos < 255; stackPos++) {
@@ -245,7 +249,7 @@ public class ProtocolGame extends Protocol {
             }
 
             if (stackPos > 10) {
-                mLogger.error("too many things");
+                LOGGER.error("too many things");
             }
 
             Thing thing = getThing(inputMessage);
@@ -293,7 +297,7 @@ public class ProtocolGame extends Protocol {
             inputMessage.getU8(); // sync I think
         }
 
-        mLogger.info("getItem item id: {}", id);
+        LOGGER.info("getItem item id: {}", id);
 
         return thing;
     }
@@ -321,7 +325,7 @@ public class ProtocolGame extends Protocol {
                 int creatureType = inputMessage.getU8();
 
                 String name = inputMessage.getString();
-                mLogger.info("Name: {}", name);
+                LOGGER.info("Name: {}", name);
 
                 if (id == localPlayer.getId()) {
                     creature = localPlayer;
@@ -440,22 +444,22 @@ public class ProtocolGame extends Protocol {
 
         String text = inputMessage.getString();
 
-        mLogger.info("Creature {} at pos {} {} {} says the following {}", creatureName, x, y, z, text);
+        LOGGER.info("Creature {} at pos {} {} {} says the following {}", creatureName, x, y, z, text);
     }
 
     private void processAddInventory(InputMessage inputMessage) {
         int slot = inputMessage.getU8();
         Item item = getItem(inputMessage);
-        mLogger.info("processAddInventory, slot: {}", slot);
+        LOGGER.info("processAddInventory, slot: {}", slot);
     }
 
     private void processDeleteInventory(InputMessage inputMessage) {
         int slot = inputMessage.getU8();
-        mLogger.info("processDeleteInventory, slot: {}", slot);
+        LOGGER.info("processDeleteInventory, slot: {}", slot);
     }
 
     private void processPlayerStats(InputMessage inputMessage) {
-        mLogger.info("processPlayerStats");
+        LOGGER.info("processPlayerStats");
 
         int health = inputMessage.getU16();
         int maxHealth = inputMessage.getU16();
@@ -504,7 +508,7 @@ public class ProtocolGame extends Protocol {
     }
 
     private void processPlayerSkills(InputMessage inputMessage) {
-        mLogger.info("processPlayerSkills");
+        LOGGER.info("processPlayerSkills");
         for (int skill = 0; skill < Consts.Skill.LASTSKILL; skill++) {
             int level = inputMessage.getU16();
             int baseLevel = inputMessage.getU16();
@@ -518,7 +522,7 @@ public class ProtocolGame extends Protocol {
     private void processAmbientLight(InputMessage inputMessage) {
         int intensity = inputMessage.getU8();
         int color = inputMessage.getU8();
-        mLogger.info("processAmbientLight, intensity:{}, color:{}", intensity, color);
+        LOGGER.info("processAmbientLight, intensity:{}, color:{}", intensity, color);
     }
 
     private void processGraphicalEffect(InputMessage inputMessage) {
@@ -529,7 +533,7 @@ public class ProtocolGame extends Protocol {
         Thing effect = Effect.create(effectId);
 
 
-        mLogger.info("processGraphicalEffect, pos: {}, id: {}", position, effectId);
+        LOGGER.info("processGraphicalEffect, pos: {}, id: {}", position, effectId);
     }
 
     private void processCreatureLight(InputMessage inputMessage) {
@@ -541,7 +545,7 @@ public class ProtocolGame extends Protocol {
             throw new RuntimeException("could not get creature");
         }
 
-        mLogger.info("processCreatureLight, creature:{}, intensity:{}, color:{}", creature.getName(), intensity, color);
+        LOGGER.info("processCreatureLight, creature:{}, intensity:{}, color:{}", creature.getName(), intensity, color);
     }
 
     private void processPlayerBasicData(InputMessage inputMessage) {
@@ -553,12 +557,12 @@ public class ProtocolGame extends Protocol {
         for (int i = 0; i < spellCount; i++) {
             inputMessage.getU8(); // get known spell
         }
-        mLogger.info("processPlayerBasicData");
+        LOGGER.info("processPlayerBasicData");
     }
 
     private void processPlayerState(InputMessage inputMessage) {
         int states = inputMessage.getU16();
-        mLogger.info("processPlayerState");
+        LOGGER.info("processPlayerState");
     }
 
     private void processTileTransformThing(InputMessage inputMessage) {
@@ -577,7 +581,7 @@ public class ProtocolGame extends Protocol {
         }
 
         Game.getInstance().getMap().addThing(newThing, position, stackPos);
-        mLogger.info("processTileTransformThing");
+        LOGGER.info("processTileTransformThing");
     }
 
     private void processTileAddThing(InputMessage inputMessage) {
@@ -586,7 +590,7 @@ public class ProtocolGame extends Protocol {
         Thing thing = getThing(inputMessage);
         Game.getInstance().getMap().addThing(thing, position, stackPos);
 
-        mLogger.info("processTileAddThing position: {}", position);
+        LOGGER.info("processTileAddThing position: {}", position);
     }
 
     private void processTileRemoveThing(InputMessage inputMessage) {
@@ -598,7 +602,7 @@ public class ProtocolGame extends Protocol {
         if (!Game.getInstance().getMap().removeThing(thing)) {
             throw new RuntimeException("unable to remove thing");
         }
-        mLogger.info("processTileRemoveThing, position {}", thing.getPosition());
+        LOGGER.info("processTileRemoveThing, position {}", thing.getPosition());
     }
 
     private void processMoveCreature(InputMessage inputMessage) {
@@ -614,7 +618,7 @@ public class ProtocolGame extends Protocol {
         }
 
         Game.getInstance().getMap().addThing(thing, newPos, -1);
-        mLogger.info("processMoveCreature, oldPos: {}, newPos: {}", thing.getPosition(), newPos);
+        LOGGER.info("processMoveCreature, oldPos: {}, newPos: {}", thing.getPosition(), newPos);
     }
 
     private void processCreatureType(InputMessage inputMessage) {
@@ -658,7 +662,7 @@ public class ProtocolGame extends Protocol {
     // SEND -->
 
     private void sendPingBack() {
-        mLogger.info("sendPingBack");
+        LOGGER.info("sendPingBack");
         OutputMessage outputMessage = new OutputMessage();
         outputMessage.addU8((char) Proto.OpCode.GAMEWORLD_PING_BACK);
         send(outputMessage);

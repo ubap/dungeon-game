@@ -74,6 +74,12 @@ public abstract class Thing {
     public boolean isTopEffect() {
         return getThingType().isTopEffect();
     }
+    public boolean isForceUse() {
+        return getThingType().isForceUse();
+    }
+    public boolean isIgnoreLook() {
+        return getThingType().isIgnoreLook();
+    }
 
     public int getAnimationPhases() {
         return getThingType().getAnimationPhases();

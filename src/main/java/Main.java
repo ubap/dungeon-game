@@ -4,6 +4,7 @@ import dunegon.game.login.CharList;
 import dunegon.net.Protocol;
 import dunegon.net.ProtocolGame;
 import dunegon.net.ProtocolLogin;
+import utils.MapPrinter;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
@@ -36,10 +37,8 @@ public class Main {
         Thread.sleep(2000);
 
         while (true) {
-            protocolGame.sendTurnEast();
-            Thread.sleep(5000);
-            protocolGame.sendTurnNorth();
-            Thread.sleep(5000);
+            MapPrinter.printThingsUnder(Game.getInstance(), protocolGame);
+            Thread.sleep(500);
         }
 
     }

@@ -96,6 +96,74 @@ public class Tile {
         return removed;
     }
 
+    public Thing getTopThing() {
+        if (isEmpty()) {
+            return null;
+        }
+        for (Thing thing : things) {
+            if (!thing.isGround() && thing.isGroundBorder() && !thing.isOnBottom() && !thing.isOnTop() && !thing.isCreature()) {
+                return thing;
+            }
+        }
+        return things.get(things.size() - 1);
+    }
+
+    public Thing getTopLookThing() {
+        if (isEmpty()) {
+            return null;
+        }
+        for (Thing thing : things) {
+            if (!thing.isIgnoreLook() && !thing.isGround() && !thing.isGroundBorder() && !thing.isOnBottom() && !thing.isOnTop()) {
+                return thing;
+            }
+        }
+        return things.get(0);
+    }
+
+    public Thing getTopUseThing() {
+        if (isEmpty()) {
+            return null;
+        }
+        for (Thing thing : things) {
+            if (thing.isForceUse()
+                    || (!thing.isGround() && !thing.isGroundBorder() && !thing.isOnBottom()
+                    && !thing.isOnBottom() && !thing.isCreature() && !thing.isSplash())) {
+                return thing;
+            }
+        }
+        for (Thing thing : things) {
+            if (!thing.isGround() && !thing.isGroundBorder() && !thing.isCreature() && !thing.isSplash()) {
+                return thing;
+            }
+        }
+
+        return things.get(0);
+    }
+
+    public List<Item> getItems() {
+        List<Item> items = new ArrayList<>();
+        for (Thing thing : things) {
+            if (thing.isItem()) {
+                items.add((Item) thing);
+            }
+        }
+        return items;
+    }
+
+    public List<Creature> getCreatures() {
+        List<Creature> creatures = new ArrayList<>();
+        for (Thing thing : things) {
+            if (thing.isCreature()) {
+                creatures.add((Creature) thing);
+            }
+        }
+        return creatures;
+    }
+
+    public boolean isEmpty() {
+        return things.size() == 0;
+    }
+
     public void clean() {
         this.things.clear();
     }
