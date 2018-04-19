@@ -81,6 +81,15 @@ public abstract class Thing {
     public boolean isIgnoreLook() {
         return getThingType().isIgnoreLook();
     }
+    public int getNumPatternX() {
+        return getThingType().getPatternX();
+    }
+    public int getNumPatternY() {
+        return getThingType().getPatternY();
+    }
+    public int getNumPatternZ() {
+        return getThingType().getPatternZ();
+    }
 
     public int getAnimationPhases() {
         return getThingType().getAnimationPhases();

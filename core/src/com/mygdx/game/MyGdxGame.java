@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.dunegon.game.Game;
 import com.mygdx.game.dunegon.game.Position;
 import com.mygdx.game.dunegon.game.Thing;
+import com.mygdx.game.dunegon.game.Tile;
 import com.mygdx.game.dunegon.game.login.CharList;
 import com.mygdx.game.dunegon.io.SpriteManager;
 import com.mygdx.game.dunegon.io.ThingTypeManager;
@@ -24,7 +25,7 @@ import java.net.URL;
 public class MyGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
 
-	private static Thing topUseThing;
+	private static Tile northTile;
 
 	@Override
 	public void create () {
@@ -80,8 +81,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 
-		if (topUseThing != null) {
-			topUseThing.draw(new Point(50, 50));
+		if (northTile != null) {
+			northTile.draw(new Point(50, 50), 1, 0xFF);
 		}
 
 		batch.end();
@@ -99,7 +100,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 				Position position = Game.getInstance().getMap().getCentralPosition();
 				position = new Position(position.getX(), position.getY() - 1, position.getZ());
-				topUseThing = Game.getInstance().getMap().getTile(position).getTopUseThing();
+				northTile = Game.getInstance().getMap().getTile(position);
 
 				try {
 					Thread.sleep(100);

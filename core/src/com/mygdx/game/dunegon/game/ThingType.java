@@ -387,9 +387,6 @@ public class ThingType {
                      int animationPhase) {
 
         animationPhase = 0;
-        xPattern = 0;
-        yPattern = 0;
-        zPattern = 0;
 
         if (animationPhase >= mAnimationPhases) {
             return;

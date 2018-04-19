@@ -1,5 +1,7 @@
 package com.mygdx.game.dunegon.game;
 
+import com.mygdx.game.graphics.Point;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -174,5 +176,18 @@ public class Tile {
 
     public void clean() {
         this.things.clear();
+    }
+
+    // todo: lightView
+    public void draw(Point dest, float scaleFactor, int drawFlags) {
+
+        for (Thing thing : things) {
+            if (!thing.isGround() && !thing.isGroundBorder() && !thing.isOnBottom()) {
+                break;
+            }
+
+            thing.draw(dest);
+        }
+
     }
 }
