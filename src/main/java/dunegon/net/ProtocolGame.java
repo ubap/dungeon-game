@@ -91,7 +91,7 @@ public class ProtocolGame extends Protocol {
                     processMapLeftRow(inputMessage);
                     break;
                 case Proto.OpCode.CREATURE_SAY:
-                    processCreatureSay(inputMessage);
+                    processTalk(inputMessage);
                     break;
                 case Proto.OpCode.SET_INVENTORY:
                     processAddInventory(inputMessage);
@@ -122,6 +122,12 @@ public class ProtocolGame extends Protocol {
                     break;
                 case Proto.OpCode.CREATURE_SPEED:
                     processCreatureSpeed(inputMessage);
+                    break;
+                case Proto.OpCode.CREATURE_SKULL:
+                    processCreatureSkull(inputMessage);
+                    break;
+                case Proto.OpCode.CREATURE_MARKS:
+                    processCreatureMarks(inputMessage);
                     break;
                 case Proto.OpCode.PLAYER_BASIC_DATA:
                     processPlayerBasicData(inputMessage);
@@ -290,20 +296,43 @@ public class ProtocolGame extends Protocol {
         sendPingBack();
     }
 
-    private void processCreatureSay(InputMessage inputMessage) {
+    private void processTalk(InputMessage inputMessage) {
         inputMessage.getU32(); // statementId
         String creatureName = inputMessage.getString();
 
         int level = inputMessage.getU16();
-        short type = inputMessage.getU8();
+        short mode = inputMessage.getU8();
 
-        int x = inputMessage.getU16();
-        int y = inputMessage.getU16();
-        int z = inputMessage.getU8();
+        Position position;
+        int channelId;
+        switch (mode) {
+            case Consts.Message.SAY:
+            case Consts.Message.WHISPER:
+            case Consts.Message.YELL:
+            case Consts.Message.NPC_TO:
+            case Consts.Message.BARK_LOW:
+            case Consts.Message.BARK_LOUD:
+            case Consts.Message.SPELL:
+            case Consts.Message.NPC_FROM_START_BLOCK:
+                position = getPosition(inputMessage);
+                break;
+            case Consts.Message.CHANNEL:
+            case Consts.Message.CHANNEL_MANAGEMENT:
+            case Consts.Message.CHANNEL_HIGHLIGHT:
+            case Consts.Message.GAMEMASTER_CHANNEL:
+                channelId = inputMessage.getU16();
+                break;
+            case Consts.Message.NPC_FROM:
+            case Consts.Message.PRIVATE_FROM:
+            case Consts.Message.GAMEMASTER_BROADCAST:
+            case Consts.Message.GAMEMASTER_PRIVATE_FROM:
+                break;
+            default:
+                throw new RuntimeException("unknown message mode " + mode);
+        }
 
         String text = inputMessage.getString();
-
-        LOGGER.info("Creature {} at pos {} {} {} says the following {}", creatureName, x, y, z, text);
+        LOGGER.info("Creature {} says the following {}", creatureName, text);
     }
 
     private void processAddInventory(InputMessage inputMessage) {
@@ -469,8 +498,18 @@ public class ProtocolGame extends Protocol {
             // set speed and base speed here
         }
 
-
         LOGGER.info("processCreatureSpeed");
+    }
+    private void processCreatureSkull(InputMessage inputMessage) {
+        long cid = inputMessage.getU32();
+        int skull = inputMessage.getU8();
+        LOGGER.info("processCreatureSkull");
+    }
+    private void processCreatureMarks(InputMessage inputMessage) {
+        long cid = inputMessage.getU32();
+        boolean isPermanent = inputMessage.getU8() != 1;
+        int markType = inputMessage.getU8();
+        LOGGER.info("processCreatureMarks");
     }
 
     private void processPlayerBasicData(InputMessage inputMessage) {

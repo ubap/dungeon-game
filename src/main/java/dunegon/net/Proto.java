@@ -42,6 +42,8 @@ public class Proto {
         public static final short CREATURE_LIGHT = 0x8D;
         public static final short CREATURE_HEALTH = 0x8C;
         public static final short CREATURE_SPEED = 0x8F;
+        public static final short CREATURE_SKULL = 0x90;
+        public static final short CREATURE_MARKS = 0x93;
         public static final short CREATURE_TYPE = 0x95;
 
         public static final short PLAYER_BASIC_DATA = 0x9F;
