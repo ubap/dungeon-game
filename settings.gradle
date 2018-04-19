@@ -1,2 +1,1 @@
-rootProject.name = 'tibiaprotocol'
-
+include 'desktop', 'core'
