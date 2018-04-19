@@ -39,6 +39,7 @@ public class Proto {
         public static final short DELETE_INVENTORY = 0x79;
         public static final short AMBIENT_LIGHT = 0x82;
         public static final short GRAPHICAL_EFFECT = 0x83;
+        public static final short MISSILE_EFFECT = 0x85;
         public static final short CREATURE_LIGHT = 0x8D;
         public static final short CREATURE_HEALTH = 0x8C;
         public static final short CREATURE_SPEED = 0x8F;

@@ -111,6 +111,9 @@ public class ProtocolGame extends Protocol {
                 case Proto.OpCode.GRAPHICAL_EFFECT:
                     processGraphicalEffect(inputMessage);
                     break;
+                case Proto.OpCode.MISSILE_EFFECT:
+                    processMissileEffect(inputMessage);
+                    break;
                 case Proto.OpCode.TEXT_MESSAGE:
                     processTextMessage(inputMessage);
                     break;
@@ -418,6 +421,12 @@ public class ProtocolGame extends Protocol {
         int effectId = inputMessage.getU8();
         Thing effect = Effect.create(effectId);
         LOGGER.info("processGraphicalEffect, pos: {}, id: {}", position, effectId);
+    }
+    private void processMissileEffect(InputMessage inputMessage) {
+        Position fromPosition = getPosition(inputMessage);
+        Position toPosition = getPosition(inputMessage);
+        int shotId = inputMessage.getU8();
+        LOGGER.info("processMissileEffect, fromPosition: {}, toPosition: {}", fromPosition, toPosition);
     }
 
     private void processTextMessage(InputMessage inputMessage) {
