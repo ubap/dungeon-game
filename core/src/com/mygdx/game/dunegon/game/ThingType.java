@@ -1,5 +1,14 @@
 package com.mygdx.game.dunegon.game;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.game.dunegon.io.SpriteManager;
+import com.mygdx.game.graphics.Painter;
+import com.mygdx.game.graphics.Point;
+import com.mygdx.game.graphics.Rect;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class ThingType {
     private int mId;
 
@@ -74,6 +83,12 @@ public class ThingType {
     private int mWritableOnce;
 
     private int mAnimationPhases;
+
+    private List<Integer> spriteIndexList;
+
+    public ThingType() {
+        this.spriteIndexList = new ArrayList<Integer>();
+    }
 
     public void setId(int id) {
         mId = id;
@@ -301,4 +316,34 @@ public class ThingType {
     public boolean isIgnoreLook() {
         return mLook;
     }
+
+
+    public void setSpriteIndexList(List<Integer> spriteIndexList) {
+        this.spriteIndexList = spriteIndexList;
+    }
+    public List<Integer> getSpriteIndexList() {
+        return spriteIndexList;
+    }
+
+    // todo
+    public void draw(Point dest, float scaleFactor, int layer, int xPattern, int yPattern, int zPattern,
+                     int animationPhase) {
+
+        Rect destRect = new Rect(dest.getX(), dest.getY(), 0, 0);
+
+        Texture texture =  getTexture(0);
+        if (texture != null) {
+            Painter.getInstance().drawTexturedRect(destRect, texture);
+        }
+
+    }
+
+    // todo:
+    public Texture getTexture(int animationPhase) {
+        if (spriteIndexList.size() >= 0) {
+            return SpriteManager.getInstance().getSpriteImage(spriteIndexList.get(0));
+        }
+        return null;
+    }
+
 }

@@ -6,15 +6,18 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.dunegon.game.Game;
+import com.mygdx.game.dunegon.game.Position;
+import com.mygdx.game.dunegon.game.Thing;
 import com.mygdx.game.dunegon.game.login.CharList;
+import com.mygdx.game.dunegon.io.SpriteManager;
 import com.mygdx.game.dunegon.io.ThingTypeManager;
 import com.mygdx.game.dunegon.net.Protocol;
 import com.mygdx.game.dunegon.net.ProtocolGame;
 import com.mygdx.game.dunegon.net.ProtocolLogin;
+import com.mygdx.game.graphics.Painter;
+import com.mygdx.game.graphics.Point;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
@@ -24,9 +27,14 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	private static int pos = 0;
 
+	private static Thing topUseThing;
+
 	@Override
 	public void create () {
 		System.out.println("starting");
+
+		batch = new SpriteBatch();
+		Painter.init(batch);
 
 		Game.init();
 		ThingTypeManager.init();
@@ -34,16 +42,10 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		try {
 
-			try {
-				URL url = new URL("file:\\D:\\dev\\libgdx\\test-tibia-sprites\\core\\assets\\Tibia.spr");
-				SpriteManager.getInstance().loadSpr(url.toURI());
-				URL datUrl = new URL("file:\\D:\\dev\\libgdx\\test-tibia-sprites\\core\\assets\\Tibia.dat");
-				ThingTypeManager.getInstance().loadDat(datUrl.toURI());
-			} catch (URISyntaxException e) {
-				e.printStackTrace();
-			} catch (MalformedURLException e) {
-				e.printStackTrace();
-			}
+			URL url = new URL("file:\\D:\\dev\\libgdx\\test-tibia-sprites\\core\\assets\\Tibia.spr");
+			SpriteManager.getInstance().loadSpr(url.toURI());
+			URL datUrl = new URL("file:\\D:\\dev\\libgdx\\test-tibia-sprites\\core\\assets\\Tibia.dat");
+			ThingTypeManager.getInstance().loadDat(datUrl.toURI());
 
 			CharList charList = new CharList();
 
@@ -60,16 +62,12 @@ public class MyGdxGame extends ApplicationAdapter {
 			Thread.sleep(2000);
 
 
-			batch = new SpriteBatch();
-
 
 			texture = new Texture[100000];
 
 			for (int i = 0; i < texture.length; i++) {
 				texture[i] = SpriteManager.getInstance().getSpriteImage(i + 136);
 			}
-
-			SpriteManager.getInstance().unloadSpr();
 
 			CountThread countThread = new CountThread();
 			countThread.start();
@@ -79,18 +77,22 @@ public class MyGdxGame extends ApplicationAdapter {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
 		}
 
 	}
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
+		Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
-		if (texture[pos] != null) {
-			batch.draw(texture[pos], 50, 50);
+
+		if (topUseThing != null) {
+			topUseThing.draw(new Point(50, 50));
 		}
+
 		batch.end();
 	}
 	
@@ -103,10 +105,11 @@ public class MyGdxGame extends ApplicationAdapter {
 		@Override
 		public void run() {
 			while (true) {
-				MyGdxGame.pos += 1;
-				if (MyGdxGame.pos == MyGdxGame.texture.length) {
-					MyGdxGame.pos = 0;
-				}
+
+				Position position = Game.getInstance().getMap().getCentralPosition();
+				position = new Position(position.getX(), position.getY() - 1, position.getZ());
+				topUseThing = Game.getInstance().getMap().getTile(position).getTopLookThing();
+
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {

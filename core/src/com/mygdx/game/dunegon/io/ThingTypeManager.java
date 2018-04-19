@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ThingTypeManager {
     private static ThingTypeManager INSTANCE;
@@ -90,6 +92,7 @@ public class ThingTypeManager {
 
         short totalSpritesCount = 0;
         short animationPhases = 0;
+        List<Integer> spriteList = new ArrayList<Integer>();
         for (int group = 0; group < groupCount; group++) {
             if (hasFrameGroups) {
                 short frameGroupType = fileStream.getU8();
@@ -123,15 +126,15 @@ public class ThingTypeManager {
                 throw new RuntimeException("has more than 4096 sprites count");
             }
 
-            long[] sprites = new long[totalSpritesCount + totalSprites];
             for (int sprite = totalSpritesCount; sprite < (totalSpritesCount + totalSprites); sprite++) {
-                sprites[sprite] = fileStream.getU32();
+                spriteList.add((int) fileStream.getU32());
             }
 
             totalSpritesCount += totalSprites;
         }
 
         thingType.setAnimationPhases(animationPhases);
+        thingType.setSpriteIndexList(spriteList);
 
         return thingType;
 

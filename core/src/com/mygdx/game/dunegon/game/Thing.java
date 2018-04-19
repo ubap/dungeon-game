@@ -1,5 +1,6 @@
 package com.mygdx.game.dunegon.game;
 
+import com.mygdx.game.graphics.Point;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -106,5 +107,10 @@ public abstract class Thing {
     // set
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+
+    public void draw(Point dest) {
+        getThingType().draw(dest, 0, 0, 0, 0, 0, 0);
     }
 }
