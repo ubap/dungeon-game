@@ -76,16 +76,16 @@ public class ProtocolLogin extends Protocol {
         while(inputMessage.hasMore()) {
             short opCode = inputMessage.getU8();
             switch (opCode) {
-                case Proto.OpCode.DISCONNECT:
+                case Proto.Login.DISCONNECT:
                     processDisconnect(inputMessage);
                     break;
-                case Proto.OpCode.MOTD:
+                case Proto.Login.MOTD:
                     processMotd(inputMessage);
                     break;
-                case Proto.OpCode.SESSION_KEY:
+                case Proto.Login.SESSION_KEY:
                     processSessionKey(inputMessage);
                     break;
-                case Proto.OpCode.CHAR_LIST:
+                case Proto.Login.CHAR_LIST:
                     processCharList(inputMessage);
                     break;
                 default:

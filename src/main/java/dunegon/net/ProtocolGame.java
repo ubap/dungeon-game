@@ -72,6 +72,9 @@ public class ProtocolGame extends Protocol {
                 case Proto.OpCode.PENDING_STATE:
                     processPendingState(inputMessage);
                     break;
+                case Proto.OpCode.DEATH:
+                    processDeath(inputMessage);
+                    break;
                 case Proto.OpCode.ENTER_WORLD:
                     processEnterWorld(inputMessage);
                     break;
@@ -597,6 +600,12 @@ public class ProtocolGame extends Protocol {
     private void processCreatureType(InputMessage inputMessage) {
         long id = inputMessage.getU32();
         int type = inputMessage.getU8();
+    }
+
+    private void processDeath(InputMessage inputMessage) {
+        int deathType = inputMessage.getU8();
+        int penalty = inputMessage.getU8();
+        LOGGER.info("processDeath");
     }
 
     private void processPlayerInventory(InputMessage inputMessage) {
