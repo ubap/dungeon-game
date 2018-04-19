@@ -23,9 +23,6 @@ import java.net.URL;
 
 public class MyGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
-	private static Texture[] texture;
-
-	private static int pos = 0;
 
 	private static Thing topUseThing;
 
@@ -62,12 +59,6 @@ public class MyGdxGame extends ApplicationAdapter {
 			Thread.sleep(2000);
 
 
-
-			texture = new Texture[100000];
-
-			for (int i = 0; i < texture.length; i++) {
-				texture[i] = SpriteManager.getInstance().getSpriteImage(i + 136);
-			}
 
 			CountThread countThread = new CountThread();
 			countThread.start();
@@ -108,7 +99,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 				Position position = Game.getInstance().getMap().getCentralPosition();
 				position = new Position(position.getX(), position.getY() - 1, position.getZ());
-				topUseThing = Game.getInstance().getMap().getTile(position).getTopLookThing();
+				topUseThing = Game.getInstance().getMap().getTile(position).getTopUseThing();
 
 				try {
 					Thread.sleep(100);

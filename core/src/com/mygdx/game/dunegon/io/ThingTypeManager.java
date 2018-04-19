@@ -1,6 +1,7 @@
 package com.mygdx.game.dunegon.io;
 
 import com.mygdx.game.dunegon.game.ThingType;
+import com.mygdx.game.graphics.Size;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,9 +70,10 @@ public class ThingTypeManager {
     }
 
     public static ThingType readThing(int id, int category, FileStream fileStream) {
-        LOGGER.debug("Reading thingType for item id: {}", id);
+        LOGGER.debug("Reading thingType for category: {}, item id: {}", category, id);
         ThingType thingType = new ThingType();
         thingType.setId(id);
+        thingType.setCategory(category);
         boolean done = false;
         for (int i = 0; i < DatAttrs.Attribute.LAST_ATTR; i++) {
             short attribute = fileStream.getU8();
@@ -99,6 +101,7 @@ public class ThingTypeManager {
             }
             short width = fileStream.getU8();
             short height = fileStream.getU8();
+            Size size = new Size(width, height);
             if (width + height > 2) {
                 short realSize = fileStream.getU8();
             }
@@ -120,7 +123,7 @@ public class ThingTypeManager {
                 }
             }
 
-            int totalSprites = nLayers * width * height * numPatternX * numPatternY * numPatternZ * groupAnimationPhases;
+            int totalSprites = size.getArea() * nLayers * numPatternX * numPatternY * numPatternZ * groupAnimationPhases;
 
             if (totalSpritesCount + totalSprites > 4096) {
                 throw new RuntimeException("has more than 4096 sprites count");
@@ -131,10 +134,16 @@ public class ThingTypeManager {
             }
 
             totalSpritesCount += totalSprites;
+            thingType.setSize(size);
+            thingType.setPatternX(numPatternX);
+            thingType.setPatternY(numPatternY);
+            thingType.setPatternZ(numPatternZ);
+            thingType.setLayers(nLayers);
         }
 
         thingType.setAnimationPhases(animationPhases);
         thingType.setSpriteIndexList(spriteList);
+
 
         return thingType;
 

@@ -59,7 +59,7 @@ public class SpriteManager {
         loaded = false;
     }
 
-    public Texture getSpriteImage(int id) {
+    public Pixmap getSpriteImage(int id) {
         // todo
         if (id == 0 || spritesFile == null) {
             return null;
@@ -132,9 +132,7 @@ public class SpriteManager {
 
 
         Pixmap pixmap = new Pixmap(gdx2DPixmap);
-        return new Texture(pixmap);
-
-
+        return pixmap;
     }
 
     private void setFourPixelsToZero(ByteBuffer byteBuffer) {

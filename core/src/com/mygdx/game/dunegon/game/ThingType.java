@@ -1,17 +1,23 @@
 package com.mygdx.game.dunegon.game;
 
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.mygdx.game.dunegon.io.DatAttrs;
 import com.mygdx.game.dunegon.io.SpriteManager;
 import com.mygdx.game.graphics.Painter;
 import com.mygdx.game.graphics.Point;
 import com.mygdx.game.graphics.Rect;
+import com.mygdx.game.graphics.Size;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ThingType {
     private int mId;
 
+    private int category;
     private boolean mGround;
     private int mGroundSpeed;
 
@@ -46,8 +52,7 @@ public class ThingType {
     private boolean mTopEffect;
 
     private boolean mHasDisplacement;
-    private int mDisplacementX;
-    private int mDisplacementY;
+    private Point displacement;
 
     private boolean mHasLight;
     private int mLightIntensity;
@@ -85,9 +90,22 @@ public class ThingType {
     private int mAnimationPhases;
 
     private List<Integer> spriteIndexList;
+    private java.util.Map<Integer, Texture> textures;
+    private Size size;
+    private int patternX;
+    private int patternY;
+    private int patternZ;
+    private int layers;
+    private java.util.Map<Integer, java.util.Map<Integer, Rect>> texturesFramesRect;
+    private java.util.Map<Integer, java.util.Map<Integer, Point>> texturesFramesOffsets;
+
 
     public ThingType() {
         this.spriteIndexList = new ArrayList<Integer>();
+        this.textures = new HashMap<Integer, Texture>();
+        this.texturesFramesRect = new HashMap<Integer, Map<Integer, Rect>>();
+        this.texturesFramesOffsets = new HashMap<Integer, Map<Integer, Point>>();
+        this.displacement = new Point(0, 0);
     }
 
     public void setId(int id) {
@@ -96,6 +114,10 @@ public class ThingType {
 
     public int getId() {
         return mId;
+    }
+
+    public void setCategory(int category) {
+        this.category = category;
     }
 
     public void setGround(boolean ground, int groundSpeed) {
@@ -153,8 +175,7 @@ public class ThingType {
 
     public void setDisplacement(boolean displacement, int x, int y) {
         mHasDisplacement = displacement;
-        mDisplacementX = x;
-        mDisplacementY = y;
+        this.displacement = new Point(x, y);
     }
 
     public void setLight(boolean light, int intensity, int color) {
@@ -325,25 +346,217 @@ public class ThingType {
         return spriteIndexList;
     }
 
+    public void setSize(Size size) {
+        this.size = size;
+    }
+
+    public Size getSize() {
+        return size;
+    }
+
+    public void setPatternX(int patternX) {
+        this.patternX = patternX;
+    }
+
+    public void setPatternY(int patternY) {
+        this.patternY = patternY;
+    }
+
+    public void setPatternZ(int patternZ) {
+        this.patternZ = patternZ;
+    }
+
+    public int getPatternX() {
+        return patternX;
+    }
+
+    public int getPatternY() {
+        return patternY;
+    }
+
+    public int getPatternZ() {
+        return patternZ;
+    }
+
+    public void setLayers(int layers) {
+        this.layers = layers;
+    }
+
     // todo
     public void draw(Point dest, float scaleFactor, int layer, int xPattern, int yPattern, int zPattern,
                      int animationPhase) {
 
+        animationPhase = 0;
+
+        if (animationPhase >= mAnimationPhases) {
+            return;
+        }
+
+
+
+        Texture texture = getTexture(animationPhase);
+        if (texture == null) {
+            return;
+        }
+
+        int frameIndex = getTextureIndex(layer, xPattern, yPattern, zPattern);
+        if (frameIndex >= texturesFramesRect.get(animationPhase).size()) {
+            return;
+        }
+
+        Point textureOffset;
+        Rect textureRect;
+
+        textureOffset = texturesFramesOffsets.get(animationPhase).get(frameIndex);
+        textureRect = texturesFramesRect.get(animationPhase).get(frameIndex);
+
+        Rect screenRect = new Rect(dest.add(textureOffset.sub(displacement).sub(
+                size.toPoint().sub(new Point(1,1 )).multiply(32) )),
+                textureRect.getSize());
+
         Rect destRect = new Rect(dest.getX(), dest.getY(), 0, 0);
 
-        Texture texture =  getTexture(0);
-        if (texture != null) {
-            Painter.getInstance().drawTexturedRect(destRect, texture);
-        }
+        Painter.getInstance().drawTexturedRect(screenRect, texture, textureRect);
 
     }
 
     // todo:
     public Texture getTexture(int animationPhase) {
-        if (spriteIndexList.size() >= 0) {
-            return SpriteManager.getInstance().getSpriteImage(spriteIndexList.get(0));
+        final int TILE_PIXELS = 32;
+
+        if (textures.containsKey(animationPhase)) {
+            return textures.get(animationPhase);
         }
-        return null;
+
+        int textureLayers = 1;
+        int numLayers = this.layers;
+        if (category == DatAttrs.ThingCategory.ThingCategoryCreature && numLayers >= 2) {
+            textureLayers = 5;
+            numLayers = 5;
+        }
+
+        int indexSize = textureLayers * patternX * patternY * patternZ;
+        Size textureSize = getBestTextureDimension(size.getWidth(), size.getHeight(), indexSize);
+
+        Pixmap fullImage = new Pixmap(textureSize.getWidth() * TILE_PIXELS, textureSize.getHeight() * TILE_PIXELS, Pixmap.Format.RGBA8888);
+
+        // todo: resize caches here
+        if (!texturesFramesRect.containsKey(animationPhase)) {
+            texturesFramesRect.put(animationPhase, new HashMap<Integer, Rect>());
+        }
+        if (!texturesFramesOffsets.containsKey(animationPhase)) {
+            texturesFramesOffsets.put(animationPhase, new HashMap<Integer, Point>());
+        }
+
+        for (int z = 0; z < patternZ; z++) {
+            for (int y = 0; y < patternY; y++) {
+                for (int x = 0; x < patternX; x++) {
+                    for (int l = 0; l < numLayers; l++) {
+                        boolean spriteMask = (category == DatAttrs.ThingCategory.ThingCategoryCreature && l > 0);
+                        int frameIndex = getTextureIndex(l % textureLayers, x, y, z);
+                        Point framePos = new Point(frameIndex % (textureSize.getWidth() / size.getWidth()) * size.getWidth(),
+                                frameIndex / (textureSize.getWidth() / size.getWidth()) * size.getHeight()).multiply(TILE_PIXELS);
+
+                        for (int h = 0; h < size.getHeight(); h++) {
+                            for (int w = 0; w < size.getWidth(); w++) {
+                                int spriteIndex = getSpriteIndex(w, h, spriteMask ? 1 : l, x, y, z, animationPhase);
+                                Pixmap spriteImage = SpriteManager.getInstance().getSpriteImage(spriteIndexList.get(spriteIndex));
+                                if (spriteImage != null) {
+                                    if (spriteMask) {
+                                        // todo: mask;
+                                    }
+                                    Point spritePos = new Point(size.getWidth() - w - 1, size.getHeight() - h - 1).multiply(TILE_PIXELS);
+                                    Point targetPos = framePos.add(spritePos);
+                                    fullImage.drawPixmap(spriteImage, targetPos.getX(), targetPos.getY());
+                                }
+                            }
+                        }
+
+                        // todo: drawrect
+                        Rect drawRect = new Rect(framePos.add(new Point(size.getWidth(), size.getHeight()).multiply(TILE_PIXELS).add(new Point(-1, -1))),
+                                framePos);
+                        for (int xrect = framePos.getX(); xrect < framePos.getX() + size.getWidth() * TILE_PIXELS; xrect++) {
+                            for (int yrect = framePos.getY(); yrect < framePos.getY() + size.getHeight() * TILE_PIXELS; yrect++) {
+                                int pixel = fullImage.getPixel(xrect, yrect);
+                                if ((pixel & 0xFF000000) != 0) {
+                                    int top = Math.min(yrect, drawRect.getTop());
+                                    int left = Math.min(xrect, drawRect.getLeft());
+                                    int bottom = Math.max(yrect, drawRect.getBottom());
+                                    int right = Math.max(xrect, drawRect.getRight());
+                                    drawRect = new Rect(top, left, bottom - top, right - left);
+                                }
+                            }
+                        }
+
+                        texturesFramesRect.get(animationPhase).put(frameIndex, drawRect);
+                        texturesFramesOffsets.get(animationPhase).put(frameIndex, drawRect.getTopLeft().sub(framePos));
+                    }
+                }
+            }
+        }
+
+        Texture texture = new Texture(fullImage);
+        textures.put(animationPhase, texture);
+
+        return texture;
     }
 
+    private Size getBestTextureDimension(int w, int h, int count) {
+        final int MAX = 32;
+
+        int k = 1;
+        while (k < w) {
+            k <<= 1;
+        }
+        w = k;
+
+        k = 1;
+        while (k < h) {
+            k <<= 1;
+        }
+        h = k;
+
+        int numSprites = w*h*count;
+        if (numSprites > MAX*MAX || w > MAX || h > MAX) {
+            throw new RuntimeException();
+        }
+
+        Size bestDimension = new Size(MAX, MAX);
+        for (int i = w; i<=MAX; i<<=1) {
+            for (int j = h; j <= MAX; j<<=1) {
+                Size candidateDimension = new Size(i, j);
+                if (candidateDimension.getArea() < numSprites) {
+                    continue;
+                }
+                if (candidateDimension.getArea() < bestDimension.getArea() ||
+                        (candidateDimension.getArea() == bestDimension.getArea()
+                                && candidateDimension.getWidth() + candidateDimension.getHeight() < bestDimension.getWidth() + bestDimension.getHeight())) {
+                    bestDimension = candidateDimension;
+                }
+            }
+        }
+
+        return bestDimension;
+    }
+
+    public int getTextureIndex(int l, int x, int y, int z) {
+        return ((l * patternZ + z)
+                * patternY + y)
+                * patternX + x;
+    }
+
+    public int getSpriteIndex(int w, int h, int l, int x, int y, int z, int a) {
+        int index =
+                ((((((a % mAnimationPhases)
+                        * patternZ + z)
+                        * patternY + y)
+                        * patternX + x)
+                        * layers + l)
+                        * size.getHeight() + h)
+                        * size.getWidth() + w;
+        if (index >= spriteIndexList.size()) {
+            throw new RuntimeException();
+        }
+        return index;
+    }
 }
