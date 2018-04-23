@@ -473,8 +473,9 @@ public class ThingType {
                         }
 
                         // todo: drawrect
-                        Rect drawRect = new Rect(framePos.add(new Point(size.getWidth(), size.getHeight()).multiply(TILE_PIXELS).add(new Point(-1, -1))),
-                                framePos);
+                        Rect drawRect = new Rect(framePos.add(new Point(size.getWidth(), size.getHeight()).multiply(TILE_PIXELS)).add(new Point(-1, -1))
+                                , framePos);
+
                         for (int xrect = framePos.getX(); xrect < framePos.getX() + size.getWidth() * TILE_PIXELS; xrect++) {
                             for (int yrect = framePos.getY(); yrect < framePos.getY() + size.getHeight() * TILE_PIXELS; yrect++) {
                                 int pixel = fullImage.getPixel(xrect, yrect);
@@ -483,7 +484,7 @@ public class ThingType {
                                     int left = Math.min(xrect, drawRect.getLeft());
                                     int bottom = Math.max(yrect, drawRect.getBottom());
                                     int right = Math.max(xrect, drawRect.getRight());
-                                    drawRect = new Rect(top, left, bottom - top, right - left);
+                                    drawRect = new Rect(left, top,right - left, bottom - top);
                                 }
                             }
                         }

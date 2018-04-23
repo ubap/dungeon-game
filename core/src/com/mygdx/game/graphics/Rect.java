@@ -13,7 +13,7 @@ public class Rect {
         x1 = x;
         y1 = y;
         x2 = x + width - 1;
-        y2 = y + width - 1;
+        y2 = y + height - 1;
     }
     public Rect(Point topLeft, Point p2) {
         x1 = topLeft.getX();
