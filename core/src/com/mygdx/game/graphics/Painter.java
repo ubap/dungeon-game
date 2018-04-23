@@ -21,7 +21,8 @@ public class Painter {
     }
 
     public void drawTexturedRect(Rect dest, Texture texture, Rect src) {
-        spriteBatch.draw(texture, dest.getLeft(), dest.getBottom(), src.getLeft(), src.getTop(), src.getWidth(), src.getHeight());
+
+        spriteBatch.draw(texture, dest.getLeft(), 200 - dest.getBottom(), src.getLeft(), src.getTop(), src.getWidth(), src.getHeight());
     }
 
     public void drawTexturedRect(Rect dest, Texture texture) {

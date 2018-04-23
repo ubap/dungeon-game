@@ -484,7 +484,7 @@ public class ThingType {
                                     int left = Math.min(xrect, drawRect.getLeft());
                                     int bottom = Math.max(yrect, drawRect.getBottom());
                                     int right = Math.max(xrect, drawRect.getRight());
-                                    drawRect = new Rect(left, top,right - left, bottom - top);
+                                    drawRect = new Rect(left, top,right - left + 1, bottom - top + 1);
                                 }
                             }
                         }

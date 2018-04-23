@@ -82,7 +82,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch.begin();
 
 		if (northTile != null) {
-			northTile.draw(new Point(50, 50), 1, 0xFF);
+			northTile.draw(new Point(100, 100), 1, 0xFF);
 		}
 
 		batch.end();
