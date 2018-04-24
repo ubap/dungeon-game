@@ -87,7 +87,7 @@ public class MyGdxGame extends ApplicationAdapter {
 			for (int y = -2; y < 3; y++) {
 				Tile tile = tiles[2 + x][2 + y];
 				if (tile != null){
-					tile.draw(new Point(100 + (x*31), 100 + (y*31)), 1, 0xFF);
+					tile.draw(new Point(100 + (x*32), 100 + (y*32)), 1, 0xFF);
 				}
 			}
 		}
