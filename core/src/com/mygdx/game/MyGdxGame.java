@@ -41,6 +41,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		ThingTypeManager.init();
 		SpriteManager.init();
+		MapView.init();
 
 		try {
 
@@ -88,8 +89,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		float TILE_SIZE = 32 * scaleFactor;
 
-        MapView mapView = new MapView();
-        mapView.draw();
+        MapView.getInstance().draw();
 
 		for (int x = -2; x < 3; x++) {
 			for (int y = -2; y < 3; y++) {
@@ -103,6 +103,13 @@ public class MyGdxGame extends ApplicationAdapter {
 		}
 
 		batch.end();
+
+		try {
+			Thread.sleep(20);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			return;
+		}
 	}
 
 	@Override

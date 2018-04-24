@@ -78,6 +78,8 @@ public class Map {
                 LOGGER.error("no tile!");
             }
         } // todo : other things
+
+        notificateTileUpdate(position);
     }
 
     public Tile getOrCreateTile(Position position) {
@@ -116,6 +118,7 @@ public class Map {
                 }
             }
         }
+        notificateTileUpdate(position);
     }
 
     public Thing getThing(Position position, int stackPos) {
@@ -136,6 +139,7 @@ public class Map {
         if (tile != null) {
             removed = tile.removeThing(thing);
         }
+        notificateTileUpdate(thing.getPosition());
         return removed;
     }
 
@@ -241,7 +245,7 @@ public class Map {
         Position tilePos = position;
         while (true) {
             tilePos = tilePos.coveredUp();
-            if (tilePos == null || tilePos.getZ() >= firstFloor) {
+            if (tilePos == null || tilePos.getZ() < firstFloor) {
                 break;
             }
 
@@ -277,6 +281,10 @@ public class Map {
             tileBlocks[z].put(index, new TileBlock());
         }
         return tileBlocks[z].get(index);
+    }
+
+    public void notificateTileUpdate(Position position) {
+        MapView.getInstance().onTileUpdate(position);
     }
 
     class TileBlock {

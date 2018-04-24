@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapView {
+    private static MapView INSTANCE;
 
     private int cachedFirstVisibleFloor;
     private int cachedLastVisibleFloor;
@@ -18,14 +19,33 @@ public class MapView {
     private int updateTilesPos;
     private List<Tile> cachedVisibleTiles;
     private boolean mustDrawVisibleTilesCache;
+    private boolean mustUpdateTilesCache;
 
-    public MapView() {
+    private MapView() {
         this.cachedVisibleTiles = new ArrayList<Tile>();
+        this.updateTilesPos = 0;
+        this.mustUpdateTilesCache = true;
         setVisibleDimension(new Size(15, 11));
     }
 
+    public static void init() {
+        INSTANCE = new MapView();
+    }
+
+    public static MapView getInstance() {
+        return INSTANCE;
+    }
+
+    public void onTileUpdate(Position position) {
+        this.mustUpdateTilesCache = true;
+    }
+
     public void draw() {
-        updateVisibleTilesCache(0);
+        if (mustUpdateTilesCache) {
+            updateVisibleTilesCache(this.updateTilesPos);
+        }
+
+        mustDrawVisibleTilesCache = true;
 
         if (mustDrawVisibleTilesCache) {
 
@@ -44,6 +64,7 @@ public class MapView {
                 }
             }
 
+            mustDrawVisibleTilesCache = false;
         }
     }
 
@@ -69,6 +90,7 @@ public class MapView {
         // clear current visible tiles cache
         this.cachedVisibleTiles.clear();
         this.mustDrawVisibleTilesCache = true;
+        this.mustUpdateTilesCache = false;
         this.updateTilesPos = 0;
 
         // cache visible tiles in draw order
