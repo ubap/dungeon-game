@@ -1,8 +1,21 @@
 package com.mygdx.game.dunegon.net;
 
 import com.mygdx.game.dunegon.Config;
-import com.mygdx.game.dunegon.game.*;
+import com.mygdx.game.dunegon.game.AwareRange;
+import com.mygdx.game.dunegon.game.Consts;
+import com.mygdx.game.dunegon.game.Creature;
+import com.mygdx.game.dunegon.game.Effect;
+import com.mygdx.game.dunegon.game.Game;
+import com.mygdx.game.dunegon.game.Item;
+import com.mygdx.game.dunegon.game.LocalPlayer;
+import com.mygdx.game.dunegon.game.Monster;
+import com.mygdx.game.dunegon.game.Npc;
+import com.mygdx.game.dunegon.game.Outfit;
+import com.mygdx.game.dunegon.game.Player;
+import com.mygdx.game.dunegon.game.Position;
+import com.mygdx.game.dunegon.game.Thing;
 import com.mygdx.game.dunegon.io.DatAttrs;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

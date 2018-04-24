@@ -3,6 +3,7 @@ package com.mygdx.game.dunegon.net;
 import com.mygdx.game.dunegon.Config;
 import com.mygdx.game.dunegon.game.login.CharList;
 import com.mygdx.game.dunegon.game.login.World;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

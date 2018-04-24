@@ -2,13 +2,13 @@ package com.mygdx.game.dunegon.io;
 
 import com.mygdx.game.dunegon.game.ThingType;
 import com.mygdx.game.graphics.Size;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URI;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,8 +43,7 @@ public class ThingTypeManager {
     public void loadDat(URI uri) throws IOException {
         LOGGER.info("loadDat");
 
-        byte[] data = Files.readAllBytes(new File(uri).toPath());
-        FileStream fileStream = new MemoryFileStream(data);
+        FileStream fileStream = new DiskFileStream(new File(uri));
 
         long datSignature = fileStream.getU32();
 
@@ -70,7 +69,7 @@ public class ThingTypeManager {
     }
 
     public static ThingType readThing(int id, int category, FileStream fileStream) {
-        LOGGER.debug("Reading thingType for category: {}, item id: {}", category, id);
+        // LOGGER.debug("Reading thingType for category: {}, item id: {}", category, id);
         ThingType thingType = new ThingType();
         thingType.setId(id);
         thingType.setCategory(category);

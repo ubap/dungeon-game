@@ -18,14 +18,20 @@ import com.mygdx.game.dunegon.net.ProtocolLogin;
 import com.mygdx.game.graphics.Painter;
 import com.mygdx.game.graphics.Point;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
 
 public class MyGdxGame extends ApplicationAdapter {
-	SpriteBatch batch;
+	private MainArguments arguments;
 
+	private SpriteBatch batch;
 	private static Tile[][] tiles;
+
+	public MyGdxGame(MainArguments mainArguments) {
+		this.arguments = mainArguments;
+	}
 
 	@Override
 	public void create () {
@@ -42,22 +48,22 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		try {
 
-			URL url = new URL("file:\\D:\\dev\\libgdx\\test-tibia-sprites\\core\\assets\\Tibia.spr");
-			SpriteManager.getInstance().loadSpr(url.toURI());
-			URL datUrl = new URL("file:\\D:\\dev\\libgdx\\test-tibia-sprites\\core\\assets\\Tibia.dat");
+			URL sprUrl = new URL("file:" + File.separator + arguments.getSprPath());
+			SpriteManager.getInstance().loadSpr(sprUrl.toURI());
+			URL datUrl = new URL("file:" + File.separator + arguments.getDatPath());
 			ThingTypeManager.getInstance().loadDat(datUrl.toURI());
 
 			CharList charList = new CharList();
 
 			Protocol protocol = new ProtocolLogin(charList, "1", "1");
-			protocol.connect("127.0.0.1", 7171);
+			protocol.connect(arguments.getGameAddress(), 7171);
 
 			synchronized (charList) {
 				charList.wait();
 			}
 
 			ProtocolGame protocolGame = new ProtocolGame("1", "1", "Heh");
-			protocolGame.connect("127.0.0.1", 7172);
+			protocolGame.connect(arguments.getGameAddress(), 7172);
 
 			Thread.sleep(2000);
 
@@ -94,7 +100,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		batch.end();
 	}
-	
+
 	@Override
 	public void dispose () {
 		batch.dispose();

@@ -1,6 +1,7 @@
 package com.mygdx.game.dunegon.net;
 
 import com.mygdx.game.dunegon.crypto.XteaEncryptionEngine;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -127,23 +128,26 @@ public abstract class Protocol {
         }
 
         int read = socket.getInputStream().read(inputMessage.getBuffer(), 0, 2); // packet size
-        if (read <= 0) {
+        if (read != 2) {
             disconnect();
             return;
         }
         int packetSize = inputMessage.getU16();
         inputMessage.setMessageSize(packetSize + 2);
 
-        read = socket.getInputStream().read(inputMessage.getBuffer(), 2, packetSize); // the rest of the packet
-        if (read <= 0) {
-            disconnect();
-            return;
+        while (read != packetSize + 2) {
+            read += socket.getInputStream().read(inputMessage.getBuffer(), read, packetSize + 2 - read); // the rest of the packet
+            if (read <= 0) {
+                disconnect();
+                return;
+            }
         }
+
         long checksum = inputMessage.getU32();
 
         Adler32 adler32 = new Adler32();
         adler32.update(inputMessage.getBuffer(), 6, packetSize - 4);
-        if (checksum != (int) adler32.getValue()) {
+        if (checksum != adler32.getValue()) {
             throw new RuntimeException("checksum mismatch");
         }
 

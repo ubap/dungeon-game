@@ -4,10 +4,8 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URI;
 import java.nio.ByteBuffer;
-import java.nio.file.Files;
 
 public class SpriteManager {
     private static SpriteManager INSTANCE;

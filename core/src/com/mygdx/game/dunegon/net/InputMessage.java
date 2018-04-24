@@ -44,8 +44,8 @@ public class InputMessage {
     public long getU32() {
         byte[] bytes = byteBuffer.array();
         int position = byteBuffer.position();
-        long val = bytes[position + 3]<<24 & 0xFF000000 | bytes[position + 2]<<16 & 0xFF0000
-                | bytes[position + 1]<<8 & 0xFF00 | bytes[position] & 0xFF;
+        long val = bytes[position + 3]<<24 & 0xFF000000L | bytes[position + 2]<<16 & 0xFF0000L
+                | bytes[position + 1]<<8 & 0xFF00L | bytes[position] & 0xFFL;
         byteBuffer.position(position + 4);
         return val;
     }

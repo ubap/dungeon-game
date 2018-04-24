@@ -1,7 +1,5 @@
 package com.mygdx.game.graphics;
 
-import com.mygdx.game.dunegon.game.Position;
-
 public class Point {
     private int x, y;
 

@@ -1,6 +1,7 @@
 package com.mygdx.game.dunegon.game;
 
 import com.mygdx.game.graphics.Point;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -3,17 +3,15 @@ package com.mygdx.game.dunegon.game;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.dunegon.io.DatAttrs;
-import com.mygdx.game.dunegon.io.PNG;
 import com.mygdx.game.dunegon.io.SpriteManager;
 import com.mygdx.game.graphics.Painter;
 import com.mygdx.game.graphics.Point;
 import com.mygdx.game.graphics.Rect;
 import com.mygdx.game.graphics.Size;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -97,14 +95,14 @@ public class ThingType {
     private int mAnimationPhases;
 
     private List<Integer> spriteIndexList;
-    private java.util.Map<Integer, Texture> textures;
+    private Map<Integer, Texture> textures;
     private Size size;
     private int patternX;
     private int patternY;
     private int patternZ;
     private int layers;
-    private java.util.Map<Integer, java.util.Map<Integer, Rect>> texturesFramesRect;
-    private java.util.Map<Integer, java.util.Map<Integer, Point>> texturesFramesOffsets;
+    private Map<Integer, Map<Integer, Rect>> texturesFramesRect;
+    private Map<Integer, Map<Integer, Point>> texturesFramesOffsets;
 
 
     public ThingType() {
@@ -480,15 +478,6 @@ public class ThingType {
                             }
                         }
 
-                        try {
-                            byte[] rawData = PNG.toPNG(fullImage);
-                            FileOutputStream fileOutputStream = new FileOutputStream(String.format("%d.png", getId()));
-                            fileOutputStream.write(rawData);
-                            fileOutputStream.close();
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
-
                         // todo: drawrect
                         Rect drawRect = new Rect(framePos.add(new Point(size.getWidth(), size.getHeight()).multiply(TILE_PIXELS)).add(new Point(-1, -1))
                                 , framePos);
@@ -502,7 +491,6 @@ public class ThingType {
                                     int bottom = Math.max(yrect, drawRect.getBottom());
                                     int right = Math.max(xrect, drawRect.getRight());
 
-                                    LOGGER.info("drawRect: left: {} top: {} right: {} bottom: {}", left, top, right, bottom);
                                     drawRect = drawRect.setTop(top).setLeft(left).setBottom(bottom).setRight(right);
                                 }
                             }

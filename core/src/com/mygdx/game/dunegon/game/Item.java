@@ -3,6 +3,7 @@ package com.mygdx.game.dunegon.game;
 import com.mygdx.game.dunegon.io.DatAttrs;
 import com.mygdx.game.dunegon.io.ThingTypeManager;
 import com.mygdx.game.graphics.Point;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,7 +49,7 @@ public class Item extends Thing {
 
     @Override
     public void draw(Point dest) {
-        LOGGER.info("drawing item: {}", clientId);
+        // LOGGER.info("drawing item: {}", clientId);
         AtomicInteger patternX = new AtomicInteger(0);
         AtomicInteger patternY = new AtomicInteger(0);
         AtomicInteger patternZ = new AtomicInteger(0);
