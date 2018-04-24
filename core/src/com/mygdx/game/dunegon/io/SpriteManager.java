@@ -120,7 +120,7 @@ public class SpriteManager {
                 writePos += 4;
             }
 
-            read += 4 + (channels + coloredPixels);
+            read += 4 + (channels * coloredPixels);
         }
 
         while (writePos < SPRITE_DATA_SIZE) {

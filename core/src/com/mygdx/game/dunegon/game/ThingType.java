@@ -3,12 +3,15 @@ package com.mygdx.game.dunegon.game;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.dunegon.io.DatAttrs;
+import com.mygdx.game.dunegon.io.PNG;
 import com.mygdx.game.dunegon.io.SpriteManager;
 import com.mygdx.game.graphics.Painter;
 import com.mygdx.game.graphics.Point;
 import com.mygdx.game.graphics.Rect;
 import com.mygdx.game.graphics.Size;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -414,8 +417,6 @@ public class ThingType {
                 size.toPoint().sub(new Point(1,1 )).multiply(32) )),
                 textureRect.getSize());
 
-        Rect destRect = new Rect(dest.getX(), dest.getY(), 0, 0);
-
         Painter.getInstance().drawTexturedRect(screenRect, texture, textureRect);
 
     }
@@ -439,6 +440,8 @@ public class ThingType {
         Size textureSize = getBestTextureDimension(size.getWidth(), size.getHeight(), indexSize);
 
         Pixmap fullImage = new Pixmap(textureSize.getWidth() * TILE_PIXELS, textureSize.getHeight() * TILE_PIXELS, Pixmap.Format.RGBA8888);
+        fullImage.fill();
+
 
         // todo: resize caches here
         if (!texturesFramesRect.containsKey(animationPhase)) {
@@ -461,6 +464,16 @@ public class ThingType {
                             for (int w = 0; w < size.getWidth(); w++) {
                                 int spriteIndex = getSpriteIndex(w, h, spriteMask ? 1 : l, x, y, z, animationPhase);
                                 Pixmap spriteImage = SpriteManager.getInstance().getSpriteImage(spriteIndexList.get(spriteIndex));
+
+                                try {
+                                    byte[] rawData = PNG.toPNG(spriteImage);
+                                    FileOutputStream fileOutputStream = new FileOutputStream(String.format("%d.png", spriteIndexList.get(spriteIndex)));
+                                    fileOutputStream.write(rawData);
+                                    fileOutputStream.close();
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+
                                 if (spriteImage != null) {
                                     if (spriteMask) {
                                         // todo: mask;
@@ -471,6 +484,8 @@ public class ThingType {
                                 }
                             }
                         }
+
+
 
                         // todo: drawrect
                         Rect drawRect = new Rect(framePos.add(new Point(size.getWidth(), size.getHeight()).multiply(TILE_PIXELS)).add(new Point(-1, -1))

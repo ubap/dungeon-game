@@ -25,11 +25,13 @@ import java.net.URL;
 public class MyGdxGame extends ApplicationAdapter {
 	SpriteBatch batch;
 
-	private static Tile northTile;
+	private static Tile[] northTiles;
 
 	@Override
 	public void create () {
 		System.out.println("starting");
+
+		northTiles = new Tile[3];
 
 		batch = new SpriteBatch();
 		Painter.init(batch);
@@ -81,9 +83,15 @@ public class MyGdxGame extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 
-		if (northTile != null) {
-			northTile.draw(new Point(100, 100), 1, 0xFF);
+//		if (northTiles[0] != null) {
+//			northTiles[0].draw(new Point(100, 100), 1, 0xFF);
+//		}
+		if (northTiles[1] != null) {
+			northTiles[1].draw(new Point(132, 100), 1, 0xFF);
 		}
+//		if (northTiles[2] != null) {
+//			northTiles[2].draw(new Point(164, 100), 1, 0xFF);
+//		}
 
 		batch.end();
 	}
@@ -99,8 +107,14 @@ public class MyGdxGame extends ApplicationAdapter {
 			while (true) {
 
 				Position position = Game.getInstance().getMap().getCentralPosition();
-				position = new Position(position.getX(), position.getY() - 1, position.getZ());
-				northTile = Game.getInstance().getMap().getTile(position);
+				position = new Position(position.getX() - 1, position.getY() - 1, position.getZ());
+
+				northTiles[0] = Game.getInstance().getMap().getTile(position);
+				position = new Position(position.getX() + 1, position.getY() , position.getZ());
+				northTiles[1] = Game.getInstance().getMap().getTile(position);
+
+				position = new Position(position.getX() + 1, position.getY(), position.getZ());
+				northTiles[2] = Game.getInstance().getMap().getTile(position);
 
 				try {
 					Thread.sleep(100);
