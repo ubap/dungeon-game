@@ -30,6 +30,7 @@ public abstract class Protocol {
     }
 
     public void connect(String host, int port) throws IOException {
+        LOGGER.info("connecting");
         inputMessage = new InputMessage();
         socket = new Socket(host, port);
         onConnect();
