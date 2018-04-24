@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -17,6 +18,8 @@ public class ThingTypeManager {
     private static Logger LOGGER = LoggerFactory.getLogger(ThingTypeManager.class.getSimpleName());
 
     private ThingType[][] thingTypes;
+    private long datSignature;
+    private boolean loaded;
 
     private ThingTypeManager() {
         thingTypes = new ThingType[DatAttrs.ThingCategory.ThingLastCategory][];
@@ -30,6 +33,7 @@ public class ThingTypeManager {
         if (INSTANCE == null) {
             INSTANCE = new ThingTypeManager();
         }
+        INSTANCE.loaded = false;
     }
 
     public static ThingTypeManager getInstance() {
@@ -40,35 +44,39 @@ public class ThingTypeManager {
         return thingTypes[category][id];
     }
 
-    public void loadDat(URI uri) throws IOException {
+    public void loadDat(URI uri) {
         LOGGER.info("loadDat");
+        try {
+            FileStream fileStream = new DiskFileStream(new FileInputStream(new File(uri)));
+            datSignature = fileStream.getU32();
 
-        FileStream fileStream = new DiskFileStream(new File(uri));
-
-        long datSignature = fileStream.getU32();
-
-
-        for (int i = 0; i < DatAttrs.ThingCategory.ThingLastCategory; i++) {
-            int count = fileStream.getU16() + 1;
-            thingTypes[i] = new ThingType[count];
-        }
-
-        for (int category = 0; category < DatAttrs.ThingCategory.ThingLastCategory; category++) {
-            int firstId = 1;
-            if (category == DatAttrs.ThingCategory.ThingCategoryItem) {
-                firstId = 100;
+            for (int i = 0; i < DatAttrs.ThingCategory.ThingLastCategory; i++) {
+                int count = fileStream.getU16() + 1;
+                thingTypes[i] = new ThingType[count];
             }
 
-            int count = thingTypes[category].length;
-            for (int id = firstId; id < count; id++) {
-                ThingType thingType = readThing(id, category, fileStream);
-                thingTypes[category][id] = thingType;
+            for (int category = 0; category < DatAttrs.ThingCategory.ThingLastCategory; category++) {
+                int firstId = 1;
+                if (category == DatAttrs.ThingCategory.ThingCategoryItem) {
+                    firstId = 100;
+                }
+
+                int count = thingTypes[category].length;
+                for (int id = firstId; id < count; id++) {
+                    ThingType thingType = readThing(id, category, fileStream);
+                    thingTypes[category][id] = thingType;
+                }
             }
+
+            loaded = true;
+        } catch (IOException ioe) {
+            LOGGER.error("could not load dat", ioe);
+            loaded = false;
         }
 
     }
 
-    public static ThingType readThing(int id, int category, FileStream fileStream) {
+    public static ThingType readThing(int id, int category, FileStream fileStream) throws IOException {
         // LOGGER.debug("Reading thingType for category: {}, item id: {}", category, id);
         ThingType thingType = new ThingType();
         thingType.setId(id);
@@ -145,12 +153,9 @@ public class ThingTypeManager {
 
 
         return thingType;
-
-
-
     }
 
-    private static void processAttribute(ThingType thingType, FileStream fileStream, short attribute) {
+    private static void processAttribute(ThingType thingType, FileStream fileStream, short attribute) throws IOException {
         switch (attribute) {
             case DatAttrs.Attribute.GROUND: {
                 LOGGER.trace("GROUND");

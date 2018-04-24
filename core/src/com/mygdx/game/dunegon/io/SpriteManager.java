@@ -3,11 +3,17 @@ package com.mygdx.game.dunegon.io;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.URI;
 import java.nio.ByteBuffer;
 
 public class SpriteManager {
+    private static Logger LOGGER = LoggerFactory.getLogger(SpriteManager.class.getSimpleName());
     private static SpriteManager INSTANCE;
 
     private static final int SPRITE_SIZE = 32;
@@ -26,6 +32,9 @@ public class SpriteManager {
         if (SpriteManager.INSTANCE == null) {
             SpriteManager.INSTANCE = new SpriteManager();
         }
+        INSTANCE.loaded = false;
+        INSTANCE.spritesCount = 0;
+        INSTANCE.signature = 0;
     }
 
     public static SpriteManager getInstance() {
@@ -33,20 +42,16 @@ public class SpriteManager {
     }
 
     public void loadSpr(URI uri) {
-        spritesCount = 0;
-        signature = 0;
-        loaded = false;
-
-        spritesFile = new DiskFileStream(new File(uri));
-        signature = spritesFile.getU32();
-        spritesCount = spritesFile.getU32();
-        spritesOffset = spritesFile.tell();
-        loaded = true;
-    }
-
-    public void unloadSpr() {
-        spritesFile = null;
-        loaded = false;
+        try {
+            spritesFile = new DiskFileStream(new FileInputStream(new File(uri)));
+            signature = spritesFile.getU32();
+            spritesCount = spritesFile.getU32();
+            spritesOffset = spritesFile.tell();
+            loaded = true;
+        } catch (IOException ioe) {
+            loaded = false;
+            LOGGER.error("could not load spr", ioe);
+        }
     }
 
     public Pixmap getSpriteImage(int id) {
@@ -54,64 +59,55 @@ public class SpriteManager {
         if (id == 0 || spritesFile == null) {
             return null;
         }
+        Pixmap pixmap = null;
+        try {
+            spritesFile.seek(((id - 1) * 4) + spritesOffset);
 
-        spritesFile.seek(((id-1) * 4) + spritesOffset);
-
-        int spriteAddress = (int) spritesFile.getU32();
-        if (spriteAddress <= 0) {
-            return null;
-        }
-
-        spritesFile.seek(spriteAddress);
-
-        // skip color key
-        spritesFile.getU8();
-        spritesFile.getU8();
-        spritesFile.getU8();
-
-        int pixelDataSize = spritesFile.getU16();
-
-        Gdx2DPixmap gdx2DPixmap = new Gdx2DPixmap(SPRITE_SIZE, SPRITE_SIZE, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
-
-        ByteBuffer byteBuffer = gdx2DPixmap.getPixels();
-
-//        for (int x = 0; x < SPRITE_SIZE; x++) {
-//            for (int y = 0; y < SPRITE_SIZE; y++) {
-//                byteBuffer.put((byte) 0x00);
-//                byteBuffer.put((byte) 0xff);
-//                byteBuffer.put((byte) 0x00);
-//                byteBuffer.put((byte) 0xff);
-//            }
-//        }
-
-        int writePos = 0;
-        int read = 0;
-        final int channels = 3;
-
-        while (read < pixelDataSize && writePos < SPRITE_DATA_SIZE) {
-            int transparentPixels = spritesFile.getU16();
-            int coloredPixels = spritesFile.getU16();
-
-            for (int i = 0; i < transparentPixels && writePos < SPRITE_DATA_SIZE; i++) {
-                setFourPixelsToZero(byteBuffer);
-                writePos += 4;
+            int spriteAddress = (int) spritesFile.getU32();
+            if (spriteAddress <= 0) {
+                return null;
             }
 
-            for (int i = 0; i < coloredPixels && writePos < SPRITE_DATA_SIZE; i++) {
-                byte r = (byte) spritesFile.getU8();
-                byte g = (byte) spritesFile.getU8();
-                byte b = (byte) spritesFile.getU8();
-                byte a = (byte) 0xFF;
+            spritesFile.seek(spriteAddress);
 
-                byteBuffer.put(r);
-                byteBuffer.put(g);
-                byteBuffer.put(b);
-                byteBuffer.put(a);
-                writePos += 4;
+            // skip color key
+            spritesFile.getU8();
+            spritesFile.getU8();
+            spritesFile.getU8();
+
+            int pixelDataSize = spritesFile.getU16();
+
+            Gdx2DPixmap gdx2DPixmap = new Gdx2DPixmap(SPRITE_SIZE, SPRITE_SIZE, Gdx2DPixmap.GDX2D_FORMAT_RGBA8888);
+            ByteBuffer byteBuffer = gdx2DPixmap.getPixels();
+
+            int writePos = 0;
+            int read = 0;
+            final int channels = 3;
+
+            while (read < pixelDataSize && writePos < SPRITE_DATA_SIZE) {
+                int transparentPixels = spritesFile.getU16();
+                int coloredPixels = spritesFile.getU16();
+
+                for (int i = 0; i < transparentPixels && writePos < SPRITE_DATA_SIZE; i++) {
+                    setFourPixelsToZero(byteBuffer);
+                    writePos += 4;
+                }
+
+                for (int i = 0; i < coloredPixels && writePos < SPRITE_DATA_SIZE; i++) {
+                    byte r = (byte) spritesFile.getU8();
+                    byte g = (byte) spritesFile.getU8();
+                    byte b = (byte) spritesFile.getU8();
+                    byte a = (byte) 0xFF;
+
+                    byteBuffer.put(r);
+                    byteBuffer.put(g);
+                    byteBuffer.put(b);
+                    byteBuffer.put(a);
+                    writePos += 4;
+                }
+
+                read += 4 + (channels * coloredPixels);
             }
-
-            read += 4 + (channels * coloredPixels);
-        }
 
         while (writePos < SPRITE_DATA_SIZE) {
             setFourPixelsToZero(byteBuffer);
@@ -121,7 +117,13 @@ public class SpriteManager {
         byteBuffer.position(0);
 
 
-        Pixmap pixmap = new Pixmap(gdx2DPixmap);
+        pixmap = new Pixmap(gdx2DPixmap);
+
+        } catch (IOException ioe) {
+            LOGGER.error("getSpriteImage failed", ioe);
+            loaded = false;
+        }
+
         return pixmap;
     }
 
