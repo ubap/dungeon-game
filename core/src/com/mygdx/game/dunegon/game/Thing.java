@@ -135,7 +135,7 @@ public abstract class Thing {
     }
 
 
-    public void draw(Point dest) {
+    public void draw(Point dest, float scaleFactor) {
         getThingType().draw(dest, 0, 0, 0, 0, 0, 0);
     }
 }

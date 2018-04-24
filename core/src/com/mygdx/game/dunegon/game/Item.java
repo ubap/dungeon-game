@@ -48,7 +48,7 @@ public class Item extends Thing {
     }
 
     @Override
-    public void draw(Point dest) {
+    public void draw(Point dest, float scaleFActor) {
         // LOGGER.info("drawing item: {}", clientId);
         AtomicInteger patternX = new AtomicInteger(0);
         AtomicInteger patternY = new AtomicInteger(0);
@@ -56,7 +56,7 @@ public class Item extends Thing {
 
         calculatePatterns(patternX, patternY, patternZ);
 
-        getThingType().draw(dest, 1, 0, patternX.get(), patternY.get(), patternZ.get(), 0);
+        getThingType().draw(dest, scaleFActor, 0, patternX.get(), patternY.get(), patternZ.get(), 0);
     }
 
     private void calculatePatterns(AtomicInteger patternX, AtomicInteger patternY, AtomicInteger patternZ) {

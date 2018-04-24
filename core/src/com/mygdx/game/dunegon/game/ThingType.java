@@ -103,6 +103,7 @@ public class ThingType {
     private int patternZ;
     private int layers;
     private Map<Integer, Map<Integer, Rect>> texturesFramesRect;
+    private Map<Integer, Map<Integer, Rect>> texturesFramesOriginRect;
     private Map<Integer, Map<Integer, Point>> texturesFramesOffsets;
 
 
@@ -110,6 +111,7 @@ public class ThingType {
         this.spriteIndexList = new ArrayList<Integer>();
         this.textures = new HashMap<Integer, Texture>();
         this.texturesFramesRect = new HashMap<Integer, Map<Integer, Rect>>();
+        this.texturesFramesOriginRect = new HashMap<Integer, Map<Integer, Rect>>();
         this.texturesFramesOffsets = new HashMap<Integer, Map<Integer, Point>>();
         this.displacement = new Point(0, 0);
     }
@@ -425,12 +427,17 @@ public class ThingType {
         Point textureOffset;
         Rect textureRect;
 
-        textureOffset = texturesFramesOffsets.get(animationPhase).get(frameIndex);
-        textureRect = texturesFramesRect.get(animationPhase).get(frameIndex);
+        if (scaleFactor != 1.0f) {
+            textureOffset = new Point(0, 0);
+            textureRect = texturesFramesOriginRect.get(animationPhase).get(frameIndex);
+        } else {
+            textureOffset = texturesFramesOffsets.get(animationPhase).get(frameIndex);
+            textureRect = texturesFramesRect.get(animationPhase).get(frameIndex);
+        }
 
         Rect screenRect = new Rect(dest.add(textureOffset.sub(displacement).sub(
-                size.toPoint().sub(new Point(1,1 )).multiply(32) )),
-                textureRect.getSize());
+                size.toPoint().sub(new Point(1,1 )).multiply(32)).multiply((int)scaleFactor)),
+                textureRect.getSize().multiply((int)scaleFactor));
 
         Painter.getInstance().drawTexturedRect(screenRect, texture, textureRect);
 
@@ -458,9 +465,11 @@ public class ThingType {
         fullImage.fill();
 
 
-        // todo: resize caches here
         if (!texturesFramesRect.containsKey(animationPhase)) {
             texturesFramesRect.put(animationPhase, new HashMap<Integer, Rect>());
+        }
+        if (!texturesFramesOriginRect.containsKey(animationPhase)) {
+            texturesFramesOriginRect.put(animationPhase, new HashMap<Integer, Rect>());
         }
         if (!texturesFramesOffsets.containsKey(animationPhase)) {
             texturesFramesOffsets.put(animationPhase, new HashMap<Integer, Point>());
@@ -512,6 +521,7 @@ public class ThingType {
                         }
 
                         texturesFramesRect.get(animationPhase).put(frameIndex, drawRect);
+                        texturesFramesOriginRect.get(animationPhase).put(frameIndex, new Rect(framePos, size.multiply(TILE_PIXELS)));
                         texturesFramesOffsets.get(animationPhase).put(frameIndex, drawRect.getTopLeft().sub(framePos));
                     }
                 }

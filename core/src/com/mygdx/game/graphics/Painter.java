@@ -32,7 +32,8 @@ public class Painter {
 
     public void drawTexturedRect(Rect dest, Texture texture, Rect src) {
 
-        spriteBatch.draw(texture, posX + dest.getLeft(), posY - dest.getBottom(), src.getLeft(), src.getTop(), src.getWidth(), src.getHeight());
+        spriteBatch.draw(texture, posX + dest.getLeft(), posY - dest.getBottom(), dest.getWidth(), dest.getHeight(),
+                src.getLeft(), src.getTop(), src.getWidth(), src.getHeight(), false, false);
     }
 
     public void overwriteMask(Pixmap pixmap, Color maskedColor) {

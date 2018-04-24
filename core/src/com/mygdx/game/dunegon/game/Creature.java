@@ -63,11 +63,11 @@ public class Creature extends Thing {
     }
 
     @Override
-    public void draw(Point dest) {
-        internalDrawOutfit(dest, direction);
+    public void draw(Point dest, float scaleFactor) {
+        internalDrawOutfit(dest, scaleFactor, direction);
     }
 
-    private void internalDrawOutfit(Point dest, Consts.Direction direction) {
+    private void internalDrawOutfit(Point dest, float scaleFactor, Consts.Direction direction) {
         if (outfit.getThingCategory() == DatAttrs.ThingCategory.ThingCategoryCreature) {
 
             // patternX -> creature direction
@@ -89,7 +89,7 @@ public class Creature extends Thing {
                     continue;
                 }
 
-                getThingType().draw(dest, 0, 0, patternX, patternY, patternZ, 0);
+                getThingType().draw(dest, scaleFactor, 0, patternX, patternY, patternZ, 0);
 
                 if (getLayers() > 1) {
                     // todo: outfit colors
