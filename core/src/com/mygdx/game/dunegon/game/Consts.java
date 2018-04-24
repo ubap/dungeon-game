@@ -26,6 +26,38 @@ public class Consts {
         public static final int LASTSKILL = 13;
     }
 
+    public static class FluidColor {
+        public static final int TRANSPARENT = 0;
+        public static final int BLUE = 1;
+        public static final int RED = 2;
+        public static final int BROWN = 3;
+        public static final int GREEN = 4;
+        public static final int YELLOW = 5;
+        public static final int WHITE = 6;
+        public static final int PURPLE = 7;
+    }
+
+    public static class Fluid {
+        public static final int NONE = 0;
+        public static final int WATER = 1;
+        public static final int MANA = 2;
+        public static final int BEER = 3;
+        public static final int OIL = 4;
+        public static final int BLOOD = 5;
+        public static final int SLIME = 6;
+        public static final int MUD = 7;
+        public static final int LEMONADE = 8;
+        public static final int MILK = 9;
+        public static final int WINE = 10;
+        public static final int HEALTH = 11;
+        public static final int URINE = 12;
+        public static final int RUM = 13;
+        public static final int FRUIT_JUICE = 14;
+        public static final int COCONUT_MILK = 15;
+        public static final int TEA = 16;
+        public static final int MEAD = 17;
+    }
+
     public static class Message {
         public static final int NONE = 0;
         public static final int SAY = 1;
