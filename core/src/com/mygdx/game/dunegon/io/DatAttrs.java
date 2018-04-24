@@ -58,4 +58,11 @@ public class DatAttrs {
         public static final short ThingInvalidCategory = 4;
         public static final short ThingLastCategory = ThingInvalidCategory;
     }
+
+    public static class SpriteMask {
+        public static final int RED = 1;
+        public static final int GREEN = 2;
+        public static final int BLUE = 3;
+        public static final int YELLOW = 4;
+    }
 }

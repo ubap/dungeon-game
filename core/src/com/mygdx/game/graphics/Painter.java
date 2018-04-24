@@ -1,5 +1,7 @@
 package com.mygdx.game.graphics;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -31,5 +33,26 @@ public class Painter {
     public void drawTexturedRect(Rect dest, Texture texture, Rect src) {
 
         spriteBatch.draw(texture, posX + dest.getLeft(), posY - dest.getBottom(), src.getLeft(), src.getTop(), src.getWidth(), src.getHeight());
+    }
+
+    public void overwriteMask(Pixmap pixmap, Color maskedColor) {
+        overwriteMask(pixmap, maskedColor, Color.WHITE, new Color(0, 0, 0, 1));
+    }
+
+    public void overwriteMask(Pixmap pixmap, Color maskedColor, Color insideColor, Color outsideColor) {
+        for (int x = 0; x < pixmap.getWidth(); x++) {
+            for (int y = 0; y < pixmap.getHeight(); y++) {
+                int pixelColor = pixmap.getPixel(x, y);
+
+                int writeColor;
+                if (pixelColor == maskedColor.toIntBits()) {
+                    writeColor = insideColor.toIntBits();
+                } else {
+                    writeColor = outsideColor.toIntBits();
+                }
+                pixmap.drawPixel(y, x, writeColor);
+            }
+        }
+
     }
 }

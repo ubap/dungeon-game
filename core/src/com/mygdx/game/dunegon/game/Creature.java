@@ -4,6 +4,8 @@ import com.mygdx.game.dunegon.io.DatAttrs;
 import com.mygdx.game.dunegon.io.ThingTypeManager;
 import com.mygdx.game.graphics.Point;
 
+import org.omg.CORBA.DATA_CONVERSION;
+
 public class Creature extends Thing {
     private long id;
     private String name;
@@ -90,7 +92,8 @@ public class Creature extends Thing {
                 getThingType().draw(dest, 0, 0, patternX, patternY, patternZ, 0);
 
                 if (getLayers() > 1) {
-
+                    // todo: outfit colors
+                   // getThingType().draw(dest, 0, DatAttrs.SpriteMask.YELLOW, patternX, patternY, patternZ, 0);
                 }
             }
 

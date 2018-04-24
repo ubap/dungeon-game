@@ -1,5 +1,6 @@
 package com.mygdx.game.dunegon.game;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.mygdx.game.dunegon.io.DatAttrs;
@@ -482,6 +483,8 @@ public class ThingType {
                                 if (spriteImage != null) {
                                     if (spriteMask) {
                                         // todo: mask;
+                                        Color[] maskColors = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW};
+                                        Painter.getInstance().overwriteMask(spriteImage, maskColors[l - 1]);
                                     }
                                     Point spritePos = new Point(size.getWidth() - w - 1, size.getHeight() - h - 1).multiply(TILE_PIXELS);
                                     Point targetPos = framePos.add(spritePos);
