@@ -56,4 +56,41 @@ public class Rect {
     public Size getSize() {
         return new Size(getWidth(), getHeight());
     }
+
+    public Rect setLeft(int x1) {
+        Rect rect = new Rect();
+        rect.x1 = x1;
+        rect.y1 = this.y1;
+        rect.x2 = this.x2;
+        rect.y2 = this.y2;
+        return rect;
+    }
+
+    public Rect setTop(int y1) {
+        Rect rect = new Rect();
+        rect.x1 = this.x1;
+        rect.y1 = y1;
+        rect.x2 = this.x2;
+        rect.y2 = this.y2;
+        return rect;
+    }
+
+    public Rect setBottom(int y2) {
+        Rect rect = new Rect();
+        rect.x1 = this.x1;
+        rect.y1 = this.y1;
+        rect.x2 = this.x2;
+        rect.y2 = y2;
+        return rect;
+    }
+
+    public Rect setRight(int x2) {
+        Rect rect = new Rect();
+        rect.x1 = this.x1;
+        rect.y1 = this.y1;
+        rect.x2 = x2;
+        rect.y2 = this.y2;
+        return rect;
+    }
+
 }

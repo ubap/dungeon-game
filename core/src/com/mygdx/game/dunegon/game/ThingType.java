@@ -9,6 +9,8 @@ import com.mygdx.game.graphics.Painter;
 import com.mygdx.game.graphics.Point;
 import com.mygdx.game.graphics.Rect;
 import com.mygdx.game.graphics.Size;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,6 +20,8 @@ import java.util.List;
 import java.util.Map;
 
 public class ThingType {
+    private static Logger LOGGER = LoggerFactory.getLogger(ThingType.class.getSimpleName());
+
     private int mId;
 
     private int category;
@@ -465,15 +469,6 @@ public class ThingType {
                                 int spriteIndex = getSpriteIndex(w, h, spriteMask ? 1 : l, x, y, z, animationPhase);
                                 Pixmap spriteImage = SpriteManager.getInstance().getSpriteImage(spriteIndexList.get(spriteIndex));
 
-                                try {
-                                    byte[] rawData = PNG.toPNG(spriteImage);
-                                    FileOutputStream fileOutputStream = new FileOutputStream(String.format("%d.png", spriteIndexList.get(spriteIndex)));
-                                    fileOutputStream.write(rawData);
-                                    fileOutputStream.close();
-                                } catch (IOException e) {
-                                    e.printStackTrace();
-                                }
-
                                 if (spriteImage != null) {
                                     if (spriteMask) {
                                         // todo: mask;
@@ -485,7 +480,14 @@ public class ThingType {
                             }
                         }
 
-
+                        try {
+                            byte[] rawData = PNG.toPNG(fullImage);
+                            FileOutputStream fileOutputStream = new FileOutputStream(String.format("%d.png", getId()));
+                            fileOutputStream.write(rawData);
+                            fileOutputStream.close();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
 
                         // todo: drawrect
                         Rect drawRect = new Rect(framePos.add(new Point(size.getWidth(), size.getHeight()).multiply(TILE_PIXELS)).add(new Point(-1, -1))
@@ -494,12 +496,14 @@ public class ThingType {
                         for (int xrect = framePos.getX(); xrect < framePos.getX() + size.getWidth() * TILE_PIXELS; xrect++) {
                             for (int yrect = framePos.getY(); yrect < framePos.getY() + size.getHeight() * TILE_PIXELS; yrect++) {
                                 int pixel = fullImage.getPixel(xrect, yrect);
-                                if ((pixel & 0xFF000000) != 0) {
+                                if ((pixel & 0x000000FF) != 0) {
                                     int top = Math.min(yrect, drawRect.getTop());
                                     int left = Math.min(xrect, drawRect.getLeft());
                                     int bottom = Math.max(yrect, drawRect.getBottom());
                                     int right = Math.max(xrect, drawRect.getRight());
-                                    drawRect = new Rect(left, top,right - left + 1, bottom - top + 1);
+
+                                    LOGGER.info("drawRect: left: {} top: {} right: {} bottom: {}", left, top, right, bottom);
+                                    drawRect = drawRect.setTop(top).setLeft(left).setBottom(bottom).setRight(right);
                                 }
                             }
                         }
