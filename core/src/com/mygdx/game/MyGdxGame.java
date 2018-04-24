@@ -3,22 +3,17 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.dunegon.game.Game;
 import com.mygdx.game.dunegon.game.Position;
-import com.mygdx.game.dunegon.game.Thing;
 import com.mygdx.game.dunegon.game.Tile;
-import com.mygdx.game.dunegon.game.login.CharList;
 import com.mygdx.game.dunegon.io.SpriteManager;
 import com.mygdx.game.dunegon.io.ThingTypeManager;
-import com.mygdx.game.dunegon.net.Protocol;
 import com.mygdx.game.dunegon.net.ProtocolGame;
 import com.mygdx.game.dunegon.net.ProtocolLogin;
 import com.mygdx.game.graphics.Painter;
 import com.mygdx.game.graphics.Point;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -42,7 +37,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch = new SpriteBatch();
 
 		Painter.init(batch, 0, Gdx.graphics.getHeight());
-		Game.init();
+
 		ThingTypeManager.init();
 		SpriteManager.init();
 
@@ -59,14 +54,18 @@ public class MyGdxGame extends ApplicationAdapter {
 			protocolLogin.waitForCharList();
 
 			ProtocolGame protocolGame = new ProtocolGame("1", "1", protocolLogin.getCharList().getCharacters().get(0).getName());
+			Game.init(protocolGame);
+
 			protocolGame.connect(arguments.getGameAddress(), 7172);
+
 
 			Thread.sleep(2000);
 
 
-			CountThread countThread = new CountThread();
-			countThread.start();
+			MapThread mapThread = new MapThread();
+			mapThread.start();
 
+            Gdx.input.setInputProcessor(new MyInputProcessor());
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -101,13 +100,12 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch.dispose();
 	}
 
-	public class CountThread extends Thread {
+	public class MapThread extends Thread {
 		@Override
 		public void run() {
 			while (true) {
 
 				Position position = Game.getInstance().getMap().getCentralPosition();
-
 				for (int x = -2; x < 3; x++) {
 					for (int y = -2; y < 3; y++) {
 						Position tilePosition = new Position(position.getX() + x, position.getY() + y, position.getZ());

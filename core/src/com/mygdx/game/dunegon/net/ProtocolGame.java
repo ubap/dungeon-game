@@ -909,4 +909,28 @@ public class ProtocolGame extends Protocol {
         outputMessage.addU8((char) Proto.OpCode.Send.TURN_EAST);
         send(outputMessage);
     }
+
+    public void sendWalkWest() {
+        OutputMessage outputMessage = new OutputMessage();
+        outputMessage.addU8((char) Proto.OpCode.Send.WALK_WEST);
+        send(outputMessage);
+    }
+
+    public void sendWalkNorth() {
+        OutputMessage outputMessage = new OutputMessage();
+        outputMessage.addU8((char) Proto.OpCode.Send.WALK_NORTH);
+        send(outputMessage);
+    }
+
+    public void sendWalkEast() {
+        OutputMessage outputMessage = new OutputMessage();
+        outputMessage.addU8((char) Proto.OpCode.Send.WALK_EAST);
+        send(outputMessage);
+    }
+
+    public void sendWalkSouth() {
+        OutputMessage outputMessage = new OutputMessage();
+        outputMessage.addU8((char) Proto.OpCode.Send.WALK_SOUTH);
+        send(outputMessage);
+    }
 }

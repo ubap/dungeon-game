@@ -58,6 +58,10 @@ public class Proto {
 
 
         public static class Send {
+            public static final byte WALK_NORTH = 0x65;
+            public static final byte WALK_EAST = 0x66;
+            public static final byte WALK_SOUTH = 0x67;
+            public static final byte WALK_WEST = 0x68;
             public static final byte TURN_NORTH = 0x6F;
             public static final byte TURN_EAST = 0x70;
         }
