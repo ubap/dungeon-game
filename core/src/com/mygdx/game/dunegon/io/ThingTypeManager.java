@@ -44,7 +44,7 @@ public class ThingTypeManager {
         LOGGER.info("loadDat");
 
         byte[] data = Files.readAllBytes(new File(uri).toPath());
-        FileStream fileStream = new FileStream(data);
+        FileStream fileStream = new MemoryFileStream(data);
 
         long datSignature = fileStream.getU32();
 

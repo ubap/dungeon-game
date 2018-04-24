@@ -1,10 +1,10 @@
-package com.mygdx.game;
+package com.mygdx.game.dunegon.io;
 
-public class FileStream {
+public class MemoryFileStream implements FileStream {
     private byte[] bytes;
     private int position;
 
-    public FileStream(byte[] bytes) {
+    public MemoryFileStream(byte[] bytes) {
         this.bytes = bytes;
         position = 0;
     }

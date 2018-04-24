@@ -1,9 +1,7 @@
 package com.mygdx.game.dunegon.io;
 
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Gdx2DPixmap;
-import com.mygdx.game.FileStream;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +15,7 @@ public class SpriteManager {
     private static final int SPRITE_SIZE = 32;
     private static final int SPRITE_DATA_SIZE = SPRITE_SIZE * SPRITE_SIZE * 4;
 
-    private com.mygdx.game.FileStream spritesFile;
+    private FileStream spritesFile;
     private int spritesOffset;
     private long spritesCount;
     private long signature;
@@ -41,17 +39,11 @@ public class SpriteManager {
         signature = 0;
         loaded = false;
 
-        try {
-            byte[] data = Files.readAllBytes(new File(uri).toPath());
-            spritesFile = new FileStream(data);
-            signature = spritesFile.getU32();
-            spritesCount = spritesFile.getU32();
-            spritesOffset = spritesFile.tell();
-            loaded = true;
-
-        } catch (IOException io) {
-            io.printStackTrace();
-        }
+        spritesFile = new DiskFileStream(new File(uri));
+        signature = spritesFile.getU32();
+        spritesCount = spritesFile.getU32();
+        spritesOffset = spritesFile.tell();
+        loaded = true;
     }
 
     public void unloadSpr() {
