@@ -181,12 +181,26 @@ public class Tile {
     // todo: lightView
     public void draw(Point dest, float scaleFactor, int drawFlags) {
 
+        int drawElevation = 0;
+
         for (Thing thing : things) {
             if (!thing.isGround() && !thing.isGroundBorder() && !thing.isOnBottom()) {
                 break;
             }
 
-            thing.draw(dest);
+            thing.draw(dest.sub(new Point(drawElevation, drawElevation)));
+
+            drawElevation += thing.getDrawElevation();
+        }
+        // common items in reverse order
+        for (int i = things.size() - 1; i >= 0; i--) {
+            Thing thing = things.get(i);
+            if (thing.isOnTop() || thing.isOnBottom() || thing.isGroundBorder() || thing.isGround() || thing.isCreature()) {
+                break;
+            }
+            thing.draw(dest.sub(new Point(drawElevation, drawElevation)));
+
+            drawElevation += thing.getDrawElevation();
         }
 
     }

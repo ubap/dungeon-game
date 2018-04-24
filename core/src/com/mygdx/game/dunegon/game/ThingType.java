@@ -374,13 +374,14 @@ public class ThingType {
     public int getPatternX() {
         return patternX;
     }
-
     public int getPatternY() {
         return patternY;
     }
-
     public int getPatternZ() {
         return patternZ;
+    }
+    public int getDrawElevation() {
+        return mElevation;
     }
 
     public void setLayers(int layers) {

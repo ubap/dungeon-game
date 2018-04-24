@@ -91,6 +91,9 @@ public abstract class Thing {
     public int getNumPatternZ() {
         return getThingType().getPatternZ();
     }
+    public int getDrawElevation() {
+        return getThingType().getDrawElevation();
+    }
 
     public int getAnimationPhases() {
         return getThingType().getAnimationPhases();
