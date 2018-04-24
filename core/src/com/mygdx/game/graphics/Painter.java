@@ -3,13 +3,21 @@ package com.mygdx.game.graphics;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+/**
+ * Y raises from top to bottom.
+ * X raises from left to right.
+ */
 public class Painter {
     public static Painter INSTANCE;
 
     private SpriteBatch spriteBatch;
+    private int posX;
+    private int posY;
 
-    public static void init(SpriteBatch spriteBatch) {
+    public static void init(SpriteBatch spriteBatch, int posX, int posY) {
         INSTANCE = new Painter(spriteBatch);
+        INSTANCE.posX = posX;
+        INSTANCE.posY = posY;
     }
 
     public static Painter getInstance() {
@@ -22,10 +30,6 @@ public class Painter {
 
     public void drawTexturedRect(Rect dest, Texture texture, Rect src) {
 
-        spriteBatch.draw(texture, dest.getLeft(), 200 - dest.getBottom(), src.getLeft(), src.getTop(), src.getWidth(), src.getHeight());
-    }
-
-    public void drawTexturedRect(Rect dest, Texture texture) {
-        spriteBatch.draw(texture, dest.getLeft(), dest.getBottom());
+        spriteBatch.draw(texture, posX + dest.getLeft(), posY - dest.getBottom(), src.getLeft(), src.getTop(), src.getWidth(), src.getHeight());
     }
 }

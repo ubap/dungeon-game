@@ -8,11 +8,14 @@ import com.mygdx.game.MyGdxGame;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		MainArguments mainArguments = new MainArguments();
-		mainArguments.setDatPath("D:\\dev\\libgdx\\test-tibia-sprites\\core\\assets\\Tibia.dat");
-		mainArguments.setSprPath("D:\\dev\\libgdx\\test-tibia-sprites\\core\\assets\\Tibia.spr");
+		mainArguments.setDatPath("\\D:\\dev\\libgdx\\test-tibia-sprites\\core\\assets\\Tibia.dat");
+		mainArguments.setSprPath("\\D:\\dev\\libgdx\\test-tibia-sprites\\core\\assets\\Tibia.spr");
 		mainArguments.setGameAddress("127.0.0.1");
 
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
+		config.title = "Title";
+		config.height = 720;
+		config.width = 1280;
 		new LwjglApplication(new MyGdxGame(mainArguments), config);
 	}
 }

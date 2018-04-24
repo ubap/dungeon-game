@@ -12,8 +12,8 @@ public class AndroidLauncher extends AndroidApplication {
 		super.onCreate(savedInstanceState);
 
 		MainArguments mainArguments = new MainArguments();
-		mainArguments.setDatPath("/sdcard/Tibia.spr");
-		mainArguments.setSprPath("/sdcard/Tibia.dat");
+		mainArguments.setDatPath("/sdcard/Tibia.dat");
+		mainArguments.setSprPath("/sdcard/Tibia.spr");
 		mainArguments.setGameAddress("10.0.2.2");
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();

@@ -40,7 +40,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		tiles = new Tile[5][5];
 
 		batch = new SpriteBatch();
-		Painter.init(batch);
+		Painter.init(batch, 0, Gdx.graphics.getHeight());
 
 		Game.init();
 		ThingTypeManager.init();
@@ -48,9 +48,9 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		try {
 
-			URL sprUrl = new URL("file:" + File.separator + arguments.getSprPath());
+			URL sprUrl = new URL("file:" + arguments.getSprPath());
 			SpriteManager.getInstance().loadSpr(sprUrl.toURI());
-			URL datUrl = new URL("file:" + File.separator + arguments.getDatPath());
+			URL datUrl = new URL("file:" + arguments.getDatPath());
 			ThingTypeManager.getInstance().loadDat(datUrl.toURI());
 
 			CharList charList = new CharList();
