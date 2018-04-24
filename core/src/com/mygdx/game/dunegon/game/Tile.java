@@ -238,7 +238,7 @@ public class Tile {
         }
 
         // effects
-        
+
 
         // topitems
         for (Thing thing : things) {

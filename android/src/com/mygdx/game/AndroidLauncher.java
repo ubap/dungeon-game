@@ -17,6 +17,7 @@ public class AndroidLauncher extends AndroidApplication {
 		mainArguments.setGameAddress("10.0.2.2");
 
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
+		config.useImmersiveMode = true;
 		initialize(new MyGdxGame(mainArguments), config);
 	}
 }
