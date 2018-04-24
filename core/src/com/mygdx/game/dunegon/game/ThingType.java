@@ -327,6 +327,9 @@ public class ThingType {
     public boolean isGround() {
         return mGround;
     }
+    public boolean isFullGround() {
+        return mFullGround;
+    }
     public boolean isGroundBorder() {
         return mGroundBorder;
     }
@@ -354,6 +357,12 @@ public class ThingType {
     public boolean isHookSouth() {
         return mHookSouth;
     }
+    public boolean isBlockProjectile() {
+        return mBlockProjectile;
+    }
+    public boolean isDontHide() {
+        return mDontHide;
+    }
 
     public void setSpriteIndexList(List<Integer> spriteIndexList) {
         this.spriteIndexList = spriteIndexList;
@@ -369,6 +378,14 @@ public class ThingType {
     public Size getSize() {
         return size;
     }
+
+    public int getHeight() {
+        return size.getHeight();
+    }
+    public int getWidth() {
+        return size.getWidth();
+    }
+
 
     public void setPatternX(int patternX) {
         this.patternX = patternX;

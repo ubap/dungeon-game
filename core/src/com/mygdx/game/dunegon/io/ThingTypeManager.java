@@ -235,6 +235,7 @@ public class ThingTypeManager {
             }
             case DatAttrs.Attribute.FULL_GROUND: {
                 LOGGER.trace("FULL_GROUND");
+                thingType.setFullGround(true);
                 break;
             }
             case DatAttrs.Attribute.MARKET: {

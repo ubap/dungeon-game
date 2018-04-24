@@ -142,6 +142,24 @@ public class Tile {
         return things.get(0);
     }
 
+    public boolean limitsFloorView(boolean isFreeView) {
+        // ground and walls limits the view
+        Thing firstThing = getThing(0);
+
+        if (firstThing == null) {
+            return false;
+        }
+
+        if (isFreeView) {
+            if (!firstThing.isDontHide() && (firstThing.isGround() || firstThing.isOnBottom())) {
+                return true;
+            }
+        } else if (!firstThing.isDontHide() && (firstThing.isGround() || (firstThing.isOnBottom() && firstThing.isBlockProjectile()))) {
+            return true;
+        }
+        return false;
+    }
+
     public List<Item> getItems() {
         List<Item> items = new ArrayList<Item>();
         for (Thing thing : things) {
@@ -178,6 +196,33 @@ public class Tile {
             }
         }
         return false;
+    }
+
+    public boolean isLookPossible() {
+        for (Thing thing : things) {
+            if (thing.isBlockProjectile()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean isDrawable() {
+        return !things.isEmpty();
+    }
+
+    public boolean isFullyOpaque() {
+        Thing thing = getThing(0);
+        return thing != null && thing.isFullGround();
+    }
+
+    public boolean isSingleDimension() {
+        for (Thing thing : things) {
+            if (thing.getHeight() != 1 || thing.getWidth() != 1) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public Position getPosition() {

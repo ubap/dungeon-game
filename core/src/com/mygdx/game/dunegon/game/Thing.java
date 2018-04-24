@@ -51,9 +51,13 @@ public abstract class Thing {
         return false;
     }
 
+
     // type shortcuts
     public boolean isGround() {
         return getThingType().isGround();
+    }
+    public boolean isFullGround() {
+        return getThingType().isFullGround();
     }
     public boolean isGroundBorder() {
         return getThingType().isGroundBorder();
@@ -91,6 +95,13 @@ public abstract class Thing {
     public boolean isHookSouth() {
         return getThingType().isHookSouth();
     }
+    public boolean isBlockProjectile() {
+        return getThingType().isBlockProjectile();
+    }
+    public boolean isDontHide() {
+        return getThingType().isDontHide();
+    }
+
     public int getNumPatternX() {
         return getThingType().getPatternX();
     }
@@ -106,7 +117,12 @@ public abstract class Thing {
     public int getLayers() {
         return getThingType().getLayers();
     }
-
+    public int getHeight() {
+        return getThingType().getHeight();
+    }
+    public int getWidth() {
+        return getThingType().getWidth();
+    }
     public int getAnimationPhases() {
         return getThingType().getAnimationPhases();
     }

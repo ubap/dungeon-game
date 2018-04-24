@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.dunegon.game.Game;
+import com.mygdx.game.dunegon.game.MapView;
 import com.mygdx.game.dunegon.game.Position;
 import com.mygdx.game.dunegon.game.Tile;
 import com.mygdx.game.dunegon.io.SpriteManager;
@@ -87,14 +88,17 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		float TILE_SIZE = 32 * scaleFactor;
 
+        MapView mapView = new MapView();
+        mapView.draw();
+
 		for (int x = -2; x < 3; x++) {
 			for (int y = -2; y < 3; y++) {
 				Tile tile = tiles[2 + x][2 + y];
 				int posX = x + 2;
 				int posY = y + 2;
-				if (tile != null){
-					tile.draw(new Point((int) Math.floor(0 + (posX*TILE_SIZE)), (int) Math.floor(0 + (posY*TILE_SIZE))), scaleFactor, 0xFF);
-				}
+//				if (tile != null){
+//					tile.draw(new Point((int) Math.floor(0 + (posX*TILE_SIZE)), (int) Math.floor(0 + (posY*TILE_SIZE))), scaleFactor, 0xFF);
+//				}
 			}
 		}
 
@@ -118,6 +122,9 @@ public class MyGdxGame extends ApplicationAdapter {
 						tiles[2+x][2+y] = Game.getInstance().getMap().getTile(tilePosition);
 					}
 				}
+
+				// stub entry point
+
 
 				try {
 					Thread.sleep(100);

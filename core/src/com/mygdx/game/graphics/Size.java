@@ -29,4 +29,7 @@ public class Size {
     public Size multiply(float factor) {
         return new Size(Math.round(width * factor), Math.round(height * factor));
     }
+    public Size add(Size size) {
+        return new Size(this.width + size.width, this.height + size.height);
+    }
 }

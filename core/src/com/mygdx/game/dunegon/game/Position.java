@@ -42,6 +42,17 @@ public class Position {
         return null;
     }
 
+    public Position up() {
+        return up(1);
+    }
+    public Position up(int n) {
+        int nz = this.z - n;
+        if (nz >= 0 && nz <= Consts.MAX_Z) {
+            return new Position(this.x, this.y, nz);
+        }
+        return null;
+    }
+
     public Position coveredDown() {
         return coveredDown(1);
     }
@@ -51,6 +62,9 @@ public class Position {
             return new Position(nx, ny, nz);
         }
         return null;
+    }
+    public Position translated(int x, int y) {
+        return new Position(this.x + x, this.y + y, this.z);
     }
 
     @Override

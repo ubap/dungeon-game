@@ -6,8 +6,10 @@ public class Consts {
     public static final int MAP_WIDTH = 18;
 
     public static final int SEA_FLOOR = 7;
+    public static final int UNDERGROUND_FLOOR = SEA_FLOOR + 1;
     public static final int MAX_Z = 15;
     public static final int AWARE_UNDEGROUND_FLOOR_RANGE = 2;
+
 
     public static final int MAX_ELEVATION = 24;
 

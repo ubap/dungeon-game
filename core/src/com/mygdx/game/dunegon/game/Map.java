@@ -231,6 +231,40 @@ public class Map {
                 awareRange.getRight(), awareRange.getTop(), awareRange.getBottom());
     }
 
+    public boolean isLookPossible(Position position) {
+        Tile tile = getTile(position);
+        return tile != null && tile.isLookPossible();
+    }
+
+    public boolean isCompletelyCovered(Position position, int firstFloor) {
+        Tile checkTile = getTile(position);
+        Position tilePos = position;
+        while (true) {
+            tilePos = tilePos.coveredUp();
+            if (tilePos == null || tilePos.getZ() >= firstFloor) {
+                break;
+            }
+
+            boolean covered = true;
+            boolean done = false;
+            for (int x = 0; x < 2 && !done;++x) {
+                for (int y = 0; y < 2 && !done; ++y) {
+                    Tile tile = getTile(tilePos.translated(-x, -y));
+                    if (tile == null || !tile.isFullyOpaque()) {
+                        covered = false;
+                        done = true;
+                    } else if (x == 0 && y == 0 && (checkTile == null || checkTile.isSingleDimension())) {
+                        done = true;
+                    }
+                }
+            }
+            if (covered) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     // private
     private int getBlockIndex(Position position) {
         return ((position.getY() / BLOCK_SIZE) * (65536 / BLOCK_SIZE)) + (position.getX() / BLOCK_SIZE);
