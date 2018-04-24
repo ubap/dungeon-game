@@ -436,8 +436,8 @@ public class ThingType {
         }
 
         Rect screenRect = new Rect(dest.add(textureOffset.sub(displacement).sub(
-                size.toPoint().sub(new Point(1,1 )).multiply(32)).multiply((int)scaleFactor)),
-                textureRect.getSize().multiply((int)scaleFactor));
+                size.toPoint().sub(new Point(1,1 )).multiply(32)).multiply(scaleFactor)),
+                textureRect.getSize().multiply(scaleFactor));
 
         Painter.getInstance().drawTexturedRect(screenRect, texture, textureRect);
 

@@ -83,7 +83,9 @@ public class MyGdxGame extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 
-		int scaleFactor = 3;
+		float scaleFactor = 3f;
+
+		float TILE_SIZE = 32 * scaleFactor;
 
 		for (int x = -2; x < 3; x++) {
 			for (int y = -2; y < 3; y++) {
@@ -91,7 +93,7 @@ public class MyGdxGame extends ApplicationAdapter {
 				int posX = x + 2;
 				int posY = y + 2;
 				if (tile != null){
-					tile.draw(new Point(0 + (posX*32*scaleFactor), 0 + (posY*32*scaleFactor)), scaleFactor, 0xFF);
+					tile.draw(new Point((int) Math.floor(0 + (posX*TILE_SIZE)), (int) Math.floor(0 + (posY*TILE_SIZE))), scaleFactor, 0xFF);
 				}
 			}
 		}

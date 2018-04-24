@@ -26,4 +26,7 @@ public class Size {
     public Size multiply(int factor) {
         return new Size(width * factor, height * factor);
     }
+    public Size multiply(float factor) {
+        return new Size(Math.round(width * factor), Math.round(height * factor));
+    }
 }

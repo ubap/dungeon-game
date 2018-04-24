@@ -206,7 +206,7 @@ public class Tile {
                 break;
             }
 
-            thing.draw(dest.sub(new Point((int) (drawElevation * scaleFactor), (int) (drawElevation * scaleFactor))), scaleFactor);
+            thing.draw(dest.sub(new Point(Math.round(drawElevation * scaleFactor), Math.round(drawElevation * scaleFactor))), scaleFactor);
 
             drawElevation += thing.getDrawElevation();
             if (drawElevation > Consts.MAX_ELEVATION) {
@@ -219,7 +219,7 @@ public class Tile {
             if (thing.isOnTop() || thing.isOnBottom() || thing.isGroundBorder() || thing.isGround() || thing.isCreature()) {
                 break;
             }
-            thing.draw(dest.sub(new Point((int) (drawElevation * scaleFactor), (int) (drawElevation * scaleFactor))), scaleFactor);
+            thing.draw(dest.sub(new Point(Math.round(drawElevation * scaleFactor), Math.round(drawElevation * scaleFactor))), scaleFactor);
 
             drawElevation += thing.getDrawElevation();
             if (drawElevation > Consts.MAX_ELEVATION) {
@@ -234,7 +234,7 @@ public class Tile {
                 continue;
             }
 
-            thing.draw(dest.sub(new Point((int) (drawElevation * scaleFactor), (int) (drawElevation * scaleFactor))), scaleFactor);
+            thing.draw(dest.sub(new Point(Math.round(drawElevation * scaleFactor), Math.round(drawElevation * scaleFactor))), scaleFactor);
         }
 
         // effects

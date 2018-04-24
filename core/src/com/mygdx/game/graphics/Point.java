@@ -19,6 +19,9 @@ public class Point {
     public Point multiply(int factor) {
         return new Point(x * factor, y * factor);
     }
+    public Point multiply(float factor) {
+        return new Point(Math.round(x * factor), Math.round(y * factor));
+    }
 
     public Point add(Point other) {
         return new Point(x + other.getX(), y + other.getY());
