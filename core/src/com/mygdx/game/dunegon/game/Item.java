@@ -80,6 +80,15 @@ public class Item extends Thing {
                 patternX.set(3);
                 patternY.set(1);
             }
+        } else if (isHangable()) {
+            Tile tile = getTile();
+            if (tile != null) {
+                if (tile.mustHookSouth()) {
+                    patternX.set(getNumPatternX() >= 2 ? 1 : 0);
+                } else if (tile.mustHookEast()) {
+                    patternX.set(getNumPatternX() >= 3 ? 2 : 0);
+                }
+            }
         } else if (isSplash() || isFluidContainer()) {
             int color;
             switch (countOrSubType) {

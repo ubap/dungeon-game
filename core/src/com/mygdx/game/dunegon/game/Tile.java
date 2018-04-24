@@ -162,6 +162,24 @@ public class Tile {
         return creatures;
     }
 
+    public boolean mustHookEast() {
+        for (Thing thing : things) {
+            if (thing.isHookEast()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean mustHookSouth() {
+        for (Thing thing : things) {
+            if (thing.isHookSouth()) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public Position getPosition() {
         return position;
     }

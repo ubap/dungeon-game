@@ -82,6 +82,15 @@ public abstract class Thing {
     public boolean isIgnoreLook() {
         return getThingType().isIgnoreLook();
     }
+    public boolean isHangable() {
+        return getThingType().isHangable();
+    }
+    public boolean isHookEast() {
+        return getThingType().isHookEast();
+    }
+    public boolean isHookSouth() {
+        return getThingType().isHookSouth();
+    }
     public int getNumPatternX() {
         return getThingType().getPatternX();
     }

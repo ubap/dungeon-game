@@ -342,7 +342,15 @@ public class ThingType {
     public boolean isIgnoreLook() {
         return mLook;
     }
-
+    public boolean isHangable() {
+        return mHangable;
+    }
+    public boolean isHookEast() {
+        return mHookEast;
+    }
+    public boolean isHookSouth() {
+        return mHookSouth;
+    }
 
     public void setSpriteIndexList(List<Integer> spriteIndexList) {
         this.spriteIndexList = spriteIndexList;
