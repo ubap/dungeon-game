@@ -12,17 +12,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProtocolLogin extends Protocol {
-    private Logger mLogger = LoggerFactory.getLogger(ProtocolLogin.class.getSimpleName());
+    private static Logger LOGGER = LoggerFactory.getLogger(ProtocolLogin.class.getSimpleName());
 
-    private String mUsername;
-    private String mPassword;
+    private String username;
+    private String password;
 
-    private CharList mCharList;
+    private CharList charList;
 
-    public ProtocolLogin(CharList charList, String username, String password) {
-        mCharList = charList;
-        mUsername = username;
-        mPassword = password;
+    public ProtocolLogin(String username, String password) {
+        charList = new CharList();
+        this.username = username;
+        this.password = password;
     }
 
     @Override
@@ -49,8 +49,8 @@ public class ProtocolLogin extends Protocol {
         outputMessage.addU32(xtea[2]);
         outputMessage.addU32(xtea[3]);
 
-        outputMessage.addString(mUsername);
-        outputMessage.addString(mPassword);
+        outputMessage.addString(username);
+        outputMessage.addString(password);
 
         outputMessage.addPaddingBytes(128 - (outputMessage.getMessageSize() - offset));
         outputMessage.encryptRsa();
@@ -89,7 +89,7 @@ public class ProtocolLogin extends Protocol {
                     processCharList(inputMessage);
                     break;
                 default:
-                    mLogger.warn("Unrecognized opCode: {}", String.format("0x%x", opCode));
+                    LOGGER.warn("Unrecognized opCode: {}", String.format("0x%x", opCode));
                     break;
             }
         }
@@ -99,18 +99,18 @@ public class ProtocolLogin extends Protocol {
 
     private void processDisconnect(InputMessage inputMessage){
         String message = inputMessage.getString();
-        mLogger.info("Got disconnect with message: {}", message);
+        LOGGER.info("Got disconnect with message: {}", message);
         disconnect();
     }
 
     private void processMotd(InputMessage inputMessage) {
         String motd = inputMessage.getString();
-        mLogger.info("Got motd: {}", motd);
+        LOGGER.info("Got motd: {}", motd);
     }
 
     private void processSessionKey(InputMessage inputMessage) {
         String sessionKey = inputMessage.getString();
-        mLogger.info("Got sessionKey: {}", sessionKey);
+        LOGGER.info("Got sessionKey: {}", sessionKey);
     }
 
     private void processCharList(InputMessage inputMessage) {
@@ -124,7 +124,7 @@ public class ProtocolLogin extends Protocol {
             inputMessage.getU8(); // stopByte: 0
             worldList.add(new World(worldId, worldName, worldIp, port));
 
-            mLogger.info("Got world: {}, {}, {}, {}", worldId, worldName, worldIp, port);
+            LOGGER.info("Got world: {}, {}, {}, {}", worldId, worldName, worldIp, port);
         }
 
         int numberOfCharacters = inputMessage.getU8();
@@ -134,20 +134,34 @@ public class ProtocolLogin extends Protocol {
             String characterName = inputMessage.getString();
             characterList.add(new com.mygdx.game.dunegon.game.login.Character(worldId, characterName));
 
-            mLogger.info("Got chracter: {}", characterName);
+            LOGGER.info("Got chracter: {}", characterName);
         }
 
         inputMessage.getU8(); // stopByte: 0
         short premium = inputMessage.getU8();
         long premDays = inputMessage.getU32();
 
-        synchronized (mCharList) {
-            mCharList.setWorlds(worldList);
-            mCharList.setCharacterList(characterList);
-            mCharList.setPremium(premium == 1);
-            mCharList.setPremDays(premDays);
+        synchronized (charList) {
+            charList.setWorlds(worldList);
+            charList.setCharacterList(characterList);
+            charList.setPremium(premium == 1);
+            charList.setPremDays(premDays);
 
-            mCharList.notify();
+            charList.notify();
         }
+    }
+
+    public void waitForCharList() {
+        try {
+            synchronized (charList) {
+                charList.wait(20000);
+            }
+        } catch (InterruptedException ie) {
+            LOGGER.error("interrupted waiting for charList", ie);
+        }
+    }
+
+    public CharList getCharList() {
+        return charList;
     }
 }

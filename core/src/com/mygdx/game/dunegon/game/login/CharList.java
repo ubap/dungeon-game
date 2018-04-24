@@ -35,4 +35,8 @@ public class CharList {
     public void setPremDays(long premDays) {
         this.premDays = premDays;
     }
+
+    public List<Character> getCharacters() {
+        return characters;
+    }
 }

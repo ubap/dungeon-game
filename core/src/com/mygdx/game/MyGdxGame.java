@@ -40,8 +40,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		tiles = new Tile[5][5];
 
 		batch = new SpriteBatch();
-		Painter.init(batch, 0, Gdx.graphics.getHeight());
 
+		Painter.init(batch, 0, Gdx.graphics.getHeight());
 		Game.init();
 		ThingTypeManager.init();
 		SpriteManager.init();
@@ -53,20 +53,15 @@ public class MyGdxGame extends ApplicationAdapter {
 			URL datUrl = new URL("file:" + arguments.getDatPath());
 			ThingTypeManager.getInstance().loadDat(datUrl.toURI());
 
-			CharList charList = new CharList();
 
-			Protocol protocol = new ProtocolLogin(charList, "1", "1");
-			protocol.connect(arguments.getGameAddress(), 7171);
+			ProtocolLogin protocolLogin = new ProtocolLogin("1", "1");
+			protocolLogin.connect(arguments.getGameAddress(), 7171);
+			protocolLogin.waitForCharList();
 
-			synchronized (charList) {
-				charList.wait();
-			}
-
-			ProtocolGame protocolGame = new ProtocolGame("1", "1", "Heh");
+			ProtocolGame protocolGame = new ProtocolGame("1", "1", protocolLogin.getCharList().getCharacters().get(0).getName());
 			protocolGame.connect(arguments.getGameAddress(), 7172);
 
 			Thread.sleep(2000);
-
 
 
 			CountThread countThread = new CountThread();
