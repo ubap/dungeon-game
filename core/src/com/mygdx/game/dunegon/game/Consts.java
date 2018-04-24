@@ -9,6 +9,9 @@ public class Consts {
     public static final int MAX_Z = 15;
     public static final int AWARE_UNDEGROUND_FLOOR_RANGE = 2;
 
+    public static final int MAX_ELEVATION = 24;
+
+
     public static class Skill {
         public static final int FIST = 0;
         public static final int CLUB = 1;

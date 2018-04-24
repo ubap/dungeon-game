@@ -94,6 +94,9 @@ public abstract class Thing {
     public int getDrawElevation() {
         return getThingType().getDrawElevation();
     }
+    public int getLayers() {
+        return getThingType().getLayers();
+    }
 
     public int getAnimationPhases() {
         return getThingType().getAnimationPhases();

@@ -51,4 +51,8 @@ public class Outfit {
     public int getId() {
         return id;
     }
+
+    public int getThingCategory() {
+        return thingCategory;
+    }
 }

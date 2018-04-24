@@ -383,6 +383,9 @@ public class ThingType {
     public int getDrawElevation() {
         return mElevation;
     }
+    public int getLayers() {
+        return layers;
+    }
 
     public void setLayers(int layers) {
         this.layers = layers;

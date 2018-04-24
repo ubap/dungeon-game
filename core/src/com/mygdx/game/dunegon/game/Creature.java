@@ -2,6 +2,7 @@ package com.mygdx.game.dunegon.game;
 
 import com.mygdx.game.dunegon.io.DatAttrs;
 import com.mygdx.game.dunegon.io.ThingTypeManager;
+import com.mygdx.game.graphics.Point;
 
 public class Creature extends Thing {
     private long id;
@@ -55,8 +56,45 @@ public class Creature extends Thing {
         this.outfit = outfit;
     }
 
-
     public String getName() {
         return name;
     }
+
+    @Override
+    public void draw(Point dest) {
+        internalDrawOutfit(dest, direction);
+    }
+
+    private void internalDrawOutfit(Point dest, Consts.Direction direction) {
+        if (outfit.getThingCategory() == DatAttrs.ThingCategory.ThingCategoryCreature) {
+
+            // patternX -> creature direction
+            int patternX;
+            if (direction == Consts.Direction.NORTH_EAST || direction == Consts.Direction.SOUTH_EAST) {
+                patternX = Consts.Direction.EAST.ordinal();
+            } else if (direction == Consts.Direction.NORTH_WEST || direction == Consts.Direction.SOUTH_WEST) {
+                patternX = Consts.Direction.WEST.ordinal();
+            } else {
+                patternX = direction.ordinal();
+            }
+
+            // mounts
+            int patternZ = 0;
+
+            for (int patternY = 0; patternY < getNumPatternY(); patternY++) {
+                // addons
+                if (patternY > 0) {
+                    continue;
+                }
+
+                getThingType().draw(dest, 0, 0, patternX, patternY, patternZ, 0);
+
+                if (getLayers() > 1) {
+
+                }
+            }
+
+        }
+    }
+
 }

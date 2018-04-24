@@ -191,6 +191,9 @@ public class Tile {
             thing.draw(dest.sub(new Point(drawElevation, drawElevation)));
 
             drawElevation += thing.getDrawElevation();
+            if (drawElevation > Consts.MAX_ELEVATION) {
+                drawElevation = Consts.MAX_ELEVATION;
+            }
         }
         // common items in reverse order
         for (int i = things.size() - 1; i >= 0; i--) {
@@ -201,6 +204,19 @@ public class Tile {
             thing.draw(dest.sub(new Point(drawElevation, drawElevation)));
 
             drawElevation += thing.getDrawElevation();
+            if (drawElevation > Consts.MAX_ELEVATION) {
+                drawElevation = Consts.MAX_ELEVATION;
+            }
+        }
+
+        // creatures
+        for (int i = things.size() - 1; i >= 0; i--) {
+            Thing thing = things.get(i);
+            if (!thing.isCreature()) {
+                continue;
+            }
+
+            thing.draw(dest.sub(new Point(drawElevation, drawElevation)));
         }
 
     }
