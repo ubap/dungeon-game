@@ -237,5 +237,15 @@ public class Tile {
             thing.draw(dest.sub(new Point(drawElevation, drawElevation)));
         }
 
+        // effects
+        
+
+        // topitems
+        for (Thing thing : things) {
+            if (thing.isOnTop()) {
+                thing.draw(dest);
+            }
+        }
+
     }
 }
