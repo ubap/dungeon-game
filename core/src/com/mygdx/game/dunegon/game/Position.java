@@ -79,6 +79,28 @@ public class Position {
     public Position translated(int x, int y) {
         return new Position(this.x + x, this.y + y, this.z);
     }
+    public Position translatedToDirection(Consts.Direction direction) {
+        switch (direction) {
+            case NORTH:
+                return this.translated(0, -1);
+            case EAST:
+                return this.translated(1, 0);
+            case SOUTH:
+                return this.translated(0, 1);
+            case WEST:
+                return this.translated(-1, 0);
+            case NORTH_EAST:
+                return this.translated(1, -1);
+            case SOUTH_EAST:
+                return this.translated(1, 1);
+            case SOUTH_WEST:
+                return this.translated(-1, 1);
+            case NORTH_WEST:
+                return this.translated(-1, -1);
+            default:
+                return this;
+        }
+    }
 
     public static Consts.Direction getDirectionFromPositions(Position fromPosition, Position toPosition) {
         double angle = Math.toDegrees(getAngleFromPositions(fromPosition, toPosition));

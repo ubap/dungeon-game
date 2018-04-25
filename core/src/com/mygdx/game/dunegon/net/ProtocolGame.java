@@ -220,6 +220,7 @@ public class ProtocolGame extends Protocol {
     private void processLoginSuccess(InputMessage inputMessage) {
         long playerId = inputMessage.getU32();
         int serverBeat = inputMessage.getU16();
+        Game.getInstance().setServerBeat(serverBeat);
 
         double speedA = inputMessage.getDouble();
         double speedB = inputMessage.getDouble();

@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.dunegon.game.Game;
 import com.mygdx.game.dunegon.game.MapView;
 import com.mygdx.game.dunegon.game.Position;
+import com.mygdx.game.dunegon.game.Thing;
 import com.mygdx.game.dunegon.game.Tile;
 import com.mygdx.game.dunegon.io.SpriteManager;
 import com.mygdx.game.dunegon.io.ThingTypeManager;
 import com.mygdx.game.dunegon.net.ProtocolGame;
 import com.mygdx.game.dunegon.net.ProtocolLogin;
+import com.mygdx.game.framework.EventDispatcher;
 import com.mygdx.game.graphics.Painter;
 import com.mygdx.game.graphics.Point;
 
@@ -39,9 +41,13 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		Painter.init(batch, 0, Gdx.graphics.getHeight());
 
+		EventDispatcher.init();
 		ThingTypeManager.init();
 		SpriteManager.init();
 		MapView.init();
+
+		DispatcherPoller dispatcherPoller = new DispatcherPoller();
+		dispatcherPoller.start();
 
 		try {
 
@@ -135,6 +141,21 @@ public class MyGdxGame extends ApplicationAdapter {
 
 				try {
 					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+					return;
+				}
+			}
+		}
+	}
+
+	public class DispatcherPoller extends Thread {
+		@Override
+		public void run() {
+			while (true) {
+				EventDispatcher.getInstance().poll();
+				try {
+					Thread.sleep(10);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 					return;

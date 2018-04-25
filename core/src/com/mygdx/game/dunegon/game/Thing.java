@@ -129,6 +129,9 @@ public abstract class Thing {
     public Position getPosition() {
         return position;
     }
+    public int getGroundSpeed() {
+        return getThingType().getGroundSpeed();
+    }
     public Tile getTile() {
         return Game.getInstance().getMap().getTile(position);
     }

@@ -385,7 +385,9 @@ public class ThingType {
     public int getWidth() {
         return size.getWidth();
     }
-
+    public int getGroundSpeed() {
+        return mGroundSpeed;
+    }
 
     public void setPatternX(int patternX) {
         this.patternX = patternX;

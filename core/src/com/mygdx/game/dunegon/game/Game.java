@@ -8,6 +8,8 @@ public class Game {
     private ProtocolGame protocolGame;
     private Map map;
 
+    private int serverBeat;
+
     private Game() {
         this.map = new Map();
     }
@@ -26,6 +28,13 @@ public class Game {
 
     public Map getMap() {
         return this.map;
+    }
+
+    public int getServerBeat() {
+        return serverBeat;
+    }
+    public void setServerBeat(int serverBeat) {
+        this.serverBeat = serverBeat;
     }
 
     public void forceWalk(Consts.Direction direction) {

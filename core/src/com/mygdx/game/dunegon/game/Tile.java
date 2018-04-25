@@ -68,14 +68,12 @@ public class Tile {
         thing.setPosition(position);
         thing.onAppear();
     }
-
     public Thing getThing(int stackPos) {
         if (stackPos >= 0 && stackPos < things.size()) {
             return things.get(stackPos);
         }
         return null;
     }
-
     public int getThingStackPos(Thing thing) {
         for (int stackPos = 0; stackPos < things.size(); stackPos++) {
             if (thing == things.get(stackPos)) {
@@ -84,7 +82,6 @@ public class Tile {
         }
         return -1;
     }
-
     public boolean removeThing(Thing thing) {
         if (thing == null) {
             return false;
@@ -101,7 +98,6 @@ public class Tile {
         thing.onDisappear();
         return removed;
     }
-
     public Thing getTopThing() {
         if (isEmpty()) {
             return null;
@@ -113,7 +109,6 @@ public class Tile {
         }
         return things.get(things.size() - 1);
     }
-
     public Thing getTopLookThing() {
         if (isEmpty()) {
             return null;
@@ -125,7 +120,6 @@ public class Tile {
         }
         return things.get(0);
     }
-
     public Thing getTopUseThing() {
         if (isEmpty()) {
             return null;
@@ -149,7 +143,6 @@ public class Tile {
     public void addWalkingCreature(Creature creature) {
         walkingCreatures.add(creature);
     }
-
     public void remvoeWalkingCreature(Creature creature) {
         walkingCreatures.remove(creature);
     }
@@ -239,6 +232,26 @@ public class Tile {
 
     public Position getPosition() {
         return position;
+    }
+
+    public Item getGround() {
+        Thing firstObject = getThing(0);
+        if (firstObject == null) {
+            return null;
+        }
+        if (firstObject.isGround() && firstObject.isItem()) {
+            return (Item) firstObject;
+        }
+        return null;
+    }
+
+    public int getGroundSpeed() {
+        int groundSpeed = 100;
+        Item ground = getGround();
+        if (ground != null) {
+            groundSpeed = ground.getGroundSpeed();
+        }
+        return groundSpeed;
     }
 
     public boolean isEmpty() {
