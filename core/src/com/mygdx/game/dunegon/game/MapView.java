@@ -46,7 +46,6 @@ public class MapView {
         }
 
         mustDrawVisibleTilesCache = true;
-
         if (mustDrawVisibleTilesCache) {
 
             int i = 0;

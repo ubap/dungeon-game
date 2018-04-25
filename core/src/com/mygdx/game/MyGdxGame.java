@@ -35,7 +35,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		tiles = new Tile[5][5];
 
-		batch = new SpriteBatch();
+		batch = new SpriteBatch(8191);
 
 		Painter.init(batch, 0, Gdx.graphics.getHeight());
 

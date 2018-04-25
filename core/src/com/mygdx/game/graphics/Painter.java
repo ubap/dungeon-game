@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 
 /**
  * Y raises from top to bottom.
@@ -34,6 +35,10 @@ public class Painter {
 
         spriteBatch.draw(texture, posX + dest.getLeft(), posY - dest.getBottom(), dest.getWidth(), dest.getHeight(),
                 src.getLeft(), src.getTop(), src.getWidth(), src.getHeight(), false, false);
+    }
+
+    public void drawFrameBuffer(FrameBuffer frameBuffer) {
+        spriteBatch.draw(frameBuffer.getColorBufferTexture(), 0, 300);
     }
 
     public void overwriteMask(Pixmap pixmap, Color maskedColor) {
