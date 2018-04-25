@@ -607,6 +607,9 @@ public class ProtocolGame extends Protocol {
         }
 
         LOGGER.info("processMoveCreature, oldPos: {}, newPos: {}", thing.getPosition(), newPos);
+
+        ((Creature) thing).allowaAppearWalk();
+
         Game.getInstance().getMap().addThing(thing, newPos, -1);
     }
 

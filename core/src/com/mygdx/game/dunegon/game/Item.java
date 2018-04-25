@@ -28,6 +28,16 @@ public class Item extends Thing {
     }
 
     @Override
+    public void onAppear() {
+
+    }
+
+    @Override
+    public void onDisappear() {
+
+    }
+
+    @Override
     public void setId(long id) {
         // todo: check: is valid dat
         this.clientId = id;

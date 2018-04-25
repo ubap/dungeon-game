@@ -31,4 +31,14 @@ public class Effect extends Thing {
     public boolean isEffect() {
         return true;
     }
+
+    @Override
+    public void onAppear() {
+
+    }
+
+    @Override
+    public void onDisappear() {
+
+    }
 }

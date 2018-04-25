@@ -9,9 +9,11 @@ public class Tile {
     public static final int MAX_THINGS = 10;
 
     private Position position;
+    private List<Creature> walkingCreatures;
     private List<Thing> things;
 
     public Tile(Position position) {
+        this.walkingCreatures = new ArrayList<Creature>();
         this.things = new ArrayList<Thing>();
         this.position = position;
     }
@@ -64,6 +66,7 @@ public class Tile {
         }
 
         thing.setPosition(position);
+        thing.onAppear();
     }
 
     public Thing getThing(int stackPos) {
@@ -95,6 +98,7 @@ public class Tile {
             removed = things.remove(thing);
         }
 
+        thing.onDisappear();
         return removed;
     }
 
@@ -140,6 +144,14 @@ public class Tile {
         }
 
         return things.get(0);
+    }
+
+    public void addWalkingCreature(Creature creature) {
+        walkingCreatures.add(creature);
+    }
+
+    public void remvoeWalkingCreature(Creature creature) {
+        walkingCreatures.remove(creature);
     }
 
     public boolean limitsFloorView(boolean isFreeView) {

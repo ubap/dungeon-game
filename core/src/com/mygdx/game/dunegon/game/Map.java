@@ -64,7 +64,7 @@ public class Map {
     }
 
     public void addThing(Thing thing, Position position, int stackPos) {
-        LOGGER.info("addThing, id: {}, postion: {}", thing.getId(), position);
+        // LOGGER.info("addThing, id: {}, postion: {}", thing.getId(), position);
         // todo
         if (thing == null) {
             return;

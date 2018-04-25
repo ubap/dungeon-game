@@ -150,6 +150,8 @@ public abstract class Thing {
         this.position = position;
     }
 
+    public abstract void onAppear();
+    public abstract void onDisappear();
 
     public void draw(Point dest, float scaleFactor) {
         getThingType().draw(dest, 0, 0, 0, 0, 0, 0);

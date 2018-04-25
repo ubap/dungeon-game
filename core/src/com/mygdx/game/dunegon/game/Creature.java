@@ -12,11 +12,22 @@ public class Creature extends Thing {
     private int healthPercent;
     private Consts.Direction direction;
     private Outfit outfit;
+    private boolean allowAppearWalk;
+    private boolean removed;
+    private Position oldPosition;
+    private Position lastStepFromPosition;
+    private Position lastStepToPosition;
+    private Consts.Direction lastStepDirection;
 
 
     private double speedA;
     private double speedB;
     private double speedC;
+
+    public Creature() {
+        super();
+        this.oldPosition = new Position();
+    }
 
     @Override
     public void setId(long id) {
@@ -58,8 +69,55 @@ public class Creature extends Thing {
         this.outfit = outfit;
     }
 
+    public void allowaAppearWalk() {
+        this.allowAppearWalk = true;
+    }
+
     public String getName() {
         return name;
+    }
+
+    @Override
+    public void onAppear() {
+        // creature appeared the first time or wasn't seen for a long time
+        if (removed) {
+            // stopWalk
+            removed = false;
+        } // walk
+        else if (this.oldPosition != getPosition() && this.oldPosition.isInRange(getPosition(), 1,1) && this.allowAppearWalk) {
+            allowAppearWalk = false;
+            walk(this.oldPosition, getPosition());
+
+        } // teleport
+        else {
+
+        }
+    }
+
+    @Override
+    public void onDisappear() {
+        this.oldPosition = getPosition();
+
+        // todo: dispatcher
+//
+//        removed = true;
+//        // stopWalk
+//        if (!isLocalPlayer()) {
+//            setPosition(new Position());
+//        }
+    }
+
+    public void walk(Position oldPosition, Position newPosition) {
+        if (oldPosition == newPosition) {
+            return;
+        }
+
+        this.lastStepDirection = oldPosition.getDirectionFromPosition(newPosition);
+        this.lastStepFromPosition = oldPosition;
+        this.lastStepToPosition = newPosition;
+
+        setDirection(this.lastStepDirection);
+
     }
 
     @Override
