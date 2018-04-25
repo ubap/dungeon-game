@@ -87,6 +87,9 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	@Override
 	public void render () {
+
+		EventDispatcher.getInstance().poll();
+
 		Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
@@ -152,15 +155,15 @@ public class MyGdxGame extends ApplicationAdapter {
 	public class DispatcherPoller extends Thread {
 		@Override
 		public void run() {
-			while (true) {
-				EventDispatcher.getInstance().poll();
-				try {
-					Thread.sleep(10);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					return;
-				}
-			}
+//			while (true) {
+//
+//				try {
+//					Thread.sleep(10);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//					return;
+//				}
+//			}
 		}
 	}
 }

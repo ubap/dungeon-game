@@ -57,9 +57,9 @@ public abstract class ScheduledEvent extends Event implements Comparable<Schedul
     public int compareTo(ScheduledEvent var1) {
         long val =  var1.getTicks() - this.getTicks();
         if (val < 0) {
-            return -1;
-        } else if (val > 0) {
             return 1;
+        } else if (val > 0) {
+            return -1;
         }
         return 0;
     }

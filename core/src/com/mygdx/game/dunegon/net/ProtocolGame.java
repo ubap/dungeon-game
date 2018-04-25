@@ -521,7 +521,8 @@ public class ProtocolGame extends Protocol {
 
         Creature creature = Game.getInstance().getMap().getCreatureById(id);
         if (creature != null) {
-            // set speed and base speed here
+            creature.setSpeed(speed);
+            creature.setBaseSpeed(baseSpeed);
         }
 
         LOGGER.info("processCreatureSpeed");
@@ -813,6 +814,7 @@ public class ProtocolGame extends Protocol {
 
             if (creature != null) {
                 // todo other attribs set
+                creature.setSpeed(speed);
                 creature.setHealthPercent(healthPercent);
                 creature.setDirection(direction);
                 creature.setOutfit(outfit);

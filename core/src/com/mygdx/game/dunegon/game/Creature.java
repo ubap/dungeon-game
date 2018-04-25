@@ -2,13 +2,11 @@ package com.mygdx.game.dunegon.game;
 
 import com.mygdx.game.dunegon.io.DatAttrs;
 import com.mygdx.game.dunegon.io.ThingTypeManager;
-import com.mygdx.game.dunegon.net.ProtocolGame;
 import com.mygdx.game.framework.EventDispatcher;
 import com.mygdx.game.framework.ScheduledEvent;
 import com.mygdx.game.framework.Timer;
 import com.mygdx.game.graphics.Point;
 
-import org.omg.CORBA.DATA_CONVERSION;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,6 +34,7 @@ public class Creature extends Thing {
 
     private ScheduledEvent walkUpdateEvent;
 
+    private int baseSpeed;
     private int speed;
     private double speedA;
     private double speedB;
@@ -79,6 +78,13 @@ public class Creature extends Thing {
     }
     public boolean hasSpeedFormula() {
         return this.speedA != -1 && this.speedB != -1 && this.speedC != -1;
+    }
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    public void setBaseSpeed(int baseSpeed) {
+        this.baseSpeed = baseSpeed;
     }
 
     public void setName(String name) {
@@ -275,7 +281,7 @@ public class Creature extends Thing {
     }
 
     private void updateWalkOffset(int totalPixelsWalked) {
-        LOGGER.info("update walk offset: pixels: {}", totalPixelsWalked);
+        // LOGGER.info("update walk offset: pixels: {}", totalPixelsWalked);
         this.walkOffset = new Point(0, 0);
         if (this.direction == Consts.Direction.NORTH || this.direction == Consts.Direction.NORTH_EAST
                 || this.direction == Consts.Direction.NORTH_WEST) {
