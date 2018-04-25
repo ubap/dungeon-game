@@ -283,6 +283,7 @@ public class Tile {
                 drawElevation = Consts.MAX_ELEVATION;
             }
         }
+
         // common items in reverse order
         for (int i = things.size() - 1; i >= 0; i--) {
             Thing thing = things.get(i);
