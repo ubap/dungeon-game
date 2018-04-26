@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.SpriteCache;
 import com.mygdx.game.dunegon.game.Game;
 import com.mygdx.game.dunegon.game.MapView;
 import com.mygdx.game.dunegon.game.Position;
@@ -28,6 +29,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 	private FpsCounter fpsCounter;
 	private SpriteBatch batch;
+	private SpriteCache spriteCache;
 	private BitmapFont font;
 	private static Tile[][] tiles;
 
@@ -44,6 +46,7 @@ public class MyGdxGame extends ApplicationAdapter {
 
 		tiles = new Tile[5][5];
 
+		spriteCache = new SpriteCache();
 		batch = new SpriteBatch(8191);
 		font = new BitmapFont();
 

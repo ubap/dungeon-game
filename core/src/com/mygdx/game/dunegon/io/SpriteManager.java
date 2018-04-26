@@ -11,6 +11,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SpriteManager {
     private static Logger LOGGER = LoggerFactory.getLogger(SpriteManager.class.getSimpleName());
@@ -24,6 +26,8 @@ public class SpriteManager {
     private long spritesCount;
     private long signature;
     private boolean loaded;
+
+    private List<Integer> usedSprites = new ArrayList<Integer>();
 
     private SpriteManager() {
     }
@@ -55,6 +59,7 @@ public class SpriteManager {
     }
 
     public Pixmap getSpriteImage(int id) {
+        usedSprites.add(id);
         // todo
         if (id == 0 || spritesFile == null) {
             return null;
