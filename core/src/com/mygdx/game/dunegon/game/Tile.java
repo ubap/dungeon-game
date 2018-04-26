@@ -309,8 +309,10 @@ public class Tile {
             if (!thing.isCreature()) {
                 continue;
             }
-
-            thing.draw(dest.sub(new Point(Math.round(drawElevation * scaleFactor), Math.round(drawElevation * scaleFactor))), scaleFactor);
+            Creature creature = (Creature) thing;
+            if (!creature.isWAlking()) {
+                thing.draw(dest.sub(new Point(Math.round(drawElevation * scaleFactor), Math.round(drawElevation * scaleFactor))), scaleFactor);
+            }
         }
 
         // effects

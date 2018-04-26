@@ -116,6 +116,9 @@ public class Creature extends Thing {
     public String getName() {
         return name;
     }
+    public boolean isWAlking() {
+        return this.walking;
+    }
 
     public int getStepDuration() {
         return getStepDuration(false, Consts.Direction.INVALID_DIRECTION);
