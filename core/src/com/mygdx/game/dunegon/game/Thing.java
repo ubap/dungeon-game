@@ -126,6 +126,9 @@ public abstract class Thing {
     public int getAnimationPhases() {
         return getThingType().getAnimationPhases();
     }
+    public boolean isAnimateAlways() {
+        return getThingType().isAnimateAlways();
+    }
     public Position getPosition() {
         return position;
     }

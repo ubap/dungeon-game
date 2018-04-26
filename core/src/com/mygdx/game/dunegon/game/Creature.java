@@ -282,6 +282,11 @@ public class Creature extends Thing {
 
         // now the walk has ended, do any scheduled turn
 
+        if (this.walkingTile != null) {
+            this.walkingTile.remvoeWalkingCreature(this);
+            this.walkingTile = null;
+        }
+
         walking = false;
         walkedPixels = 0;
 
@@ -396,6 +401,15 @@ public class Creature extends Thing {
     private void internalDrawOutfit(Point dest, float scaleFactor, Consts.Direction direction) {
         if (outfit.getThingCategory() == DatAttrs.ThingCategory.ThingCategoryCreature) {
 
+            boolean animateWalk = true;
+            boolean animateIdle = true;
+            int animationPhase = animateWalk ? this.walkAnimationPhase : 0;
+
+            if (isAnimateAlways() && animateIdle) {
+                int ticksPerFrame = 1000 / getAnimationPhases();
+                animationPhase = (int) (System.currentTimeMillis() % (ticksPerFrame * getAnimationPhases())) / ticksPerFrame;
+            }
+
             // patternX -> creature direction
             int patternX;
             if (direction == Consts.Direction.NORTH_EAST || direction == Consts.Direction.SOUTH_EAST) {
@@ -415,7 +429,7 @@ public class Creature extends Thing {
                     continue;
                 }
 
-                getThingType().draw(dest, scaleFactor, 0, patternX, patternY, patternZ, this.walkAnimationPhase);
+                getThingType().draw(dest, scaleFactor, 0, patternX, patternY, patternZ, animationPhase);
 
                 if (getLayers() > 1) {
                     // todo: outfit colors

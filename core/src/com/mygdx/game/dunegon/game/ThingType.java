@@ -325,6 +325,9 @@ public class ThingType {
     public int getAnimationPhases() {
         return mAnimationPhases;
     }
+    public boolean isAnimateAlways() {
+        return mAnimateAlways;
+    }
     public boolean isGround() {
         return mGround;
     }
