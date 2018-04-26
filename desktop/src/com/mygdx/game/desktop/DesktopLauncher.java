@@ -7,7 +7,13 @@ import com.mygdx.game.MyGdxGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
-		MainArguments mainArguments = new MainArguments();
+		MainArguments mainArguments = new MainArguments() {
+			@Override
+			public void ensureResourceFiles() {
+
+			}
+		};
+
 		mainArguments.setDatPath("\\D:\\dev\\libgdx\\test-tibia-sprites\\core\\assets\\Tibia.dat");
 		mainArguments.setSprPath("\\D:\\dev\\libgdx\\test-tibia-sprites\\core\\assets\\Tibia.spr");
 		mainArguments.setGameAddress("127.0.0.1");

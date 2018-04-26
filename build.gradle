@@ -6,9 +6,10 @@ buildscript {
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         jcenter()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.2.0'
+        classpath 'com.android.tools.build:gradle:3.1.2'
         
 
     }
@@ -41,9 +42,9 @@ project(":desktop") {
 
 
     dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
-        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        implementation  project(":core")
+        implementation  "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        implementation  "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
         
     }
 }
@@ -54,8 +55,8 @@ project(":android") {
     configurations { natives }
 
     dependencies {
-        compile project(":core")
-        compile "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
+        implementation  project(":core")
+        implementation  "com.badlogicgames.gdx:gdx-backend-android:$gdxVersion"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-armeabi-v7a"
         natives "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-arm64-v8a"
@@ -70,13 +71,13 @@ project(":core") {
 
 
     dependencies {
-        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        implementation  "com.badlogicgames.gdx:gdx:$gdxVersion"
 
-        compile group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
-        compile group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.21'
-        compile group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.7'
-        compile group: 'ch.qos.logback', name: 'logback-core', version: '1.1.7'
-        compile group: 'ch.qos.logback', name: 'logback-access', version: '1.1.7'
+        implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.21'
+        implementation group: 'org.slf4j', name: 'jcl-over-slf4j', version: '1.7.21'
+        implementation group: 'ch.qos.logback', name: 'logback-classic', version: '1.1.7'
+        implementation group: 'ch.qos.logback', name: 'logback-core', version: '1.1.7'
+        implementation group: 'ch.qos.logback', name: 'logback-access', version: '1.1.7'
         
     }
 }

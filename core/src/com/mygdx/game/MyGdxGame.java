@@ -50,6 +50,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		Painter.init(batch, 0, Gdx.graphics.getHeight());
 		this.fpsCounter = new FpsCounter();
 
+		this.arguments.ensureResourceFiles();
+
 		EventDispatcher.init();
 		ThingTypeManager.init();
 		SpriteManager.init();

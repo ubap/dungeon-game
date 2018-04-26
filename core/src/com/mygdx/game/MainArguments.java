@@ -1,6 +1,6 @@
 package com.mygdx.game;
 
-public class MainArguments {
+public abstract  class MainArguments {
     private String sprPath;
     private String datPath;
     private String gameAddress;
@@ -31,4 +31,6 @@ public class MainArguments {
     public String getGameAddress() {
         return gameAddress;
     }
+
+    public abstract void ensureResourceFiles();
 }
