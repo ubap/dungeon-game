@@ -53,9 +53,55 @@ public class Rect {
         return y2 - y1 + 1;
     }
     public Point getTopLeft() { return new Point(x1, y1); }
+    public Point getBottomRight() {
+        return new Point(x2, y2);
+    }
     public Size getSize() {
         return new Size(getWidth(), getHeight());
     }
+
+    public boolean contains(Point point) {
+        return contains(point, false);
+    }
+    public boolean contains(Point point, boolean insideOnly) {
+        int l, r;
+        if (x2 < x1 - 1) {
+            l = x2;
+            r = x1;
+        } else {
+            l = x1;
+            r = x2;
+        }
+        if (insideOnly) {
+            if (point.getX() <= l || point.getX() >= r) {
+                return false;
+            } else {
+                if (point.getX() < l || point.getX() > r) {
+                    return false;
+                }
+            }
+        }
+
+        int t, b;
+        if (y2 < y1 - 1) {
+            t = y2;
+            b = y1;
+        } else {
+            t = y1;
+            b = y2;
+        }
+        if (insideOnly) {
+            if (point.getY() <= t || point.getY() >= b) {
+                return false;
+            }
+        } else {
+            if (point.getY() < t || point.getY() > b) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public Rect setLeft(int x1) {
         Rect rect = new Rect();

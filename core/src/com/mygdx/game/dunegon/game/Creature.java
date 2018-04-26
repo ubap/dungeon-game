@@ -6,6 +6,7 @@ import com.mygdx.game.framework.EventDispatcher;
 import com.mygdx.game.framework.ScheduledEvent;
 import com.mygdx.game.framework.Timer;
 import com.mygdx.game.graphics.Point;
+import com.mygdx.game.graphics.Rect;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +32,13 @@ public class Creature extends Thing {
     private int walkedPixels;
     private Point walkOffset;
     private int walkAnimationPhase;
+    private Tile walkingTile;
 
+    private boolean footStepDrawn;
+    private Timer footTimer;
+    private int footStep;
+
+    private ScheduledEvent walkFinishAnimEvent;
     private ScheduledEvent walkUpdateEvent;
 
     private int baseSpeed;
@@ -44,6 +51,7 @@ public class Creature extends Thing {
         super();
         this.oldPosition = new Position();
         this.walkTimer = new Timer();
+        this.footTimer = new Timer();
         this.walkOffset = new Point(0, 0);
         this.speed = 200;
         this.speedA = -1;
@@ -256,7 +264,9 @@ public class Creature extends Thing {
         this.walkedPixels = Math.max(walkedPixels, totalPixelsWalked);
 
         // update walk animation and offsets
+        updateWalkAnimation(totalPixelsWalked);
         updateWalkOffset(this.walkedPixels);
+        updateWalkingTile();
 
         // terminate walk
         if (walking && walkTimer.getElapsedTicks() >= getStepDuration()) {
@@ -304,12 +314,83 @@ public class Creature extends Thing {
         }
     }
 
+    private void updateWalkingTile() {
+        Tile newWalkingTile = null;
+        Rect virtualCreatureRect = new Rect(ThingType.TILE_PIXELS + (walkOffset.getX() - getDisplacement().getX()),
+                                            ThingType.TILE_PIXELS + (walkOffset.getY() - getDisplacement().getY()),
+                                                ThingType.TILE_PIXELS , ThingType.TILE_PIXELS);
+        for (int xi = -1; xi <= 1 && newWalkingTile == null ; xi++) {
+            for (int yi = -1; yi <= 1 && newWalkingTile == null; yi++) {
+                Rect virtualTileRect = new Rect( (xi+1)*ThingType.TILE_PIXELS, (yi+1) * ThingType.TILE_PIXELS,
+                                                    ThingType.TILE_PIXELS, ThingType.TILE_PIXELS);
+
+                // only render creatures where bottom right is inside tile rect
+                if (virtualTileRect.contains(virtualCreatureRect.getBottomRight())) {
+                    newWalkingTile = Game.getInstance().getMap().getTile(getPosition().translated(xi, yi));
+                }
+            }
+        }
+
+        if (newWalkingTile != this.walkingTile) {
+            if (this.walkingTile != null) {
+                this.walkingTile.remvoeWalkingCreature(this);
+            }
+            if (newWalkingTile != null) {
+                newWalkingTile.addWalkingCreature(this);
+            }
+
+            // recache visible tiles in map views
+            if (newWalkingTile != null && newWalkingTile.isEmpty()) {
+                Game.getInstance().getMap().notificateTileUpdate(newWalkingTile.getPosition());
+            }
+            this.walkingTile = newWalkingTile;
+        }
+    }
+
+    private void updateWalkAnimation(int totalPixelsWalked) {
+        if (this.outfit.getThingCategory() != DatAttrs.ThingCategory.ThingCategoryCreature) {
+            return;
+        }
+
+        int footAnimPhases = getAnimationPhases() - 1;
+        int footDelay = getStepDuration(true) / 3;
+        if (footAnimPhases == 0) {
+            this.walkAnimationPhase = 0;
+        } else if (this.footStepDrawn && this.footTimer.getElapsedTicks() >= footDelay && totalPixelsWalked < 32) {
+            this.footStep++;
+            this.walkAnimationPhase = 1 + (this.footStep % footAnimPhases);
+            this.footStepDrawn = false;
+            this.footTimer.restart();
+        } else if (this.walkAnimationPhase == 0 && totalPixelsWalked < 32) {
+            walkAnimationPhase = 1 + (this.footStep & footAnimPhases);
+        }
+
+        if (totalPixelsWalked == 32 && this.walkFinishAnimEvent == null) {
+            final int delay = Math.min(footDelay, 200);
+            this.walkFinishAnimEvent = new ScheduledEvent() {
+                @Override
+                public int getDelay() {
+                    return delay;
+                }
+                @Override
+                public void callback() {
+                    if (!Creature.this.walking || Creature.this.walkTimer.getElapsedTicks() >= Creature.this.getStepDuration(true)) {
+                        Creature.this.walkAnimationPhase = 0;
+                    }
+                    Creature.this.walkFinishAnimEvent = null;
+                }
+            };
+            EventDispatcher.getInstance().scheduleEvent(this.walkFinishAnimEvent);
+        }
+    }
+
     @Override
     public void draw(Point dest, float scaleFactor) {
         boolean animate = true;
         Point animationOffset = animate ? this.walkOffset : new Point(0, 0);
 
         internalDrawOutfit(dest.add( animationOffset.multiply(scaleFactor) ), scaleFactor, direction);
+        this.footStepDrawn = true;
     }
 
     private void internalDrawOutfit(Point dest, float scaleFactor, Consts.Direction direction) {
@@ -334,7 +415,7 @@ public class Creature extends Thing {
                     continue;
                 }
 
-                getThingType().draw(dest, scaleFactor, 0, patternX, patternY, patternZ, 0);
+                getThingType().draw(dest, scaleFactor, 0, patternX, patternY, patternZ, this.walkAnimationPhase);
 
                 if (getLayers() > 1) {
                     // todo: outfit colors

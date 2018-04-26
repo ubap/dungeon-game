@@ -20,6 +20,7 @@ import java.util.Map;
 
 public class ThingType {
     private static Logger LOGGER = LoggerFactory.getLogger(ThingType.class.getSimpleName());
+    public static final int TILE_PIXELS = 32;
 
     private int mId;
 
@@ -416,6 +417,9 @@ public class ThingType {
     public int getLayers() {
         return layers;
     }
+    public Point getDisplacement() {
+        return displacement;
+    }
 
     public void setLayers(int layers) {
         this.layers = layers;
@@ -424,8 +428,6 @@ public class ThingType {
     // todo
     public void draw(Point dest, float scaleFactor, int layer, int xPattern, int yPattern, int zPattern,
                      int animationPhase) {
-
-        animationPhase = 0;
 
         if (animationPhase >= mAnimationPhases) {
             return;
@@ -464,7 +466,6 @@ public class ThingType {
 
     // todo:
     public Texture getTexture(int animationPhase) {
-        final int TILE_PIXELS = 32;
 
         if (textures.containsKey(animationPhase)) {
             return textures.get(animationPhase);

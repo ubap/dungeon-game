@@ -147,6 +147,9 @@ public abstract class Thing {
             return tile.getThingStackPos(this);
         }
     }
+    public Point getDisplacement() {
+        return getThingType().getDisplacement();
+    }
 
     // set
     public void setPosition(Position position) {

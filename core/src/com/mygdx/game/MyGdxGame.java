@@ -98,7 +98,7 @@ public class MyGdxGame extends ApplicationAdapter {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 
-		float scaleFactor = 1.5f;
+		float scaleFactor = 1f;
 
 		float TILE_SIZE = 32 * scaleFactor;
 

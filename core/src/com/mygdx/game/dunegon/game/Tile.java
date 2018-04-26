@@ -299,6 +299,11 @@ public class Tile {
         }
 
         // creatures
+        for (Creature creature : this.walkingCreatures) {
+            creature.draw(new Point((int) (dest.getX() + ((creature.getPosition().getX() - getPosition().getX())*ThingType.TILE_PIXELS - drawElevation) * scaleFactor),
+                    (int) (dest.getY() + ((creature.getPosition().getY() - getPosition().getY())*ThingType.TILE_PIXELS - drawElevation) * scaleFactor)), scaleFactor);
+        }
+
         for (int i = things.size() - 1; i >= 0; i--) {
             Thing thing = things.get(i);
             if (!thing.isCreature()) {
