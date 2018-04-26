@@ -68,12 +68,8 @@ public class MyGdxGame extends ApplicationAdapter {
 
 			protocolGame.connect(arguments.getGameAddress(), 7172);
 
-
 			Thread.sleep(2000);
 
-
-			MapThread mapThread = new MapThread();
-			mapThread.start();
 
             Gdx.input.setInputProcessor(new MyInputProcessor());
 
@@ -104,58 +100,14 @@ public class MyGdxGame extends ApplicationAdapter {
 
         MapView.getInstance().draw(scaleFactor);
 
-		for (int x = -2; x < 3; x++) {
-			for (int y = -2; y < 3; y++) {
-				Tile tile = tiles[2 + x][2 + y];
-				int posX = x + 2;
-				int posY = y + 2;
-//				if (tile != null){
-//					tile.draw(new Point((int) Math.floor(0 + (posX*TILE_SIZE)), (int) Math.floor(0 + (posY*TILE_SIZE))), scaleFactor, 0xFF);
-//				}
-			}
-		}
-
 		batch.end();
 
 		protocolGame.unlockReceiving();
-
-		try {
-			Thread.sleep(20);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-			return;
-		}
 	}
 
 	@Override
 	public void dispose () {
 		batch.dispose();
-	}
-
-	public class MapThread extends Thread {
-		@Override
-		public void run() {
-			while (true) {
-
-				Position position = Game.getInstance().getMap().getCentralPosition();
-				for (int x = -2; x < 3; x++) {
-					for (int y = -2; y < 3; y++) {
-						Position tilePosition = new Position(position.getX() + x, position.getY() + y, position.getZ());
-						tiles[2+x][2+y] = Game.getInstance().getMap().getTile(tilePosition);
-					}
-				}
-
-				// stub entry point
-
-
-				try {
-					Thread.sleep(100);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-					return;
-				}
-			}
-		}
 	}
 
 	public class DispatcherPoller extends Thread {

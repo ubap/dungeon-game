@@ -75,10 +75,10 @@ public class Rect {
         if (insideOnly) {
             if (point.getX() <= l || point.getX() >= r) {
                 return false;
-            } else {
-                if (point.getX() < l || point.getX() > r) {
-                    return false;
-                }
+            }
+        } else {
+            if (point.getX() < l || point.getX() > r) {
+                return false;
             }
         }
 

@@ -334,7 +334,9 @@ public class Creature extends Thing {
 
                 // only render creatures where bottom right is inside tile rect
                 if (virtualTileRect.contains(virtualCreatureRect.getBottomRight())) {
-                    newWalkingTile = Game.getInstance().getMap().getTile(getPosition().translated(xi, yi));
+                    Position tilePosition = getPosition().translated(xi, yi);
+                    LOGGER.info("updateWalkingTile tilePosition: {} {}", tilePosition);
+                    newWalkingTile = Game.getInstance().getMap().getTile(tilePosition);
                 }
             }
         }
