@@ -182,6 +182,7 @@ public class ProtocolGame extends Protocol {
                     break;
                 default:
                     LOGGER.warn("Unrecognized opCode: {}", String.format("0x%x", opCode));
+                    recvLock.unlock();
                     return;
             }
 
