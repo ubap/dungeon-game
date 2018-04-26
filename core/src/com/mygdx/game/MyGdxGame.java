@@ -3,6 +3,7 @@ package com.mygdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mygdx.game.dunegon.game.Game;
 import com.mygdx.game.dunegon.game.MapView;
@@ -14,6 +15,7 @@ import com.mygdx.game.dunegon.io.ThingTypeManager;
 import com.mygdx.game.dunegon.net.ProtocolGame;
 import com.mygdx.game.dunegon.net.ProtocolLogin;
 import com.mygdx.game.framework.EventDispatcher;
+import com.mygdx.game.framework.FpsCounter;
 import com.mygdx.game.graphics.Painter;
 import com.mygdx.game.graphics.Point;
 
@@ -24,8 +26,11 @@ import java.net.URL;
 public class MyGdxGame extends ApplicationAdapter {
 	private MainArguments arguments;
 
+	private FpsCounter fpsCounter;
 	private SpriteBatch batch;
+	private BitmapFont font;
 	private static Tile[][] tiles;
+
 
 	private ProtocolGame protocolGame;
 
@@ -40,8 +45,10 @@ public class MyGdxGame extends ApplicationAdapter {
 		tiles = new Tile[5][5];
 
 		batch = new SpriteBatch(8191);
+		font = new BitmapFont();
 
 		Painter.init(batch, 0, Gdx.graphics.getHeight());
+		this.fpsCounter = new FpsCounter();
 
 		EventDispatcher.init();
 		ThingTypeManager.init();
@@ -86,6 +93,7 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void render () {
 
+
 		protocolGame.lockReceiving();
 
 		EventDispatcher.getInstance().poll();
@@ -95,10 +103,11 @@ public class MyGdxGame extends ApplicationAdapter {
 		batch.begin();
 
 		float scaleFactor = 1f;
-
-		float TILE_SIZE = 32 * scaleFactor;
-
         MapView.getInstance().draw(scaleFactor);
+
+		this.fpsCounter.frame();
+        String fpsString = String.format("FPS %.2f", this.fpsCounter.getFps());
+		font.draw(batch, fpsString, 10, 20);
 
 		batch.end();
 
