@@ -93,7 +93,6 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void render () {
 
-
 		protocolGame.lockReceiving();
 
 		EventDispatcher.getInstance().poll();
@@ -108,6 +107,9 @@ public class MyGdxGame extends ApplicationAdapter {
 		this.fpsCounter.frame();
         String fpsString = String.format("FPS %.2f", this.fpsCounter.getFps());
 		font.draw(batch, fpsString, 10, 20);
+
+		String loadedSpritesCount = String.format("Loaded Sprites Count: %d", SpriteManager.getInstance().loadedSprites.size());
+		font.draw(batch, loadedSpritesCount, 10, 50);
 
 		batch.end();
 

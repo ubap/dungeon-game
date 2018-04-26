@@ -8,9 +8,12 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.ByteBuffer;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SpriteManager {
     private static Logger LOGGER = LoggerFactory.getLogger(SpriteManager.class.getSimpleName());
@@ -24,6 +27,8 @@ public class SpriteManager {
     private long spritesCount;
     private long signature;
     private boolean loaded;
+
+    public Set<Integer> loadedSprites = new HashSet<Integer>();
 
     private SpriteManager() {
     }
@@ -118,6 +123,12 @@ public class SpriteManager {
 
 
         pixmap = new Pixmap(gdx2DPixmap);
+
+        this.loadedSprites.add(id);
+        byte[] bytes = PNG.toPNG(pixmap);
+        FileOutputStream fos = new FileOutputStream(String.format("sprites%s%d.png", File.separator, id));
+        fos.write(bytes);
+        fos.close();
 
         } catch (IOException ioe) {
             LOGGER.error("getSpriteImage failed", ioe);
