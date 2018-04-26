@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.mygdx.game.dunegon.game.Consts;
@@ -41,7 +42,14 @@ public class MyInputProcessor implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
+        int width = Gdx.graphics.getWidth();
+        if (screenX < width / 2) {
+            Game.getInstance().forceWalk(Consts.Direction.WEST);
+            return true;
+        } else {
+            Game.getInstance().forceWalk(Consts.Direction.EAST);
+            return true;
+        }
     }
 
     @Override

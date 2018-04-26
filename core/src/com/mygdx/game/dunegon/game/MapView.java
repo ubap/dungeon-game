@@ -40,7 +40,10 @@ public class MapView {
         this.mustUpdateTilesCache = true;
     }
 
-    public void draw() {
+    public void draw(float scaleFactor) {
+        // temporary solution
+        this.tileSize = (int)(32f * scaleFactor);
+
         if (mustUpdateTilesCache) {
             updateVisibleTilesCache(this.updateTilesPos);
         }
@@ -59,7 +62,7 @@ public class MapView {
                         i++;
                     }
 
-                    tile.draw(transformPositionTo2D(tilePos, getCameraPosition()), 1, 0xFF);
+                    tile.draw(transformPositionTo2D(tilePos, getCameraPosition()), scaleFactor, 0xFF);
                 }
             }
 

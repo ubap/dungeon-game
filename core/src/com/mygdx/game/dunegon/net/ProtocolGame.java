@@ -20,6 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class ProtocolGame extends Protocol {
     private static Logger LOGGER = LoggerFactory.getLogger(ProtocolGame.class.getSimpleName());
@@ -34,6 +36,8 @@ public class ProtocolGame extends Protocol {
     private LocalPlayer localPlayer;
     private boolean mapKnown;
 
+    private Lock recvLock;
+
 
     public LocalPlayer getLocalPlayer() {
         return this.localPlayer;
@@ -46,6 +50,7 @@ public class ProtocolGame extends Protocol {
         this.characterName = characterName;
         this.localPlayer = new LocalPlayer();
         this.mapKnown = false;
+        this.recvLock = new ReentrantLock();
     }
 
     @Override
@@ -74,6 +79,9 @@ public class ProtocolGame extends Protocol {
     @Override
     protected void onRecv(InputMessage inputMessage) {
         while (inputMessage.hasMore()) {
+
+            recvLock.lock();
+
             short opCode = inputMessage.getU8();
             switch (opCode) {
                 case Proto.OpCode.GAMESERVER_LOGIN_SUCCESS:
@@ -176,8 +184,18 @@ public class ProtocolGame extends Protocol {
                     LOGGER.warn("Unrecognized opCode: {}", String.format("0x%x", opCode));
                     return;
             }
+
+            recvLock.unlock();
         }
     }
+
+    public void lockReceiving() {
+        recvLock.lock();
+    }
+    public void unlockReceiving() {
+        recvLock.unlock();
+    }
+
 
     private void sendFirstPacket() throws IOException {
         OutputMessage outputMessage = new OutputMessage();

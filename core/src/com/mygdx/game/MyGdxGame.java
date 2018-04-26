@@ -27,6 +27,8 @@ public class MyGdxGame extends ApplicationAdapter {
 	private SpriteBatch batch;
 	private static Tile[][] tiles;
 
+	private ProtocolGame protocolGame;
+
 	public MyGdxGame(MainArguments mainArguments) {
 		this.arguments = mainArguments;
 	}
@@ -61,7 +63,7 @@ public class MyGdxGame extends ApplicationAdapter {
 			protocolLogin.connect(arguments.getGameAddress(), 7171);
 			protocolLogin.waitForCharList();
 
-			ProtocolGame protocolGame = new ProtocolGame("1", "1", protocolLogin.getCharList().getCharacters().get(0).getName());
+			protocolGame = new ProtocolGame("1", "1", protocolLogin.getCharList().getCharacters().get(0).getName());
 			Game.init(protocolGame);
 
 			protocolGame.connect(arguments.getGameAddress(), 7172);
@@ -88,17 +90,19 @@ public class MyGdxGame extends ApplicationAdapter {
 	@Override
 	public void render () {
 
+		protocolGame.lockReceiving();
+
 		EventDispatcher.getInstance().poll();
 
 		Gdx.gl.glClearColor(0.5f, 0.5f, 0.5f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 
-		float scaleFactor = 3f;
+		float scaleFactor = 1.2f;
 
 		float TILE_SIZE = 32 * scaleFactor;
 
-        MapView.getInstance().draw();
+        MapView.getInstance().draw(scaleFactor);
 
 		for (int x = -2; x < 3; x++) {
 			for (int y = -2; y < 3; y++) {
@@ -112,6 +116,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		}
 
 		batch.end();
+
+		protocolGame.unlockReceiving();
 
 		try {
 			Thread.sleep(20);
