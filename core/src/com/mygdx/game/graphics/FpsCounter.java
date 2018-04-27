@@ -1,4 +1,4 @@
-package com.mygdx.game.framework;
+package com.mygdx.game.graphics;
 
 public class FpsCounter {
     private double frame;

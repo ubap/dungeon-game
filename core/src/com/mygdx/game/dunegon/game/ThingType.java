@@ -3,12 +3,14 @@ package com.mygdx.game.dunegon.game;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.mygdx.game.dunegon.io.DatAttrs;
 import com.mygdx.game.dunegon.io.SpriteManager;
 import com.mygdx.game.graphics.Painter;
 import com.mygdx.game.graphics.Point;
 import com.mygdx.game.graphics.Rect;
 import com.mygdx.game.graphics.Size;
+import com.mygdx.game.graphics.TextureAtlas;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -511,6 +513,7 @@ public class ThingType {
                             for (int w = 0; w < size.getWidth(); w++) {
                                 int spriteIndex = getSpriteIndex(w, h, spriteMask ? 1 : l, x, y, z, animationPhase);
                                 Pixmap spriteImage = SpriteManager.getInstance().getSpriteImage(spriteIndexList.get(spriteIndex));
+                                TextureRegion textureRegion = TextureAtlas.getInstance().getTextureRegion(Integer.toString(spriteIndexList.get(spriteIndex)));
 
                                 if (spriteImage != null) {
                                     if (spriteMask) {

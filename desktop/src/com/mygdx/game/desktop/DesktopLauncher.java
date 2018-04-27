@@ -7,7 +7,7 @@ import com.mygdx.game.MyGdxGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
-		packTextures();
+		// packTextures();
 
 
 		MainArguments mainArguments = new MainArguments();
@@ -24,12 +24,12 @@ public class DesktopLauncher {
 
 	public static void packTextures() {
 		TexturePacker.Settings settings = new TexturePacker.Settings();
-		settings.maxWidth = 1024;
-		settings.maxHeight = 1024;
+		settings.maxWidth = 8192;
+		settings.maxHeight = 8192;
 		settings.paddingX = 0;
 		settings.paddingY = 0;
 		settings.ignoreBlankImages = false;
-		
+
 		TexturePacker.process(settings, "sprites", "atlas", "pack");
 	}
 }
