@@ -116,6 +116,8 @@ public class MyGdxGame extends ApplicationAdapter {
 		String loadedSpritesCount = String.format("Loaded Sprites Count: %d", SpriteManager.getInstance().loadedSprites.size());
 		font.draw(batch, loadedSpritesCount, 10, 50);
 
+		batch.draw(TextureAtlas.getInstance().getTextureRegion("1005"), 50, 50);
+
 		batch.end();
 
 		protocolGame.unlockReceiving();
